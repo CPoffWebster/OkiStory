@@ -1,5 +1,8 @@
 import React from "react";
-import { CharacterSelectionProps } from "../../classes/book";
+
+export interface CharacterSelectionProps {
+  sendCharacterInfo: (character: string) => void;
+}
 
 const CharacterSelection: React.FC<CharacterSelectionProps> = ({
   sendCharacterInfo,

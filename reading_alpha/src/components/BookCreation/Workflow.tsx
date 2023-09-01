@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import CreateStory from "./CreateStory";
 import CharacterSelection from "./CharacterSelection";
 import SettingSelection from "./SettingSelection";
-import { BookCreationProps } from "../../classes/book";
 import { Book } from "../../classes/book";
 
-const Workflow: React.FC<BookCreationProps> = ({ sendBookInfo }) => {
+export interface SelectBookInformation {
+  sendBookInfo: (book: Book) => void;
+}
+
+const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
   const handleCreateNewBook = (info: Book): void => {
     sendBookInfo(info);
   };
@@ -30,6 +33,7 @@ const Workflow: React.FC<BookCreationProps> = ({ sendBookInfo }) => {
     handleCreateNewBook({
       setting: info!, // Use the new value directly
       character: characterInfo!,
+      created: false,
     });
   };
 

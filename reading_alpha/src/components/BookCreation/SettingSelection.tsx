@@ -1,5 +1,8 @@
 import React from "react";
-import { SettingSelectionProps } from "../../classes/book";
+
+export interface SettingSelectionProps {
+  sendSettingInfo: (setting: string) => void;
+}
 
 const SettingSelection: React.FC<SettingSelectionProps> = ({
   sendSettingInfo,

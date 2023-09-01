@@ -1,16 +1,16 @@
 export interface Book {
   setting: string;
   character: string;
+  created?: boolean;
+  generatedBook?: {
+    title: string;
+    cover: string;
+    pages: Pages[];
+  };
 }
 
-export interface CharacterSelectionProps {
-  sendCharacterInfo: (character: string) => void;
-}
-
-export interface SettingSelectionProps {
-  sendSettingInfo: (setting: string) => void;
-}
-
-export interface BookCreationProps {
-  sendBookInfo: (book: Book) => void;
+export interface Pages {
+  picture: string;
+  text: string;
+  pageNumber: number;
 }
