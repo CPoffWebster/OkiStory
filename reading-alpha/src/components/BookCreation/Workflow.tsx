@@ -68,7 +68,7 @@ const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
           case "CharacterSelection":
             return (
               <StoryElementSelection
-                title="Character Selection"
+                title="Choose your <u style='color: purple'>Main Character</u>!"
                 fetchElements={getAllDefaultCharacters}
                 sendElementInfo={(info) =>
                   handleStoryElementSelection("Character", info)
@@ -78,7 +78,7 @@ const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
           case "LocationSelection":
             return (
               <StoryElementSelection
-                title="Location Selection"
+                title="Choose your <u style='color: purple'>Location</u>!"
                 fetchElements={getAllDefaultLocations}
                 sendElementInfo={(info) =>
                   handleStoryElementSelection("Location", info)

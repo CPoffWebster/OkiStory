@@ -43,7 +43,7 @@ const StoryElementSelection: React.FC<StoryElementSelectionProps> = ({
 
   return (
     <div>
-      <h2 className="title">{title}</h2>
+      <h2 className="title" dangerouslySetInnerHTML={{ __html: title }}></h2>
       <div className="selection-container">
         {loading && <p>Loading...</p>}
         {error && <p>{error}</p>}
