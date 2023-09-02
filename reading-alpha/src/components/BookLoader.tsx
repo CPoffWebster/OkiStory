@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { Book } from "../classes/book";
-import { environ } from "../config";
+import { createNewBook } from "../utilities/BookCalls";
+import "./BookLoader.css";
 
 interface BookCreation {
-  dataForBookCreation: Book | null;
   createFullBook: (newBook: Book) => void;
+  dataForBookCreation: Book | null;
 }
 
 const BookLoader: React.FC<BookCreation> = ({
@@ -14,17 +15,8 @@ const BookLoader: React.FC<BookCreation> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${environ.API_URL}/api/createNewBook`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataForBookCreation),
-        });
-        const data = await response.json();
-        console.log("data: ", data);
-
-        createFullBook(data);
+        const newBook = await createNewBook(dataForBookCreation);
+        createFullBook(newBook);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -1,20 +1,30 @@
 import Workflow from "./BookCreation/Workflow";
 import { Book } from "../classes/book";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookLoader from "./BookLoader";
+import BookReader from "./BookReader";
 
 const HomePage = () => {
   const [book, setBook] = useState<Book | null>(null);
+  const [bookComplete, setBookComplete] = useState<boolean | null>(false); // Add this line
 
   const handleBookCreation = (newBook: Book): void => {
     setBook(newBook);
-    console.log(newBook);
+    if (!bookComplete && newBook.created === true) {
+      setBookComplete(true);
+    }
   };
+
+  useEffect(() => {
+    if (book !== null && book.created === true && !bookComplete) {
+      setBookComplete(true);
+    }
+  }, [book, bookComplete]);
 
   return (
     <>
-      {book !== null && book.created === true && <h1>Book Created</h1>}
-      {book !== null && book.created === false && (
+      {book !== null && book.created === true && <BookReader fullBook={book} />}
+      {book !== null && !bookComplete && (
         <BookLoader
           createFullBook={handleBookCreation}
           dataForBookCreation={book}
