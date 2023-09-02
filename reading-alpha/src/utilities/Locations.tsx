@@ -10,5 +10,5 @@ export const getAllDefaultLocations = async (): Promise<Location[]> => {
     `${environ.API_URL}/api/locations/getAllDefaultLocations`
   );
   const data = await response.json();
-  return data;
+  return data.defaultLocations;
 };

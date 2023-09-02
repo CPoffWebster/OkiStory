@@ -20,7 +20,7 @@ export const createNewBook = async (
   // Mimic delay
   const delay = (ms: number | undefined) =>
     new Promise((res) => setTimeout(res, ms));
-  await delay(3000);
+  await delay(1000);
 
   const data = await response.json();
   return data.book;

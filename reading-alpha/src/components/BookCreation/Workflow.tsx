@@ -1,40 +1,36 @@
 import React, { useState } from "react";
 import CreateStory from "./CreateStory";
-import CharacterSelection from "./CharacterSelection";
-import LocationSelection from "./LocationSelection";
+import StoryElementSelection from "./StoryElementSelection";
 import { Book } from "../../classes/book";
+import { getAllDefaultCharacters } from "../../utilities/Characters";
+import { getAllDefaultLocations } from "../../utilities/Locations";
 
 export interface SelectBookInformation {
   sendBookInfo: (book: Book) => void;
 }
 
 const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
+  const [creationWorkflow, setCreationWorkflow] =
+    useState<string>("CreateStory");
+  const [characterInfo, setCharacterInfo] = useState<string | null>(null);
+  const [locationInfo, setLocationInfo] = useState<string | null>(null);
+
   const handleCreateNewBook = (info: Book): void => {
     sendBookInfo(info);
   };
 
-  const [creationWorkflow, setCreationWorkflow] =
-    useState<string>("CreateStory");
-  const [characterInfo, setCharacterInfo] = useState<string | null>(null);
-  const [LocationInfo, setLocationInfo] = useState<string | null>(null);
-
-  const handleNewStory = (page: string): void => {
-    setCreationWorkflow(page);
-  };
-
-  const handleCharacterSelection = (info: string): void => {
-    setCharacterInfo(info);
-    setCreationWorkflow("LocationSelection");
-  };
-
-  const handleLocationSelection = (info: string): void => {
-    setLocationInfo(info);
-    console.log(info);
-    handleCreateNewBook({
-      location: info!, // Use the new value directly
-      character: characterInfo!,
-      created: false,
-    });
+  const handleStoryElementSelection = (type: string, info: string): void => {
+    if (type === "Character") {
+      setCharacterInfo(info);
+      setCreationWorkflow("LocationSelection");
+    } else if (type === "Location") {
+      setLocationInfo(info);
+      handleCreateNewBook({
+        location: info,
+        character: characterInfo!,
+        created: false,
+      });
+    }
   };
 
   const handleBack = (): void => {
@@ -64,27 +60,39 @@ const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
           case "CreateStory":
             return (
               <CreateStory
-                initiateNewStory={() => handleNewStory("CharacterSelection")}
+                initiateNewStory={() =>
+                  setCreationWorkflow("CharacterSelection")
+                }
               />
             );
           case "CharacterSelection":
             return (
-              <CharacterSelection
-                sendCharacterInfo={handleCharacterSelection}
+              <StoryElementSelection
+                title="Character Selection"
+                fetchElements={getAllDefaultCharacters}
+                sendElementInfo={(info) =>
+                  handleStoryElementSelection("Character", info)
+                }
               />
             );
           case "LocationSelection":
             return (
-              <LocationSelection sendLocationInfo={handleLocationSelection} />
+              <StoryElementSelection
+                title="Location Selection"
+                fetchElements={getAllDefaultLocations}
+                sendElementInfo={(info) =>
+                  handleStoryElementSelection("Location", info)
+                }
+              />
             );
-          // Add more cases as your workflow expands
           default:
             return null;
         }
       })()}
 
+      {/* Display Selected Information */}
       {characterInfo && <p>Selected Character: {characterInfo}</p>}
-      {LocationInfo && <p>Selected Location: {LocationInfo}</p>}
+      {locationInfo && <p>Selected Location: {locationInfo}</p>}
     </div>
   );
 };
