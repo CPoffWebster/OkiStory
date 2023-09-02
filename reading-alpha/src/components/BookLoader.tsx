@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Book } from "../classes/book";
-import { createNewBook } from "../utilities/BookCalls";
+import { createNewBook } from "../utilities/Books";
 import "./BookLoader.css";
 
 interface BookCreation {

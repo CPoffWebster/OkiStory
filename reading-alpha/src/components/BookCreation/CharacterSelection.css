@@ -1,0 +1,41 @@
+/* Container to hold all the buttons */
+.selection-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 2em;
+  }
+  
+  /* Individual selection button styling */
+  .selection-button {
+    width: 400px;
+    height: 400px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+  }
+  
+  /* Image styling */
+  .selection-button img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Hover effect for the selection button */
+  .selection-button:hover img {
+    opacity: 0.8;  /* You can also use filter: brightness(120%) instead of opacity */
+  }
+  
+  
+  /* Title styling */
+  .title {
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 24px;
+  }
+  

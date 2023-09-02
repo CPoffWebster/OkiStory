@@ -2,9 +2,9 @@ import { Book } from "../classes/book";
 import { environ } from "../config";
 
 /**
- *
- * @param dataForBookCreation
- * @returns
+ * Create a new book using data from the BookCreation workflow
+ * @param dataForBookCreation data from the BookCreation workflow
+ * @returns created book data
  */
 export const createNewBook = async (
   dataForBookCreation: Book | null

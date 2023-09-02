@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CreateStory from "./CreateStory";
 import CharacterSelection from "./CharacterSelection";
-import SettingSelection from "./SettingSelection";
+import LocationSelection from "./LocationSelection";
 import { Book } from "../../classes/book";
 
 export interface SelectBookInformation {
@@ -16,7 +16,7 @@ const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
   const [creationWorkflow, setCreationWorkflow] =
     useState<string>("CreateStory");
   const [characterInfo, setCharacterInfo] = useState<string | null>(null);
-  const [settingInfo, setSettingInfo] = useState<string | null>(null);
+  const [LocationInfo, setLocationInfo] = useState<string | null>(null);
 
   const handleNewStory = (page: string): void => {
     setCreationWorkflow(page);
@@ -24,14 +24,14 @@ const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
 
   const handleCharacterSelection = (info: string): void => {
     setCharacterInfo(info);
-    setCreationWorkflow("SettingSelection");
+    setCreationWorkflow("LocationSelection");
   };
 
-  const handleSettingSelection = (info: string): void => {
-    setSettingInfo(info);
+  const handleLocationSelection = (info: string): void => {
+    setLocationInfo(info);
     console.log(info);
     handleCreateNewBook({
-      setting: info!, // Use the new value directly
+      location: info!, // Use the new value directly
       character: characterInfo!,
       created: false,
     });
@@ -42,7 +42,7 @@ const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
       case "CharacterSelection":
         setCreationWorkflow("CreateStory");
         break;
-      case "SettingSelection":
+      case "LocationSelection":
         setCreationWorkflow("CharacterSelection");
         break;
       // Add more cases as your workflow expands
@@ -53,8 +53,6 @@ const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
 
   return (
     <div>
-      <h1>Workflow Component</h1>
-
       {/* Back Button */}
       {creationWorkflow !== "CreateStory" && (
         <button onClick={handleBack}>Back</button>
@@ -75,9 +73,9 @@ const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
                 sendCharacterInfo={handleCharacterSelection}
               />
             );
-          case "SettingSelection":
+          case "LocationSelection":
             return (
-              <SettingSelection sendSettingInfo={handleSettingSelection} />
+              <LocationSelection sendLocationInfo={handleLocationSelection} />
             );
           // Add more cases as your workflow expands
           default:
@@ -86,7 +84,7 @@ const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
       })()}
 
       {characterInfo && <p>Selected Character: {characterInfo}</p>}
-      {settingInfo && <p>Selected Setting: {settingInfo}</p>}
+      {LocationInfo && <p>Selected Location: {LocationInfo}</p>}
     </div>
   );
 };

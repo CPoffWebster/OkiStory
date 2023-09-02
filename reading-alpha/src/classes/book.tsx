@@ -1,5 +1,5 @@
 export interface Book {
-  setting: string;
+  location: string;
   character: string;
   created?: boolean;
   generatedBook?: {
