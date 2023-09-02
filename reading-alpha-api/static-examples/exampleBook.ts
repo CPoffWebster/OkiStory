@@ -1,7 +1,7 @@
 import { Book } from "@/types/book";
 
 export const exampleBook: Book = {
-    setting: "A forest",
+    location: "A forest",
     character: "A bear",
     created: true,
     generatedBook: {
