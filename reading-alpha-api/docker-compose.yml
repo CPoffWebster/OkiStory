@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_NAME=ReadingAlpha
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    command: ["--init-file", "/docker-entrypoint-initdb.d/mysql-init.sql"]
+    volumes:
+      - ./data/mysql/mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ReadingAlpha
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
