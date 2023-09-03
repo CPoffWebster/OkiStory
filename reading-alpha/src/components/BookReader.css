@@ -46,24 +46,28 @@ body, html {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 2px; /* Width of the crease */
+  width: 12px;  /* Updated to 12px */
   height: 100%;
-  background-color: rgba(0,0,0,0.5); /* Color of the crease */
-  z-index: 2; /* Place it above the other content */
+  background: linear-gradient(90deg, rgba(255,255,255,0.5), rgba(0,0,0,0.5), rgba(255,255,255,0.5));
+  z-index: 2;
 }
 
-/* FlippingPages takes up full width and height of its container */
+/* FlippingPages layout */
 .FlippingPages {
-  width: 100%;
+  width: 50%;  /* Half the screen */
   height: 100%;
-  z-index: 1; /* Place it below the crease */
+  z-index: 1;
+  overflow: hidden;  /* Prevent overflow */
 }
 
 /* Page layout */
 .page {
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
+  overflow: hidden;  /* Prevent overflow */
 }
 
 /* Image and text styles */
@@ -75,9 +79,10 @@ body, html {
 }
 
 .page img {
-  object-fit: contain; /* Fit within dimensions */
-  width: 45%; /* Make it smaller than the entire half */
-  height: 90%;
+  object-fit: contain;
+  width: 60%;
+  height: 60%;
+  margin: auto;  /* Center the image */
 }
 
 .page p, .page h1 {
