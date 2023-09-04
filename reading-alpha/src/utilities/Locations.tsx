@@ -1,5 +1,4 @@
 import { Location } from "../classes/location";
-import { environ } from "../config";
 
 /**
  * Get a list of all default location
@@ -7,7 +6,7 @@ import { environ } from "../config";
  */
 export const getAllDefaultLocations = async (): Promise<Location[]> => {
   const response = await fetch(
-    `${environ.API_URL}/api/locations/getAllDefaultLocations`
+    `${process.env.REACT_APP_API_URL}/api/locations/getAllDefaultLocations`
   );
   const data = await response.json();
   return data.defaultLocations;

@@ -1,5 +1,4 @@
 import { Book } from "../classes/book";
-import { environ } from "../config";
 
 /**
  * Create a new book using data from the BookCreation workflow
@@ -9,13 +8,13 @@ import { environ } from "../config";
 export const createNewBook = async (
   dataForBookCreation: Book | null
 ): Promise<Book> => {
-  const response = await fetch(`${environ.API_URL}/api/createNewBook`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(dataForBookCreation),
-  });
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/createNewBook`,
+    {
+      method: "POST",
+      body: JSON.stringify(dataForBookCreation),
+    }
+  );
 
   // Mimic delay
   const delay = (ms: number | undefined) =>
@@ -32,7 +31,9 @@ export const createNewBook = async (
  * @returns
  */
 export const getBook = async (bookId: string): Promise<Book> => {
-  const response = await fetch(`${environ.API_URL}/api/getBook/${bookId}`);
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/api/getBook/${bookId}`
+  );
   const data = await response.json();
   return data.book;
 };
