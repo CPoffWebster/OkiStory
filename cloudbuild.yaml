@@ -12,7 +12,7 @@ steps:
       [
         "build",
         "-t",
-        "gcr.io/$_PROJECT_ID/$_READING_ALPHA_IMAGE_NAME",
+        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/readingalpha/$_READING_ALPHA_IMAGE_NAME",
         "./reading-alpha",
       ]
 
@@ -24,7 +24,7 @@ steps:
         "deploy",
         "reading-alpha-service",
         "--image",
-        "gcr.io/$_PROJECT_ID/$_READING_ALPHA_IMAGE_NAME",
+        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/readingalpha/$_READING_ALPHA_IMAGE_NAME",
         "--region",
         "us-central1",
       ]
@@ -36,7 +36,7 @@ steps:
       [
         "build",
         "-t",
-        "gcr.io/$_PROJECT_ID/$_READING_ALPHA_API_IMAGE_NAME",
+        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/readingalpha/$_READING_ALPHA_API_IMAGE_NAME",
         "./reading-alpha-api",
       ]
 
@@ -48,7 +48,7 @@ steps:
         "deploy",
         "reading-alpha-api-service",
         "--image",
-        "gcr.io/$_PROJECT_ID/$_READING_ALPHA_API_IMAGE_NAME",
+        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/readingalpha/$_READING_ALPHA_API_IMAGE_NAME",
         "--region",
         "us-central1",
       ]
