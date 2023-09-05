@@ -4,8 +4,9 @@ substitutions:
   _READING_ALPHA_API_IMAGE_NAME: "reading-alpha-api"
   _PROJECT_ID: "reading-alpha-dev"
 
-# Frontend Build and Deploy Steps
 steps:
+  ### Frontend Build and Deploy Steps ###
+
   # Build the frontend container image
   - name: "gcr.io/cloud-builders/docker"
     args:
@@ -13,7 +14,7 @@ steps:
         "build",
         "-t",
         "gcr.io/$PROJECT_ID/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA",
-        "./reading-alpha",
+        "./$_READING_ALPHA_IMAGE_NAME",
       ]
 
   # Push the frontend container image to Container Registry
@@ -26,10 +27,37 @@ steps:
     args:
       - "run"
       - "deploy"
-      - "$_READING_ALPHA_IMAGE_NAME"
+      - "$_READING_ALPHA_IMAGE_NAME-dev"
       - "--image"
       - "gcr.io/$PROJECT_ID/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA"
       - "--region"
       - "us-central1"
-# Backend Build and Deploy Steps (similar to frontend)
-# ...
+
+  ### Backend Build and Deploy Steps ###
+
+  # Build the backend container image
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/$PROJECT_ID/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA",
+        "./$_READING_ALPHA_API_IMAGE_NAME",
+      ]
+
+  # Push the backend container image to Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      ["push", "gcr.io/$PROJECT_ID/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA"]
+
+  # Deploy backend container image to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "$_READING_ALPHA_API_IMAGE_NAME-dev"
+      - "--image"
+      - "gcr.io/$PROJECT_ID/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA"
+      - "--region"
+      - "us-central1"
