@@ -17,6 +17,7 @@ steps:
   #     ]
   - id: "build-reading-alpha"
     name: "gcr.io/cloud-builders/docker"
+    entrypoint: "sh"
     args:
       [
         "cd $_READING_ALPHA_IMAGE_NAME && docker build",
