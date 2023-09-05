@@ -10,7 +10,7 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args:
       [
-        "cd $_READING_ALPHA_IMAGE_NAME && docker build \",
+        "cd $_READING_ALPHA_IMAGE_NAME && docker build",
         "-t",
         "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA",
         ".",
@@ -34,7 +34,7 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args:
       [
-        "cd $_READING_ALPHA_API_IMAGE_NAME && docker build \",
+        "cd $_READING_ALPHA_API_IMAGE_NAME && docker build",
         "-t",
         "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA",
         ".",
