@@ -10,10 +10,10 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args:
       [
-        "build",
+        "cd $_READING_ALPHA_IMAGE_NAME && docker build \",
         "-t",
-        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/readingalpha/$_READING_ALPHA_IMAGE_NAME",
-        "./reading-alpha",
+        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA",
+        ".",
       ]
 
   - id: "deploy-reading-alpha"
@@ -24,7 +24,7 @@ steps:
         "deploy",
         "reading-alpha-service",
         "--image",
-        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/readingalpha/$_READING_ALPHA_IMAGE_NAME",
+        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA",
         "--region",
         "us-central1",
       ]
@@ -34,10 +34,10 @@ steps:
     name: "gcr.io/cloud-builders/docker"
     args:
       [
-        "build",
+        "cd $_READING_ALPHA_API_IMAGE_NAME && docker build \",
         "-t",
-        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/readingalpha/$_READING_ALPHA_API_IMAGE_NAME",
-        "./reading-alpha-api",
+        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA",
+        ".",
       ]
 
   - id: "deploy-reading-alpha-api"
@@ -48,7 +48,7 @@ steps:
         "deploy",
         "reading-alpha-api-service",
         "--image",
-        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/readingalpha/$_READING_ALPHA_API_IMAGE_NAME",
+        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA",
         "--region",
         "us-central1",
       ]
