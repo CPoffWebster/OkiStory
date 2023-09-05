@@ -6,15 +6,21 @@ substitutions:
 
 # Frontend Build and Deploy Steps
 steps:
+  # - id: "build-reading-alpha"
+  #   name: "gcr.io/cloud-builders/docker"
+  #   args:
+  #     [
+  #       "cd $_READING_ALPHA_IMAGE_NAME && docker build",
+  #       "-t",
+  #       "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA",
+  #       ".",
+  #     ]
   - id: "build-reading-alpha"
     name: "gcr.io/cloud-builders/docker"
+    entrypoint: "sh"
     args:
-      [
-        "cd $_READING_ALPHA_IMAGE_NAME && docker build",
-        "-t",
-        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA",
-        ".",
-      ]
+      - "-c"
+      - "cd $_READING_ALPHA_IMAGE_NAME && docker build -t gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA ."
 
   - id: "deploy-reading-alpha"
     name: "gcr.io/cloud-builders/gcloud"
@@ -30,15 +36,21 @@ steps:
       ]
 
   # Backend Build and Deploy Steps
+  # - id: "build-reading-alpha-api"
+  #   name: "gcr.io/cloud-builders/docker"
+  #   args:
+  #     [
+  #       "cd $_READING_ALPHA_API_IMAGE_NAME && docker build",
+  #       "-t",
+  #       "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA",
+  #       ".",
+  #     ]
   - id: "build-reading-alpha-api"
     name: "gcr.io/cloud-builders/docker"
+    entrypoint: "sh"
     args:
-      [
-        "cd $_READING_ALPHA_API_IMAGE_NAME && docker build",
-        "-t",
-        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA",
-        ".",
-      ]
+      - "-c"
+      - "cd $_READING_ALPHA_API_IMAGE_NAME && docker build -t gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA ."
 
   - id: "deploy-reading-alpha-api"
     name: "gcr.io/cloud-builders/gcloud"
