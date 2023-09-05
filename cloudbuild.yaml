@@ -55,14 +55,14 @@ steps:
   #       ".",
   #     ]
   - id: "build-reading-alpha-api"
-  name: "gcr.io/cloud-builders/docker"
-  args:
-    [
-      'cd $_READING_ALPHA_API_IMAGE_NAME && docker build \',
-      "-t",
-      "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA",
-      ".",
-    ]
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        'cd $_READING_ALPHA_API_IMAGE_NAME && docker build \',
+        "-t",
+        "gcr.io/$_PROJECT_ID/github.com/cpoffwebster/$_READING_ALPHA_API_IMAGE_NAME:$COMMIT_SHA",
+        ".",
+      ]
   # - id: "build-reading-alpha-api"
   #   name: "gcr.io/cloud-builders/docker"
   #   entrypoint: "sh"
