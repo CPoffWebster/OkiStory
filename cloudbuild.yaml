@@ -1,0 +1,54 @@
+# Define substitutions for convenience
+substitutions:
+  _READING_ALPHA_IMAGE_NAME: "reading-alpha"
+  _READING_ALPHA_API_IMAGE_NAME: "reading-alpha-api"
+  _PROJECT_ID: "reading-alpha-dev" # manually setting project ID
+
+# Frontend Build and Deploy Steps
+steps:
+  - id: "build-reading-alpha"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/$_PROJECT_ID/$_READING_ALPHA_IMAGE_NAME",
+        "./reading-alpha",
+      ]
+
+  - id: "deploy-reading-alpha"
+    name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "reading-alpha-service",
+        "--image",
+        "gcr.io/$_PROJECT_ID/$_READING_ALPHA_IMAGE_NAME",
+        "--region",
+        "us-central1",
+      ]
+
+  # Backend Build and Deploy Steps
+  - id: "build-reading-alpha-api"
+    name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "gcr.io/$_PROJECT_ID/$_READING_ALPHA_API_IMAGE_NAME",
+        "./reading-alpha-api",
+      ]
+
+  - id: "deploy-reading-alpha-api"
+    name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "reading-alpha-api-service",
+        "--image",
+        "gcr.io/$_PROJECT_ID/$_READING_ALPHA_API_IMAGE_NAME",
+        "--region",
+        "us-central1",
+      ]
