@@ -9,6 +9,9 @@ export interface SelectBookInformation {
   sendBookInfo: (book: Book) => void;
 }
 
+/**
+ * Workflow for creating a new book
+ */
 const Workflow: React.FC<SelectBookInformation> = ({ sendBookInfo }) => {
   const [creationWorkflow, setCreationWorkflow] =
     useState<string>("CreateStory");

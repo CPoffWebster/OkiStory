@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { Book } from "../classes/book";
-import { createNewBook } from "../utilities/Books";
+import { Book } from "../../../classes/book";
+import { createNewBook } from "../../../utilities/Books";
 import "./BookLoader.css";
 
 interface BookCreation {
@@ -8,6 +8,12 @@ interface BookCreation {
   dataForBookCreation: Book | null;
 }
 
+/**
+ * Creates a new book and loads it into the BookReader
+ * @param createFullBook
+ * @param dataForBookCreation
+ * @returns
+ */
 const BookLoader: React.FC<BookCreation> = ({
   createFullBook,
   dataForBookCreation,

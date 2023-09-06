@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Book } from "../classes/book";
+import { Book } from "../../classes/book";
 import { FlippingPages } from "flipping-pages";
 import "flipping-pages/dist/style.css";
 import "./BookReader.css"; // Make sure to include your CSS
@@ -8,6 +8,11 @@ interface ReadBook {
   fullBook: Book;
 }
 
+/**
+ * Renders a book for reading - includes flipping pages
+ * @param fullBook import book data
+ * @returns
+ */
 const BookReader: React.FC<ReadBook> = ({ fullBook }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const book = fullBook!.generatedBook!;

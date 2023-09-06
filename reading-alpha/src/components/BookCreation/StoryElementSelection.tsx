@@ -12,6 +12,13 @@ export interface StoryElementSelectionProps {
   title: string;
 }
 
+/**
+ * Select a story element
+ * @param sendElementInfo
+ * @param fetchElements
+ * @param title
+ * @returns
+ */
 const StoryElementSelection: React.FC<StoryElementSelectionProps> = ({
   sendElementInfo,
   fetchElements,

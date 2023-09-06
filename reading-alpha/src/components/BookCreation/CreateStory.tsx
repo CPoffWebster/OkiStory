@@ -4,6 +4,11 @@ interface CreateStoryProps {
   initiateNewStory: () => void;
 }
 
+/**
+ * Create a new story button
+ * @param initiateNewStory
+ * @returns
+ */
 const CreateStory: React.FC<CreateStoryProps> = ({ initiateNewStory }) => {
   return (
     <div>

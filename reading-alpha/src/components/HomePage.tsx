@@ -1,8 +1,8 @@
 import Workflow from "./BookCreation/Workflow";
 import { Book } from "../classes/book";
 import { useEffect, useState } from "react";
-import BookLoader from "./BookLoader";
-import BookReader from "./BookReader";
+import BookLoader from "./BookCreation/BookLoading/BookLoader";
+import BookReader from "./BookReader/BookReader";
 
 const HomePage = () => {
   const [book, setBook] = useState<Book | null>(null);
