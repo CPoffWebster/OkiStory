@@ -28,9 +28,7 @@ export const createNewBook = async (
  * @returns
  */
 export const getBook = async (bookId: string): Promise<Book> => {
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/api/getBook/${bookId}`
-  );
+  const response = await fetch(`/api/getBook/${bookId}`);
   const data = await response.json();
   return data.book;
 };
