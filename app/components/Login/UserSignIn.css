@@ -37,11 +37,21 @@
     width: 350px;
     padding: 12px;
     margin: 8px 0;
-    font-weight: bold;
     cursor: pointer;
     border: gray 1px solid;
     border-radius: 4px;
     background-color: white;
+  }
+
+  .socialButton {
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  }
+  
+  .socialButton svg {
+    margin-right: 8px; /* Adds spacing between the icon and the text */
   }
   
   .continueButton {
@@ -69,18 +79,6 @@
   
   .orText {
     margin: 0 16px;
-  }
-  
-  .facebook {
-    color: #1877f2;
-  }
-  
-  .google {
-    color: #db4437;
-  }
-  
-  .apple {
-    color: black;
   }
   
   .footer {
