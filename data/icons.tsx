@@ -1,3 +1,34 @@
+export const errorIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    x="0px"
+    y="0px"
+    width="15"
+    height="15"
+    viewBox="0,0,256,256"
+  >
+    <g
+      fill="#f60000"
+      fillRule="nonzero"
+      stroke="none"
+      strokeWidth="1"
+      strokeLinecap="butt"
+      strokeLinejoin="miter"
+      strokeMiterlimit="10"
+      strokeDasharray=""
+      strokeDashoffset="0"
+      fontFamily="none"
+      fontWeight="none"
+      fontSize="none"
+      textAnchor="none"
+    >
+      <g transform="scale(10.66667,10.66667)">
+        <path d="M12,0c-6.62891,0 -12,5.37109 -12,12c0,6.62891 5.37109,12 12,12c6.62891,0 12,-5.37109 12,-12c0,-6.62891 -5.37109,-12 -12,-12zM17.39063,15.42969l-1.96094,1.96094l-3.42969,-3.42969l-3.42969,3.42969l-1.96094,-1.96094l3.42969,-3.42969l-3.42969,-3.42969l1.96094,-1.96094l3.42969,3.42969l3.42969,-3.42969l1.96094,1.96094l-3.42969,3.42969z"></path>
+      </g>
+    </g>
+  </svg>
+);
+
 export const googleIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
