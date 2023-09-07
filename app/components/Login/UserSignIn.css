@@ -1,0 +1,92 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f8f8f8;
+  }
+
+  .logo {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Logo styling here, e.g., background-image */
+  }
+  
+  .title {
+    font-size: 50px;
+    margin-bottom: 50px;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .input {
+    width: 350px;
+    padding: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .continueButton,
+  .socialButton {
+    width: 350px;
+    padding: 12px;
+    margin: 8px 0;
+    font-weight: bold;
+    cursor: pointer;
+    border: gray 1px solid;
+    border-radius: 4px;
+    background-color: white;
+  }
+  
+  .continueButton {
+    background-color: #1877f2;
+    color: white;
+  }
+
+  .signup {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .orSeparator {
+    display: flex;
+    align-items: center;
+    margin: 16px 0;
+    width: 350px;
+  }
+  
+  .line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #ccc;
+  }
+  
+  .orText {
+    margin: 0 16px;
+  }
+  
+  .facebook {
+    color: #1877f2;
+  }
+  
+  .google {
+    color: #db4437;
+  }
+  
+  .apple {
+    color: black;
+  }
+  
+  .footer {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+  }
