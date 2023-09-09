@@ -1,0 +1,33 @@
+.main-wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+  }  
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f8f8f8;
+  }
+
+  .logo {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* Logo styling here, e.g., background-image */
+  }
+
+  .footer {
+    position: fixed; /* Makes the footer stick to the bottom */
+    bottom: 0; /* Aligns it to the bottom of the screen */
+    width: 100%; /* Takes up the full width of the viewport */
+    text-align: center; /* Center-align text */
+    padding: 10px 0; /* Some padding to give it space */
+    background-color: #f8f8f8; /* Same as your .container background-color */
+  }
+  

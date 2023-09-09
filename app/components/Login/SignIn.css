@@ -1,27 +1,3 @@
-.main-wrap {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    justify-content: space-between;
-  }  
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #f8f8f8;
-  }
-
-  .logo {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    /* Logo styling here, e.g., background-image */
-  }
-  
   .title {
     font-size: 50px;
     margin-bottom: 50px;
@@ -101,6 +77,16 @@
   .input:focus {
     border-color: green;
   }
+
+    
+  .continueButton {
+    background-color: #1877f2;
+    color: white;
+  }
+
+  .socialButton {
+    background-color: white;
+  }
   
   .continueButton,
   .socialButton {
@@ -110,7 +96,6 @@
     cursor: pointer;
     border: gray 1px solid;
     border-radius: 4px;
-    background-color: white;
   }
   
   .continueButton:hover {
@@ -131,11 +116,6 @@
   
   .socialButton svg {
     margin-right: 8px;
-  }
-  
-  .continueButton {
-    background-color: #1877f2;
-    color: white;
   }
 
   .signup {
@@ -159,14 +139,3 @@
   .orText {
     margin: 0 16px;
   }
-  
-
-  .footer {
-    position: fixed; /* Makes the footer stick to the bottom */
-    bottom: 0; /* Aligns it to the bottom of the screen */
-    width: 100%; /* Takes up the full width of the viewport */
-    text-align: center; /* Center-align text */
-    padding: 10px 0; /* Some padding to give it space */
-    background-color: #f8f8f8; /* Same as your .container background-color */
-  }
-  
