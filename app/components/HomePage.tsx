@@ -1,4 +1,3 @@
-"use client";
 import Workflow from "./BookCreation/Workflow";
 import { Book } from "../classes/book";
 import { useEffect, useState } from "react";

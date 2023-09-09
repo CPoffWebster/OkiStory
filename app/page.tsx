@@ -1,11 +1,13 @@
-// @client
+"use client";
 import HomePage from "./components/HomePage";
+// import UserSignIn from "./components/Login/UserSignIn";
+import "bootstrap/dist/css/bootstrap.css";
 
 export default function Home() {
   return (
     <>
-      {/* <h1>Reading Alpha</h1> */}
       <HomePage />
+      {/* <UserSignIn /> */}
     </>
   );
 }
