@@ -29,6 +29,8 @@
 
   .email-input {
     padding: 12px;
+    border: gray 1px solid;
+    border-radius: 4px;
   }
 
   .input-container {
@@ -110,13 +112,22 @@
     border-radius: 4px;
     background-color: white;
   }
+  
+  .continueButton:hover {
+    opacity: 0.8;
+  }
 
+  .socialButton:hover {
+    background-color: lightgray;
+  }
+  
   .socialButton {
     color: black;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
   }
+
   
   .socialButton svg {
     margin-right: 8px;
