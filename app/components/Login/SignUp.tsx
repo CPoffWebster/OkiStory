@@ -1,6 +1,6 @@
 import React from "react";
 import "./SignUp.css";
-import { errorIcon } from "@/data/icons";
+import { eyeOffIcon, eyeOnIcon } from "@/data/icons";
 
 export interface SignUpProps {
   emailValue: string;
@@ -11,6 +11,7 @@ const SignUp: React.FC<SignUpProps> = ({ emailValue }) => {
   const [passwordError, setPasswordError] = React.useState(false);
   const [inputFocused, setInputFocused] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
+  const [continueClicked, setContinueClicked] = React.useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -23,36 +24,45 @@ const SignUp: React.FC<SignUpProps> = ({ emailValue }) => {
     target: { value: React.SetStateAction<string> };
   }) => {
     setPasswordValue(e.target.value);
+    if (passwordError && e.target.value.length >= 8) {
+      setPasswordError(false);
+    }
   };
 
   // handle password submit
   const handleSubmit = async () => {
-    // const isEmailValid = validator.isEmail(emailValue);
-    // console.log(isEmailValid, emailValue);
-    setPasswordError(true); // Set the error state based on email validity
+    setContinueClicked(true);
+    if (passwordValue.length < 8) {
+      setPasswordError(true);
+    }
   };
 
   return (
     <>
-      <h1>Create an account</h1>
+      <h1 className="title">Create an account</h1>
       <div className="input-edit-container">
         <input className="email-input-edit" value={emailValue} readOnly />
         <button className="edit-button">Edit</button>
       </div>
       <div className="input-password-container">
-        <input
-          className={`password-input ${passwordError ? "error" : ""}`}
-          id="password"
-          type={showPassword ? "text" : "password"}
-          value={passwordValue}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
-        {showPassword.toString()}
-        <button className="toggle-password" onClick={togglePasswordVisibility}>
-          {showPassword ? "Hide" : "Show"}
-        </button>
+        <div className="input-wrapper">
+          <input
+            className={`password-input ${passwordError ? "error" : ""}`}
+            id="password"
+            type={showPassword ? "text" : "password"}
+            value={passwordValue}
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+          />
+          <button
+            className="toggle-password"
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? eyeOffIcon : eyeOnIcon}
+          </button>
+        </div>
+
         <label
           className={
             passwordValue || inputFocused
@@ -65,12 +75,25 @@ const SignUp: React.FC<SignUpProps> = ({ emailValue }) => {
         >
           Password
         </label>
-        {passwordError && (
-          <div className="errorText">{errorIcon} password error</div>
+        {continueClicked && (
+          <div className="password-strength-info">
+            <p>Your password must contain:</p>
+            <ul>
+              <li
+                className={
+                  passwordValue.length < 8
+                    ? "char-count-red"
+                    : "char-count-green"
+                }
+              >
+                At least 8 characters
+              </li>
+            </ul>
+          </div>
         )}
       </div>
       <button className="signInButton" onClick={handleSubmit}>
-        Sign In
+        Continue
       </button>
     </>
   );

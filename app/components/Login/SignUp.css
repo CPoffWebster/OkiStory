@@ -1,3 +1,7 @@
+.title {
+  margin-bottom: 50px;
+}
+
 .input-edit-container {
     position: relative;
     display: inline-flex;
@@ -15,7 +19,7 @@
   
   .edit-button {
     position: absolute;
-    right: 2%;
+    right: 0%;
     top: 0;
     padding: 12px;
     border: none;
@@ -62,29 +66,43 @@
     color: red;
   }
 
-  .toggle-password {
-    position: absolute;
-    right: 2%;
-    top: 2%;
-    padding: 12px;
-    border: none;
-    background: none;
-    color: #1877f2;
-    cursor: pointer;
-    border-radius: 4px;
-    z-index: 2;
-    background-color: white;
+  .input-wrapper {
+    position: relative;
+    width: 350px;
   }
   
+  .toggle-password {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 2;
+  }
+  
+
+  /* For most browsers */
+  input[type="password"]::-ms-reveal,
+  input[type="password"]::-webkit-reveal {
+    display: none;
+  }
+
+  
   .password-input {
+    /* height: 40px; */
+    width: 100%;
     padding: 12px;
     border: gray 1px solid;
     border-radius: 4px;
   }
+  
 
   .password-input:focus {
     outline: none;
-    border: 1px solid #0a53e4;  /* Blue border when focused */
+    border: 1px solid #0a53e4;
   }
   
   .password-input.error {
@@ -96,6 +114,33 @@
     border-color: red;
     border: 1px solid red;
   }
+
+
+
+  .password-strength-info {
+    margin-top: 15px;
+    border: gray 1px solid;
+    border-radius: 4px;
+    padding: 8px 16px;
+  }
+  
+  .password-strength-info p {
+    margin-bottom: 5px;
+  }
+  
+  .password-strength-info ul {
+    line-height: 1.2;
+    margin-bottom:5px;
+  }
+  
+  .char-count-red {
+    color: red;
+  }
+  
+  .char-count-green {
+    color: green;
+  }
+  
   
 
   .signInButton {
