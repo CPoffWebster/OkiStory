@@ -69,6 +69,11 @@ export class ReadingAlphaDB {
         return this.sequelize.transaction();
     }
 
+    // public async recreateDatabase() {
+    //     await this.sequelize.dropAllSchemas({});
+    //     // await this.createTables();
+    // }
+
     public async createTables(options: { useDev?: boolean } = {}) {
         const syncOptions: SyncOptions = (options.useDev === true)
             ? ({ force: true })  //  Force if dev

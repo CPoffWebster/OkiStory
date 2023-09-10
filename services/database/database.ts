@@ -12,6 +12,14 @@ export function connectToDb() {
     return new ReadingAlphaDB(sequelize);
 }
 
+export function initializeTables() {
+    const { database, user, pass, settings } = getDbConfig();
+    const sequelize = new Sequelize(database, user, pass, settings);
+
+    const db = new ReadingAlphaDB(sequelize);
+    db.createTables({ useDev: true });
+}
+
 /**
  * Gets the database configuration
  */
