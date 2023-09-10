@@ -67,19 +67,6 @@ CREATE TABLE Books (
     FOREIGN KEY (UserID) REFERENCES Users(UserID)
 );
 
--- Create Pages Table
-CREATE TABLE Pages (
-    PageID INT PRIMARY KEY AUTO_INCREMENT,
-    BookID INT,
-    PageNumber INT,
-    Text varchar(MAX),
-    Image VARCHAR(512),
-    DateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (BookID) REFERENCES Books(BookID)
-);
-
-
-
 -- Updated Pages Table
 CREATE TABLE Pages (
     PageID INT PRIMARY KEY AUTO_INCREMENT,

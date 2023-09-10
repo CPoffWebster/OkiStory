@@ -16,9 +16,8 @@ services:
     image: mysql:8.0
     ports:
       - "3306:3306"
-    command: ["--init-file", "/docker-entrypoint-initdb.d/mysql-init.sql"]
     volumes:
-      - ./data/mysql/mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
+      - ./services/database/mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: ReadingAlpha
