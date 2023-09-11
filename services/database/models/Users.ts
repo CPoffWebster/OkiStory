@@ -1,6 +1,13 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
-export class Users extends Model { }
+export interface UsersAttributes {
+    id?: number;
+    Email: string;
+    Password: string;
+    LastLogin?: Date;
+}
+
+export class Users extends Model<UsersAttributes> { }
 
 export function initUsers(sequelize: Sequelize) {
     Users.init({
