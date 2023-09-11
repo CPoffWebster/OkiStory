@@ -76,7 +76,7 @@ export class ReadingAlphaDB {
 
     public async createTables(options: { useDev?: boolean } = {}) {
         const syncOptions: SyncOptions = (options.useDev === true)
-            ? ({ force: true })  //  Force if dev
+            ? ({ alter: true, force: true })  //  Force if dev
             : ({ alter: false, force: false });  // Don't force it.  We're in prod
 
         await this.tables.Users.sync(syncOptions)

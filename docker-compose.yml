@@ -1,9 +1,14 @@
 version: "3.9"
 services:
-  api:
-    build: .
+  web:
+    build: 
+      context: .
+      # dockerfile: Dockerfile.dev
     ports:
       - "8080:8080"
+    # volumes:
+    #   - ./:/app
+    #   - /app/node_modules
     environment:
       - DB_HOST=db
       - DB_PORT=3306
@@ -17,7 +22,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./services/database/mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
+      - ./services/database/sql/mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: ReadingAlpha
