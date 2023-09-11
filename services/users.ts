@@ -1,13 +1,12 @@
-// import * as bcrypt from 'bcrypt';
 import { connectToDb } from './database/database';
+import bcrypt from 'bcrypt';
 
 
-export async function saveUser(user: string, pwd: string, admin: boolean = false) {
+export async function saveUser(user: string, pwd: string) {
     const db = connectToDb();
-    // const saltRounds = 10;
-    // const hash = bcrypt.hashSync(pwd, saltRounds);
-    const hash = pwd;
+    const saltRounds = 11;
+    const hash = bcrypt.hashSync(pwd, saltRounds);
 
     await db.tables.Users.create({ Email: user, Password: hash });
-    console.log("inserted " + user);
+    console.log("User inserted: " + user);
 }

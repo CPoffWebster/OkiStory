@@ -7,16 +7,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
  * @param res 
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-
     const { email, password } = req.body;
-    console.log("email", email, "password", password)
-    // console.log('TEST!!')
+    console.log("Register User: Email", email);
 
     try {
-        await saveUser(email, password, false);
-
+        await saveUser(email, password);
         res.status(200).json({ email, password });
-
     } catch (error) {
         res.status(500).json({ error: error });
     }
