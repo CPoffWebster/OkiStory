@@ -2,6 +2,7 @@ import React from "react";
 import "./LoginWorkFlow.css";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import WelcomeBack from "./WelcomeBack";
 
 const LoginWorkFlow = () => {
   return (
@@ -9,7 +10,8 @@ const LoginWorkFlow = () => {
       <div className="logo">Logo Here</div> {/* todo Logo placement */}
       <div className="container">
         {/* <SignIn /> */}
-        <SignUp emailValue={"test value.com"} />
+        {/* <SignUp emailValue={"test2@email.com"} /> */}
+        <WelcomeBack emailValue={"test2@email.com"} />
       </div>
       <div className="footer">
         <a href="/terms">Terms of use</a> |{" "}
