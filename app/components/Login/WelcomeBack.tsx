@@ -87,9 +87,15 @@ const WelcomeBack: React.FC<WelcomeBackProps> = ({ emailValue }) => {
           </div>
         )}
       </div>
+      <div>
+        <a href="/forgot-password">Forgot password? - todo</a>
+      </div>
       <button className="signInButton" onClick={handleSubmit}>
         Continue
       </button>
+      <div>
+        Don't have an account? <a href="/signup">Sign up - todo</a>
+      </div>
     </>
   );
 };
