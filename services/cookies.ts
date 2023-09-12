@@ -59,14 +59,26 @@ export async function checkCookies(req: CookiefulRequest): Promise<UsersAttribut
     const tokenValue = value || access_token;
     const db = connectToDb();
     try {
-        console.log(`tokenValue`, tokenValue)
-        console.log(`process.env.JWT_SECRET`, process.env.JWT_SECRET)
+        // console.log(`tokenValue`, tokenValue)
+        // console.log(`process.env.JWT_SECRET`, process.env.JWT_SECRET)
         const tokenObject = jwt.verify(tokenValue, process.env.JWT_SECRET);
-        console.log(`tokenObject`, tokenObject)
-        const user = await db.tables.Users.findOne({ where: { Email: tokenObject.email } }) as unknown as UsersAttributes;
-        console.log(`user`, user)
+        // console.log(`tokenObject`, tokenObject)
+        const user = await db.tables.Users.findOne({ where: { Email: tokenObject.email } });
+        // console.log(`user`, user)
         if (!user) { return null }
-        return user;
+
+
+        // Access the dataValues property and cast it to UsersAttributes
+        const userAttributes = user.get() as UsersAttributes;
+
+        // If you need to serialize the Date, you can do so here
+        if (userAttributes.LastLogin) {
+            userAttributes.LastLogin = userAttributes.LastLogin;
+        }
+
+        return userAttributes;
+
+
     } catch (err) {
         console.log('Error in verifyToken: ', tokenValue, err);
         const decoded = jwt.decode(tokenValue);

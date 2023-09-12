@@ -5,9 +5,10 @@ import "./identifier.css";
 import LoginLayout from "@/app/components/LoginLayout";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
+import { decrypt, encrypt } from "@/services/encryption";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const emailValue = context.query.state as string;
+  const emailValue = decrypt(context.query.state as string);
   return {
     props: { emailValue },
   };
@@ -32,7 +33,7 @@ export default function identifier(props: { emailValue: string }) {
   const handleSubmit = async () => {
     const isEmailValid = validator.isEmail(emailValue);
     if (isEmailValid) {
-      router.push(`/login/password?state=${emailValue}`);
+      router.push(`/login/password?state=${encrypt(emailValue)}`);
       return;
     }
     setEmailError(!isEmailValid); // Set the error state based on email validity

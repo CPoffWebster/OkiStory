@@ -5,9 +5,10 @@ import { GetServerSideProps } from "next";
 import axios from "axios";
 import "./password.css";
 import { useRouter } from "next/router";
+import { decrypt, encrypt } from "@/services/encryption";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const emailValue = context.query.state as string;
+  const emailValue = decrypt(context.query.state as string);
   return {
     props: { emailValue }, // will be passed to the page component as props
   };
@@ -35,7 +36,7 @@ export default function password(props: { emailValue: string }) {
   };
 
   const handleEdit = () => {
-    router.push(`/login/identifier?state=${props.emailValue}`);
+    router.push(`/login/identifier?state=${encrypt(props.emailValue)}`);
     return;
   };
 
