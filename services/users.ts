@@ -58,5 +58,5 @@ export async function checkLoginDB(email: string, password: string): Promise<{ a
 
 /** Creates an authentication token good for 7 day */
 export function createTokenForUser_Internal(email: string): string {
-    return jwt.sign({ email }, 'Kf!7GUyc<nMZj&nbt[<$Rm82', { expiresIn: '7 day' });
+    return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '7 day' });
 }

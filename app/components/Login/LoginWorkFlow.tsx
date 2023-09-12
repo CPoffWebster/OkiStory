@@ -4,14 +4,14 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import WelcomeBack from "./WelcomeBack";
 
-const LoginWorkFlow = () => {
+const LoginWorkFlow = async () => {
   return (
     <div className="main-wrap">
       <div className="logo">Logo Here</div> {/* todo Logo placement */}
       <div className="container">
-        {/* <SignIn /> */}
+        <SignIn />
         {/* <SignUp emailValue={"test2@email.com"} /> */}
-        <WelcomeBack emailValue={"test2@email.com"} />
+        {/* <WelcomeBack emailValue={"test2@email.com"} /> */}
       </div>
       <div className="footer">
         <a href="/terms">Terms of use</a> |{" "}

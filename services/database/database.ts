@@ -26,8 +26,6 @@ export function initializeTables() {
 export function getDbConfig(): ConnectionSetting {
     const { IS_CLOUD, DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, CLOUD_SQL_CONNECTION_NAME, SQL_LOGGING } = process.env;
 
-    console.log("LOOK HERE", IS_CLOUD, DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, CLOUD_SQL_CONNECTION_NAME, SQL_LOGGING);
-
     const isCloud = (IS_CLOUD) ? JSON.parse(IS_CLOUD) : false;
     const sqlLogging = (SQL_LOGGING) ? JSON.parse(SQL_LOGGING) : false;
     if (!JSON.parse(isCloud) && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
