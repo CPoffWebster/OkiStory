@@ -1,24 +1,36 @@
-import { Location } from "@/types/location";
+import { LocationsAttributes } from "@/services/database/models/Locations";
 
-export const exampleDefaultLocations: Location[] = [
+export const exampleDefaultLocations: LocationsAttributes[] = [
     {
-        name: "Location 1",
-        imageUrl: "https://placebear.com/300/300",
-        description: ""
+        id: 1,
+        Name: "Location 1",
+        Image: "https://placebear.com/300/300",
+        Description: "Location 1",
+        GenerationDescription: "",
+        IsDefault: true
     },
     {
-        name: "Location 2",
-        imageUrl: "https://placebear.com/300/300",
-        description: ""
+        id: 2,
+        Name: "Location 2",
+        Image: "https://placebear.com/300/300",
+        Description: "Location 2",
+        GenerationDescription: "",
+        IsDefault: true
     },
     {
-        name: "Location 3",
-        imageUrl: "https://placebear.com/300/300",
-        description: ""
+        id: 3,
+        Name: "Location 3",
+        Image: "https://placebear.com/300/300",
+        Description: "Location 3",
+        GenerationDescription: "",
+        IsDefault: true
     },
     {
-        name: "Location 4",
-        imageUrl: "https://placebear.com/300/300",
-        description: ""
+        id: 4,
+        Name: "Location 4",
+        Image: "https://placebear.com/300/300",
+        Description: "Location 4",
+        GenerationDescription: "",
+        IsDefault: true
     },
 ];

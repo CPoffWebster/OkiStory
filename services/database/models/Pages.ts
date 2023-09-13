@@ -1,6 +1,16 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
-export class Pages extends Model { }
+export interface PagesAttributes {
+    id: number;
+    BookID: number;
+    PageNumber: number;
+    Text: string;
+    Image: string;
+    PositiveImagePrompt: string;
+    NegativeImagePrompt: string;
+}
+
+export class Pages extends Model<PagesAttributes> { }
 
 export function initPages(sequelize: Sequelize) {
     Pages.init({

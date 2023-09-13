@@ -1,6 +1,16 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
-export class Characters extends Model { }
+export interface CharactersAttributes {
+    id: number;
+    Name: string;
+    Image: string;
+    Description: string;
+    GenerationDescription: string;
+    IsDefault: boolean;
+    UserCreatedID?: number;
+}
+
+export class Characters extends Model<CharactersAttributes> { }
 
 export function initCharacters(sequelize: Sequelize) {
     Characters.init({

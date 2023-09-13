@@ -1,3 +1,4 @@
+import { exampleBook, examplePages } from "@/static-examples/exampleBook";
 import { BooksAttributes } from "./database/models/Books";
 
 /**
@@ -6,21 +7,12 @@ import { BooksAttributes } from "./database/models/Books";
  * @returns created book data
  */
 export async function createNewBook(locationID: number, characterID: number): Promise<BooksAttributes> {
-    const response = await fetch(`/api/createNewBook`, {
-        method: "POST",
-        body: JSON.stringify({
-            locationID,
-            characterID
-        }),
-    });
+    console.log(`createNewBook: locationID: ${locationID}, characterID: ${characterID}`)
 
     // Mimic delay
-    const delay = (ms: number | undefined) =>
-        new Promise((res) => setTimeout(res, ms));
-    await delay(1000);
+    await delay(3000)
 
-    const data = await response.json();
-    return data.book;
+    return exampleBook;
 };
 
 /**
@@ -29,7 +21,27 @@ export async function createNewBook(locationID: number, characterID: number): Pr
  * @returns
  */
 export async function getBook(bookID: number): Promise<BooksAttributes> {
-    const response = await fetch(`/api/getBook/${bookID}`);
-    const data = await response.json();
-    return data.book;
+    console.log(`getBook: bookID: ${bookID}`)
+
+    // Mimic delay
+    await delay()
+
+    return exampleBook;
 };
+
+export async function getPage(bookID: number, pageNumber: number) {
+    console.log(`getPage: bookID: ${bookID}, pageNumber: ${pageNumber}`)
+
+    // Mimic delay
+    await delay()
+
+    return examplePages[pageNumber - 1];
+}
+
+async function delay(timeout: number = 1000) {
+    // Mimic delay
+    const delay = (ms: number | undefined) =>
+        new Promise((res) => setTimeout(res, ms));
+    await delay(timeout);
+    return;
+}

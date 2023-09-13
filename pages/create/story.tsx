@@ -7,11 +7,10 @@ import {
 } from "@/services/storyElements";
 import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
+import { encrypt } from "@/services/encryption";
+import { CharactersAttributes } from "@/services/database/models/Characters";
 
-export interface StoryElement {
-  name: string;
-  imageUrl: string;
-}
+export interface StoryElement extends CharactersAttributes {}
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const themes = await getAllDefaultLocations();
@@ -29,22 +28,27 @@ export default function story(props: {
   const [selectionType, setSelectionType] = useState<string>("Theme");
   const [elements, setElements] = useState<StoryElement[]>([]);
   const [selectedStoryElements, setSelectedStoryElements] = useState<any>({
-    theme: "",
-    hero: "",
+    theme: 0,
+    hero: 0,
   });
 
   useEffect(() => {
     setElements(props.themes);
   }, []);
 
-  const handleSelectElement = (element: string): void => {
+  const handleSelectElement = (element: StoryElement): void => {
     if (selectionType === "Theme") {
-      setSelectedStoryElements({ ...selectedStoryElements, theme: element });
+      setSelectedStoryElements({ ...selectedStoryElements, theme: element.id });
       setSelectionType("Hero");
       setElements(props.characters);
     } else if (selectionType === "Hero") {
-      setSelectedStoryElements({ ...selectedStoryElements, hero: element });
-      setSelectionType(`DONE - MOVING ON`);
+      const encryptedData = encrypt(
+        JSON.stringify({
+          ...selectedStoryElements,
+          hero: element.id,
+        })
+      );
+      router.push(`/creating/book?data=${encryptedData}`);
     }
   };
 
@@ -73,11 +77,11 @@ export default function story(props: {
           <button
             className="selection-button"
             key={index}
-            onClick={() => handleSelectElement(element.name)}
+            onClick={() => handleSelectElement(element)}
           >
-            <img src={element.imageUrl} alt={element.name} />
+            <img src={element.Image} alt={element.Name} />
             <br />
-            {element.name}
+            {element.Name}
           </button>
         ))}
       </div>

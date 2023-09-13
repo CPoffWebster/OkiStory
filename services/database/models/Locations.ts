@@ -1,6 +1,16 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
-export class Locations extends Model { }
+export interface LocationsAttributes {
+    id: number;
+    Name: string;
+    Image: string;
+    Description: string;
+    GenerationDescription: string;
+    IsDefault: boolean;
+    UserCreatedID?: number;
+}
+
+export class Locations extends Model<LocationsAttributes> { }
 
 export function initLocations(sequelize: Sequelize) {
     Locations.init({
