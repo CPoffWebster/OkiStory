@@ -42,7 +42,7 @@ export default function HomePage() {
         {/* Right Section */}
         <div className="section">
           <img src="/changeImage.jpg" alt="Open Book" />
-          <Link href="/newstory">
+          <Link href="/create/story">
             <button className="button">New Story</button>
           </Link>
         </div>

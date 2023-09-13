@@ -1,6 +1,15 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
-export class Books extends Model { }
+export interface BooksAttributes {
+    id?: number;
+    Title: string;
+    CoverImage: string;
+    LocationID: number;
+    CharacterID: number;
+    UserID: number;
+}
+
+export class Books extends Model<BooksAttributes> { }
 
 export function initBooks(sequelize: Sequelize) {
     Books.init({
