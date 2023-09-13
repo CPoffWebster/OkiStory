@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { createNewBook } from "@/services/books";
-import { decrypt } from "@/services/encryption"; // Import your decryption function
+import { decrypt, encrypt } from "@/services/encryption"; // Import your decryption function
 import "./book.css";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const encryptedData = context.query.data;
@@ -21,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function creatingBookLoader(theme: number, hero: number) {
+  const router = useRouter();
   const [count, setCount] = useState(1);
 
   useEffect(() => {
@@ -28,6 +30,8 @@ export default function creatingBookLoader(theme: number, hero: number) {
       try {
         const creatingBook = await createNewBook(theme, hero);
         console.log(creatingBook);
+        const encryptedData = encrypt(JSON.stringify(creatingBook));
+        router.push(`/read/book?data=${encryptedData}`);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

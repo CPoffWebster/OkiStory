@@ -1,7 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface BooksAttributes {
-    id?: number;
+    id: number;
     Title: string;
     CoverImage: string;
     LocationID: number;

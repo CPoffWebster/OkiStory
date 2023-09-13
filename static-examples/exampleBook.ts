@@ -45,6 +45,7 @@ export const examplePages: PagesAttributes[] = [
         Text: "The bear was happy.",
         Image: "https://placebear.com/300/300",
         PositiveImagePrompt: "",
-        NegativeImagePrompt: ""
+        NegativeImagePrompt: "",
+        LastPage: true
     },
 ]

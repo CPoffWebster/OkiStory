@@ -8,6 +8,7 @@ export interface PagesAttributes {
     Image: string;
     PositiveImagePrompt: string;
     NegativeImagePrompt: string;
+    LastPage?: boolean;
 }
 
 export class Pages extends Model<PagesAttributes> { }
@@ -21,6 +22,7 @@ export function initPages(sequelize: Sequelize) {
         Image: { type: DataTypes.STRING(512) },
         PositiveImagePrompt: { type: DataTypes.TEXT },
         NegativeImagePrompt: { type: DataTypes.TEXT },
+        LastPage: { type: DataTypes.BOOLEAN, allowNull: true },
     }, {
         sequelize, modelName: 'pages', tableName: `pages`,
         timestamps: true

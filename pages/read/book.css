@@ -122,3 +122,8 @@ body, html {
   right: 10px;
 }
 
+/* To ignore CSS scope leakage */
+.home-icon-wrapper {
+  color: initial;
+  font-size: initial;
+}
