@@ -1,0 +1,25 @@
+/* Container styling */
+.container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  /* Header styling */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Book list styling */
+  .book-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .book-list-item {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+  

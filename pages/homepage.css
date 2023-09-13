@@ -1,0 +1,40 @@
+/* General layout */
+.container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  /* Header layout */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Main content layout */
+  .main-content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+  }
+  
+  /* Each section layout */
+  .section {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Image styling */
+  .section img {
+    width: 50%;
+  }
+  
+  /* Button styling */
+  .button {
+    margin-top: 20px;
+    font-size: 24px;
+  }
+  

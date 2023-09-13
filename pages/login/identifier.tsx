@@ -1,13 +1,12 @@
 import React from "react";
 import { appleIcon, errorIcon, facebookIcon, googleIcon } from "@/data/icons";
 var validator = require("validator");
-import "./identifier.css";
 import LoginLayout from "@/app/components/LoginLayout";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import { decrypt, encrypt } from "@/services/encryption";
-import { checkUserExists } from "@/services/users";
 import axios from "axios";
+import "./identifier.css";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const emailValue = decrypt(context.query.state as string);
