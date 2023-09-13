@@ -35,7 +35,7 @@ export default function identifier(props: { emailValue: string }) {
   const handleSubmit = async () => {
     const isEmailValid = validator.isEmail(emailValue);
     if (isEmailValid) {
-      const exists = await axios.post("/api/users/exists", {
+      const exists = await axios.post("/api/users/verifyUser", {
         email: emailValue,
       });
       if (exists) router.push(`/login/password?state=${encrypt(emailValue)}`);

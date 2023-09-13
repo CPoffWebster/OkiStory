@@ -1,8 +1,7 @@
 import { GetServerSideProps } from "next";
 import { checkCookies } from "../services/cookies";
-import "bootstrap/dist/css/bootstrap.css";
 import { encrypt } from "@/services/encryption";
-import { UsersAttributes } from "@/services/database/models/Users";
+// import "bootstrap/dist/css/bootstrap.css";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const user = await checkCookies(context.req);
@@ -14,8 +13,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-
-  console.log("LOOK HERE", user);
 
   return {
     props: { user: user },
