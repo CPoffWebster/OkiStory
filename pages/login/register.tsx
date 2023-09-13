@@ -1,12 +1,24 @@
 import React from "react";
-import "./SignUp.css";
 import { eyeOffIcon, eyeOnIcon } from "@/data/icons";
+import "./register.css";
+import LoginLayout from "@/app/components/LoginLayout";
+import { GetServerSideProps } from "next";
+import { decrypt, encrypt } from "@/services/encryption";
+import { useRouter } from "next/router";
 
 export interface SignUpProps {
   emailValue: string;
 }
 
-const SignUp: React.FC<SignUpProps> = ({ emailValue }) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const emailValue = decrypt(context.query.state as string);
+  return {
+    props: { emailValue }, // will be passed to the page component as props
+  };
+};
+
+export default function register(props: { emailValue: string }) {
+  const router = useRouter();
   const [passwordValue, setPasswordValue] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [inputFocused, setInputFocused] = React.useState(false);
@@ -29,6 +41,11 @@ const SignUp: React.FC<SignUpProps> = ({ emailValue }) => {
     }
   };
 
+  const handleEdit = () => {
+    router.push(`/login/identifier?state=${encrypt(props.emailValue)}`);
+    return;
+  };
+
   // handle password submit
   const handleSubmit = async () => {
     setContinueClicked(true);
@@ -38,11 +55,13 @@ const SignUp: React.FC<SignUpProps> = ({ emailValue }) => {
   };
 
   return (
-    <>
+    <LoginLayout>
       <h1 className="title">Create an account</h1>
       <div className="input-edit-container">
-        <input className="email-input-edit" value={emailValue} readOnly />
-        <button className="edit-button">Edit</button>
+        <input className="email-input-edit" value={props.emailValue} readOnly />
+        <button className="edit-button" onClick={handleEdit}>
+          Edit
+        </button>
       </div>
       <div className="input-password-container">
         <div className="input-wrapper">
@@ -95,8 +114,6 @@ const SignUp: React.FC<SignUpProps> = ({ emailValue }) => {
       <button className="signInButton" onClick={handleSubmit}>
         Continue
       </button>
-    </>
+    </LoginLayout>
   );
-};
-
-export default SignUp;
+}

@@ -6,6 +6,8 @@ import LoginLayout from "@/app/components/LoginLayout";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import { decrypt, encrypt } from "@/services/encryption";
+import { checkUserExists } from "@/services/users";
+import axios from "axios";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const emailValue = decrypt(context.query.state as string);
@@ -33,7 +35,11 @@ export default function identifier(props: { emailValue: string }) {
   const handleSubmit = async () => {
     const isEmailValid = validator.isEmail(emailValue);
     if (isEmailValid) {
-      router.push(`/login/password?state=${encrypt(emailValue)}`);
+      const exists = await axios.post("/api/users/exists", {
+        email: emailValue,
+      });
+      if (exists) router.push(`/login/password?state=${encrypt(emailValue)}`);
+      else router.push(`/login/register?state=${encrypt(emailValue)}`);
       return;
     }
     setEmailError(!isEmailValid); // Set the error state based on email validity

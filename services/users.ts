@@ -60,3 +60,14 @@ export async function checkLoginDB(email: string, password: string): Promise<{ a
 export function createTokenForUser_Internal(email: string): string {
     return jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '7 day' });
 }
+
+/**
+ * Checks if the user exists in the database
+ * @param email 
+ * @returns 
+ */
+export async function checkUserExists(email: string): Promise<boolean> {
+    const db = connectToDb();
+    const user = await db.tables.Users.findOne({ where: { Email: email } });
+    return user !== null;
+}

@@ -5,7 +5,6 @@ import { encrypt } from "@/services/encryption";
 import { UsersAttributes } from "@/services/database/models/Users";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log("context", context);
   const user = await checkCookies(context.req);
   if (!user) {
     return {
@@ -15,7 +14,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  console.log("USER FOUND HERE", user);
+
+  console.log("LOOK HERE", user);
 
   return {
     props: { user: user },
