@@ -75,11 +75,13 @@ export default function password() {
         </button>
       </div>
       <div className={styles["input-password-container"]}>
-        <div className={styles["input-wrapper"]}>
+        <div
+          className={`${styles["input-wrapper"]} ${
+            passwordError ? styles.error : ""
+          }`}
+        >
           <input
-            className={`${styles["password-input"]} ${
-              passwordError ? styles.error : ""
-            }`}
+            className={styles["password-input"]}
             id="password"
             type={showPassword ? "text" : "password"}
             value={passwordValue}
