@@ -12,7 +12,7 @@ export function connectToDb() {
     return new ReadingAlphaDB(sequelize);
 }
 
-export function initializeTables() {
+export async function initializeTables() {
     const { database, user, pass, settings } = getDbConfig();
     const sequelize = new Sequelize(database, user, pass, settings);
 
@@ -24,11 +24,11 @@ export function initializeTables() {
  * Gets the database configuration
  */
 export function getDbConfig(): ConnectionSetting {
-    const { IS_CLOUD, DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, CLOUD_SQL_CONNECTION_NAME, SQL_LOGGING } = process.env;
+    const { IS_CLOUD, DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, SQL_LOGGING } = process.env;
 
     const isCloud = (IS_CLOUD) ? JSON.parse(IS_CLOUD) : false;
     const sqlLogging = (SQL_LOGGING) ? JSON.parse(SQL_LOGGING) : false;
-    if (!JSON.parse(isCloud) && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
+    if (JSON.parse(isCloud) && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
         return connection(DB_NAME, DB_USER, DB_PASSWORD, {
             dialect: 'mysql',
             define: {
@@ -44,8 +44,8 @@ export function getDbConfig(): ConnectionSetting {
         });
     }
 
-    if (JSON.parse(isCloud)) {
-        return connection('invoice', 'test-user', 'MyPasswordIsDumb21398234', {
+    if (!JSON.parse(isCloud) && DB_NAME && DB_USER && DB_PASSWORD) {
+        return connection(DB_NAME, DB_USER, DB_PASSWORD, {
             host: '127.0.0.1',
             dialect: 'mysql',
             define: {
@@ -55,20 +55,7 @@ export function getDbConfig(): ConnectionSetting {
         });
     }
 
-    if (!DB_USER || !DB_PASSWORD || !DB_NAME) {
-        throw new Error(`Invalid database connection information`);
-    }
-
-    return connection(DB_NAME, DB_USER, DB_PASSWORD, {
-        dialect: 'mysql',
-        define: {
-            charset: 'utf8',
-            collate: 'utf8_general_ci',
-        },
-        dialectOptions: {
-            socketPath: `/cloudsql/${CLOUD_SQL_CONNECTION_NAME}`,
-        }
-    });
+    throw new Error(`Invalid database connection information`);
 }
 
 /**

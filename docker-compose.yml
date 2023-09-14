@@ -3,18 +3,16 @@ services:
   web:
     build: 
       context: .
-      # dockerfile: Dockerfile.dev
     ports:
       - "8080:8080"
-    # volumes:
-    #   - ./:/app
-    #   - /app/node_modules
-    environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=user
-      - DB_PASSWORD=password
-      - DB_NAME=ReadingAlpha
+    env_file:
+      - ./.env
+    # environment:
+    #   - DB_NAME=reading-alpha
+    #   - DB_HOST=db
+    #   - DB_PORT=3306
+    #   - DB_USER=user
+    #   - DB_PASSWORD=afZZs5DQzYegZFTeFLob
     depends_on:
       - db
   db:
@@ -23,8 +21,10 @@ services:
       - "3306:3306"
     volumes:
       - ./services/database/sql/mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: ReadingAlpha
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
+    env_file:
+      - ./.env
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: afZZs5DQzYegZFTeFLob
+    #   MYSQL_DATABASE: reading-alpha
+    #   MYSQL_USER: user
+    #   MYSQL_PASSWORD: afZZs5DQzYegZFTeFLob
