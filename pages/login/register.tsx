@@ -8,7 +8,7 @@ import {
 import { useRouter } from "next/router";
 import styles from "./register.module.css";
 
-export default function register() {
+export default function Register() {
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");

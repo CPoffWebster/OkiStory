@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export default function story(props: {
+export default function Story(props: {
   themes: StoryElement[];
   characters: StoryElement[];
 }) {

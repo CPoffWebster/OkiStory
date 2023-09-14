@@ -9,7 +9,7 @@ import {
 } from "@/services/encryption";
 import styles from "./password.module.css";
 
-export default function password() {
+export default function Password() {
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");

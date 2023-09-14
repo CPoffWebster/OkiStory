@@ -6,7 +6,7 @@ import {
 } from "@/services/encryption";
 import { useRouter } from "next/router";
 
-export default function creatingBookLoader() {
+export default function CreatingBookLoader() {
   const router = useRouter();
   const [count, setCount] = useState(1);
 

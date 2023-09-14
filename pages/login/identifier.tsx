@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import styles from "./identifier.module.css";
 
-export default function identifier() {
+export default function Identifier() {
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
