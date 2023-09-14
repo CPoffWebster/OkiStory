@@ -18,7 +18,6 @@ export default function Register() {
   const [continueClicked, setContinueClicked] = React.useState(false);
 
   useEffect(() => {
-    const router = useRouter();
     const emailValue = doubleDecryptSession("email");
     if (emailValue === "") {
       router.push("/");

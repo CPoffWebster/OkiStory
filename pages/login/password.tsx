@@ -22,7 +22,6 @@ export default function Password() {
   const handleBlur = () => setInputFocused(false);
 
   useEffect(() => {
-    const router = useRouter();
     const emailValue = doubleDecryptSession("email");
     if (emailValue === "") {
       router.push("/");

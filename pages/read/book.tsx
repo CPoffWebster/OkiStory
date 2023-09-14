@@ -12,13 +12,13 @@ import "flipping-pages/dist/style.css";
 import styles from "./book.module.css";
 
 export default function BookReader() {
+  const router = useRouter();
   const [book, setBook] = useState<BooksAttributes>({} as BooksAttributes);
   const [currentPage, setCurrentPage] = useState(0);
   const [pages, setPages] = useState<PagesAttributes[]>([]);
   const isLastPage = pages[currentPage]?.LastPage || false;
 
   useEffect(() => {
-    const router = useRouter();
     const bookString = doubleDecryptSession("book");
     if (bookString === "") {
       router.push("/");
