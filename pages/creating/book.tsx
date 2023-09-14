@@ -7,10 +7,10 @@ import {
 import { useRouter } from "next/router";
 
 export default function CreatingBookLoader() {
-  const router = useRouter();
   const [count, setCount] = useState(1);
 
   useEffect(() => {
+    const router = useRouter();
     const hero = (doubleDecryptSession("hero") as unknown as number) || 0;
     const theme = (doubleDecryptSession("theme") as unknown as number) || 0;
     if (hero === 0 || theme === 0) {

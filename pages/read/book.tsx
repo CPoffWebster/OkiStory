@@ -6,18 +6,19 @@ import { arrowLeftIcon, arrowRightIcon, homeIcon } from "@/data/icons";
 import { FlippingPages } from "flipping-pages";
 import { doubleDecryptSession } from "@/services/encryption";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import Link from "next/link";
 import "flipping-pages/dist/style.css";
 import styles from "./book.module.css";
 
 export default function BookReader() {
-  const router = useRouter();
   const [book, setBook] = useState<BooksAttributes>({} as BooksAttributes);
   const [currentPage, setCurrentPage] = useState(0);
   const [pages, setPages] = useState<PagesAttributes[]>([]);
   const isLastPage = pages[currentPage]?.LastPage || false;
 
   useEffect(() => {
+    const router = useRouter();
     const bookString = doubleDecryptSession("book");
     if (bookString === "") {
       router.push("/");
@@ -77,12 +78,12 @@ export default function BookReader() {
           onSwipeEnd={setSelected}
         >
           <div className={styles.page}>
-            <img src={book.CoverImage} alt="cover" />
+            <Image src={book.CoverImage} alt="cover" />
             <h1>{book.Title}</h1>
           </div>
           {pages.map((page, index) => (
             <div className={styles.page} key={index}>
-              <img src={page.Image} alt={`page-${index}`} />
+              <Image src={page.Image} alt={`page-${index}`} />
               <p>{page.Text}</p>
             </div>
           ))}

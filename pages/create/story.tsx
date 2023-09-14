@@ -8,6 +8,7 @@ import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
 import { doubleEncryptSession } from "@/services/encryption";
 import { CharactersAttributes } from "@/services/database/models/Characters";
+import Image from "next/image";
 import styles from "./story.module.css";
 
 export interface StoryElement extends CharactersAttributes {}
@@ -26,12 +27,8 @@ export default function Story(props: {
 }) {
   const router = useRouter();
   const [selectionType, setSelectionType] = useState<string>("Theme");
-  const [elements, setElements] = useState<StoryElement[]>([]);
+  const [elements, setElements] = useState<StoryElement[]>(props.themes);
   const [selectedTheme, setSelectedTheme] = useState<number>();
-
-  useEffect(() => {
-    setElements(props.themes);
-  }, []);
 
   const handleSelectElement = (element: StoryElement): void => {
     if (selectionType === "Theme") {
@@ -74,7 +71,7 @@ export default function Story(props: {
             key={index}
             onClick={() => handleSelectElement(element)}
           >
-            <img src={element.Image} alt={element.Name} />
+            <Image src={element.Image} alt={element.Name} />
             <br />
             {element.Name}
           </button>

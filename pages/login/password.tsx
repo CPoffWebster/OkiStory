@@ -22,6 +22,7 @@ export default function Password() {
   const handleBlur = () => setInputFocused(false);
 
   useEffect(() => {
+    const router = useRouter();
     const emailValue = doubleDecryptSession("email");
     if (emailValue === "") {
       router.push("/");
@@ -122,7 +123,7 @@ export default function Password() {
         Continue
       </button>
       <div>
-        Don't have an account? <a href="/signup">Sign up - todo</a>
+        Don&apos;t have an account? <a href="/signup">Sign up - todo</a>
       </div>
     </LoginLayout>
   );
