@@ -1,36 +1,3 @@
-/* Reset some default browser styles */
-body, h1, p {
-  margin: 0;
-  padding: 0;
-}
-
-/* Take up full screen and remove any potential scroll bars */
-body, html {
-  overflow: hidden;
-}
-
-/* Container should occupy the full viewport */
-.container {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Page layout */
-/* Reset some default browser styles */
-body, h1, p {
-  margin: 0;
-  padding: 0;
-}
-
-/* Take up full screen and remove any potential scroll bars */
-body, html {
-  overflow: hidden;
-}
-
 /* Container layout */
 .container {
   position: relative;

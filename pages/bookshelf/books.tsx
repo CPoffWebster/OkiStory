@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 // import fetchBooks from '../api/fetchBooks';  // Replace with your actual API
-import "./books.css";
+import styles from "./books.module.css";
 import { arrowLeftIcon } from "@/data/icons";
 
 const testBook = {
@@ -22,16 +22,15 @@ export default function BookShelf() {
   }, []);
 
   return (
-    <div className="container">
-      <div className="header">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <Link href="/">{arrowLeftIcon}</Link>
         <h1>My Book Shelf</h1>
         <div></div> {/* Empty div for layout balance */}
       </div>
-
-      <ul className="book-list">
+      <ul className={styles["book-list"]}>
         {books.map((book, index) => (
-          <li key={index} className="book-list-item">
+          <li key={index} className={styles["book-list-item"]}>
             {book.title}
           </li>
         ))}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./story.css";
 import { GetServerSideProps } from "next";
 import {
   getAllDefaultCharacters,
@@ -9,6 +8,7 @@ import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
 import { doubleEncryptSession } from "@/services/encryption";
 import { CharactersAttributes } from "@/services/database/models/Characters";
+import styles from "./story.module.css";
 
 export interface StoryElement extends CharactersAttributes {}
 
@@ -28,7 +28,6 @@ export default function story(props: {
   const [selectionType, setSelectionType] = useState<string>("Theme");
   const [elements, setElements] = useState<StoryElement[]>([]);
   const [selectedTheme, setSelectedTheme] = useState<number>();
-  // const [selectedHero, setSelectedHero] = useState<number>(); // Will need if we have more story element types
 
   useEffect(() => {
     setElements(props.themes);
@@ -36,7 +35,6 @@ export default function story(props: {
 
   const handleSelectElement = (element: StoryElement): void => {
     if (selectionType === "Theme") {
-      // setSelectedStoryElements({ ...selectedStoryElements, theme: element.id });
       setSelectedTheme(element.id);
       setSelectionType("Hero");
       setElements(props.characters);
@@ -61,18 +59,18 @@ export default function story(props: {
   };
 
   return (
-    <div className="container">
-      <div className="header">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <span onClick={handleBack}>{arrowLeftIcon}</span>
-        <h2 className="title">
+        <h2 className={styles.title}>
           Choose your <u>{selectionType}</u>!{" "}
         </h2>
-        <div></div> {/* Empty div for layout balance */}
+        <div></div>
       </div>
-      <div className="selection-container">
+      <div className={styles["selection-container"]}>
         {elements.map((element, index) => (
           <button
-            className="selection-button"
+            className={styles["selection-button"]}
             key={index}
             onClick={() => handleSelectElement(element)}
           >

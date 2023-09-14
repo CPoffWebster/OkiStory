@@ -5,7 +5,6 @@ import {
   doubleEncryptSession,
 } from "@/services/encryption";
 import { useRouter } from "next/router";
-import "./book.css";
 
 export default function creatingBookLoader() {
   const router = useRouter();

@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { errorIcon, eyeOffIcon, eyeOnIcon } from "@/data/icons";
 import LoginLayout from "@/app/components/LoginLayout";
 import axios from "axios";
-import "./password.css";
 import { useRouter } from "next/router";
 import {
   doubleDecryptSession,
   doubleEncryptSession,
 } from "@/services/encryption";
+import styles from "./password.module.css";
 
 export default function password() {
   const router = useRouter();
@@ -63,17 +63,23 @@ export default function password() {
 
   return (
     <LoginLayout>
-      <h1 className="title">Welcome Back!</h1>
-      <div className="input-edit-container">
-        <input className="email-input-edit" value={emailValue} readOnly />
-        <button className="edit-button" onClick={handleEdit}>
+      <h1 className={styles.title}>Welcome Back!</h1>
+      <div className={styles["input-edit-container"]}>
+        <input
+          className={styles["email-input-edit"]}
+          value={emailValue}
+          readOnly
+        />
+        <button className={styles["edit-button"]} onClick={handleEdit}>
           Edit
         </button>
       </div>
-      <div className="input-password-container">
-        <div className="input-wrapper">
+      <div className={styles["input-password-container"]}>
+        <div className={styles["input-wrapper"]}>
           <input
-            className={`password-input ${passwordError ? "error" : ""}`}
+            className={`${styles["password-input"]} ${
+              passwordError ? styles.error : ""
+            }`}
             id="password"
             type={showPassword ? "text" : "password"}
             value={passwordValue}
@@ -82,7 +88,7 @@ export default function password() {
             onBlur={handleBlur}
           />
           <button
-            className="toggle-password"
+            className={styles["toggle-password"]}
             onClick={togglePasswordVisibility}
           >
             {showPassword ? eyeOffIcon : eyeOnIcon}
@@ -93,8 +99,8 @@ export default function password() {
           className={
             passwordValue || inputFocused
               ? passwordError
-                ? "errorFilled"
-                : "filled"
+                ? styles.errorFilled
+                : styles.filled
               : ""
           }
           htmlFor="email"
@@ -102,7 +108,7 @@ export default function password() {
           Password
         </label>
         {continueClicked && (
-          <div className="failed-singin-alert">
+          <div className={styles["failed-singin-alert"]}>
             {errorIcon} Wrong email or password
           </div>
         )}
@@ -110,7 +116,7 @@ export default function password() {
       <div>
         <a href="/forgot-password">Forgot password? - todo</a>
       </div>
-      <button className="signInButton" onClick={handleSubmit}>
+      <button className={styles.signInButton} onClick={handleSubmit}>
         Continue
       </button>
       <div>

@@ -51,6 +51,7 @@ export async function checkLoginDB(email: string, password: string): Promise<{ a
         return { error: 'Please provide a valid username & password' };
     }
 
+    db.tables.Users.update({ LastLogin: new Date() }, { where: { Email: email } });
     const access_token = createTokenForUser_Internal(email);
 
     return { access_token };

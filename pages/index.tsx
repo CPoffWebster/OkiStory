@@ -1,14 +1,13 @@
 import { GetServerSideProps } from "next";
 import { checkCookies } from "../services/cookies";
-// import { encrypt } from "@/services/encryption";
 import { settingsIcon } from "@/data/icons";
 import Link from "next/link";
-import "./homepage.css";
+import styles from "./homepage.module.css";
+// import "./homepage.css";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const user = await checkCookies(context.req);
   if (!user) {
-    // sessionStorage.setItem("redirect", context.resolvedUrl)
     return {
       redirect: {
         destination: `/login/identifier`,
@@ -24,27 +23,27 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default function HomePage() {
   return (
-    <div className="container">
-      <div className="header">
+    <div className={styles.container}>
+      <div className={styles.header}>
         <button>{settingsIcon}</button>
         <h1>Reading Alpha</h1>
         <div></div> {/* Empty div for layout balance */}
       </div>
 
-      <div className="main-content">
+      <div className={styles["main-content"]}>
         {/* Left Section */}
-        <div className="section">
+        <div className={styles.section}>
           <img src="/changeImage.jpg" alt="Books" />
           <Link href="/bookshelf/books">
-            <button className="button">Book Shelf</button>
+            <button className={styles.button}>Book Shelf</button>
           </Link>
         </div>
 
         {/* Right Section */}
-        <div className="section">
+        <div className={styles.section}>
           <img src="/changeImage.jpg" alt="Open Book" />
           <Link href="/create/story">
-            <button className="button">New Story</button>
+            <button className={styles.button}>New Story</button>
           </Link>
         </div>
       </div>

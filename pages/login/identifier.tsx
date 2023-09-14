@@ -8,7 +8,7 @@ import {
   doubleEncryptSession,
 } from "@/services/encryption";
 import axios from "axios";
-import "./identifier.css";
+import styles from "./identifier.module.css";
 
 export default function identifier() {
   const router = useRouter();
@@ -47,10 +47,12 @@ export default function identifier() {
 
   return (
     <LoginLayout>
-      <h1 className="title">Reading Alpha</h1>
-      <div className="input-container">
+      <h1 className={styles.title}>Reading Alpha</h1>
+      <div className={styles["input-container"]}>
         <input
-          className={`email-input ${emailError ? "error" : ""}`}
+          className={`${styles["email-input"]} ${
+            emailError ? styles.error : ""
+          }`}
           id="email"
           type="email"
           value={emailValue}
@@ -62,8 +64,8 @@ export default function identifier() {
           className={
             emailValue || inputFocused
               ? emailError
-                ? "errorFilled"
-                : "filled"
+                ? styles.errorFilled
+                : styles.filled
               : ""
           }
           htmlFor="email"
@@ -71,30 +73,31 @@ export default function identifier() {
           Email Address
         </label>
         {emailError && (
-          <div className="errorText">{errorIcon} Invalid email address</div>
+          <div className={styles.errorText}>
+            {errorIcon} Invalid email address
+          </div>
         )}
       </div>
-      <button className="continueButton" onClick={handleSubmit}>
+      <button className={styles.continueButton} onClick={handleSubmit}>
         Continue
       </button>
-      <div className="signup">
+      <div className={styles.signup}>
         Don&apos;t have an account? <a href="/signup">Sign up</a>
-      </div>{" "}
-      {/* todo Sign-up link */}
-      <div className="orSeparator">
-        <span className="line"></span>
-        <span className="orText">OR</span>
-        <span className="line"></span>
       </div>
-      <button className="socialButton google">
+      <div className={styles.orSeparator}>
+        <span className={styles.line}></span>
+        <span className={styles.orText}>OR</span>
+        <span className={styles.line}></span>
+      </div>
+      <button className={`${styles.socialButton} ${styles.google}`}>
         {googleIcon}
         Continue with Google
       </button>
-      <button className="socialButton facebook">
+      <button className={`${styles.socialButton} ${styles.facebook}`}>
         {facebookIcon}
         Continue with Facebook
       </button>
-      <button className="socialButton apple">
+      <button className={`${styles.socialButton} ${styles.apple}`}>
         {appleIcon}
         Continue with Apple
       </button>

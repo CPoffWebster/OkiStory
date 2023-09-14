@@ -8,7 +8,7 @@ import { doubleDecryptSession } from "@/services/encryption";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import "flipping-pages/dist/style.css";
-import "./book.css";
+import styles from "./book.module.css";
 
 export default function BookReader() {
   const router = useRouter();
@@ -69,33 +69,33 @@ export default function BookReader() {
   }, [selected]);
 
   return (
-    <div className="App">
-      <div className="container">
+    <div className={styles.App}>
+      <div className={styles.container}>
         <FlippingPages
           direction="right-to-left"
           selected={selected}
           onSwipeEnd={setSelected}
         >
-          <div className="page">
+          <div className={styles.page}>
             <img src={book.CoverImage} alt="cover" />
             <h1>{book.Title}</h1>
           </div>
           {pages.map((page, index) => (
-            <div className="page" key={index}>
+            <div className={styles.page} key={index}>
               <img src={page.Image} alt={`page-${index}`} />
               <p>{page.Text}</p>
             </div>
           ))}
         </FlippingPages>
       </div>
-      <div className="navigation">
+      <div className={styles.navigation}>
         {currentPage > 0 && <span onClick={back}>{arrowLeftIcon}</span>}
         {!isLastPage && <span onClick={next}>{arrowRightIcon}</span>}
         <Link href="/">
-          <span className="home-icon-wrapper">{homeIcon}</span>
+          <span className={styles["home-icon-wrapper"]}>{homeIcon}</span>
         </Link>
       </div>
-      <div className="page-count">Page {currentPage + 1}</div>
+      <div className={styles["page-count"]}>Page {currentPage + 1}</div>
     </div>
   );
 }

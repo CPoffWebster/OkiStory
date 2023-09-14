@@ -1,13 +1,12 @@
 import React, { useEffect } from "react";
 import { eyeOffIcon, eyeOnIcon } from "@/data/icons";
-import "./register.css";
 import LoginLayout from "@/app/components/LoginLayout";
 import {
   doubleDecryptSession,
   doubleEncryptSession,
-  encrypt,
 } from "@/services/encryption";
 import { useRouter } from "next/router";
+import styles from "./register.module.css";
 
 export default function register() {
   const router = useRouter();
@@ -61,17 +60,23 @@ export default function register() {
 
   return (
     <LoginLayout>
-      <h1 className="title">Create an account</h1>
-      <div className="input-edit-container">
-        <input className="email-input-edit" value={emailValue} readOnly />
-        <button className="edit-button" onClick={handleEdit}>
+      <h1 className={styles.title}>Create an account</h1>
+      <div className={styles["input-edit-container"]}>
+        <input
+          className={styles["email-input-edit"]}
+          value={emailValue}
+          readOnly
+        />
+        <button className={styles["edit-button"]} onClick={handleEdit}>
           Edit
         </button>
       </div>
-      <div className="input-password-container">
-        <div className="input-wrapper">
+      <div className={styles["input-password-container"]}>
+        <div className={styles["input-wrapper"]}>
           <input
-            className={`password-input ${passwordError ? "error" : ""}`}
+            className={`${styles["password-input"]} ${
+              passwordError ? styles.error : ""
+            }`}
             id="password"
             type={showPassword ? "text" : "password"}
             value={passwordValue}
@@ -80,7 +85,7 @@ export default function register() {
             onBlur={handleBlur}
           />
           <button
-            className="toggle-password"
+            className={styles["toggle-password"]}
             onClick={togglePasswordVisibility}
           >
             {showPassword ? eyeOffIcon : eyeOnIcon}
@@ -91,8 +96,8 @@ export default function register() {
           className={
             passwordValue || inputFocused
               ? passwordError
-                ? "errorFilled"
-                : "filled"
+                ? styles.errorFilled
+                : styles.filled
               : ""
           }
           htmlFor="email"
@@ -100,14 +105,14 @@ export default function register() {
           Password
         </label>
         {continueClicked && (
-          <div className="password-strength-info">
+          <div className={styles["password-strength-info"]}>
             <p>Your password must contain:</p>
             <ul>
               <li
                 className={
                   passwordValue.length < 8
-                    ? "char-count-red"
-                    : "char-count-green"
+                    ? styles["char-count-red"]
+                    : styles["char-count-green"]
                 }
               >
                 At least 8 characters
@@ -116,7 +121,7 @@ export default function register() {
           </div>
         )}
       </div>
-      <button className="signInButton" onClick={handleSubmit}>
+      <button className={styles.signInButton} onClick={handleSubmit}>
         Continue
       </button>
     </LoginLayout>
