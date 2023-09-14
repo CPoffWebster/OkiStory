@@ -1,28 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { appleIcon, errorIcon, facebookIcon, googleIcon } from "@/data/icons";
 var validator = require("validator");
 import LoginLayout from "@/app/components/LoginLayout";
 import { useRouter } from "next/router";
-import { GetServerSideProps } from "next";
-import { decrypt, encrypt } from "@/services/encryption";
+import {
+  doubleDecryptSession,
+  doubleEncryptSession,
+} from "@/services/encryption";
 import axios from "axios";
 import "./identifier.css";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const emailValue = decrypt(context.query.state as string);
-  return {
-    props: { emailValue },
-  };
-};
-
-export default function identifier(props: { emailValue: string }) {
+export default function identifier() {
   const router = useRouter();
-  const [emailValue, setEmailValue] = React.useState(props.emailValue);
+  const [emailValue, setEmailValue] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
   const [inputFocused, setInputFocused] = React.useState(false);
 
   const handleFocus = () => setInputFocused(true);
   const handleBlur = () => setInputFocused(false);
+
+  useEffect(() => {
+    const emailValue = doubleDecryptSession("email");
+    setEmailValue(emailValue);
+  }, []);
 
   const handleChange = (e: {
     target: { value: React.SetStateAction<string> };
@@ -37,8 +37,9 @@ export default function identifier(props: { emailValue: string }) {
       const exists = await axios.post("/api/users/verifyUser", {
         email: emailValue,
       });
-      if (exists) router.push(`/login/password?state=${encrypt(emailValue)}`);
-      else router.push(`/login/register?state=${encrypt(emailValue)}`);
+      doubleEncryptSession("email", emailValue);
+      if (exists.data) router.push("/login/password");
+      else router.push("/login/register");
       return;
     }
     setEmailError(!isEmailValid); // Set the error state based on email validity

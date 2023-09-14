@@ -1,37 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { createNewBook } from "@/services/books";
-import { decrypt, encrypt } from "@/services/encryption"; // Import your decryption function
-import "./book.css";
-import { GetServerSideProps } from "next";
+import {
+  doubleDecryptSession,
+  doubleEncryptSession,
+} from "@/services/encryption";
 import { useRouter } from "next/router";
+import "./book.css";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const encryptedData = context.query.data;
-  if (encryptedData) {
-    const { theme, hero } = JSON.parse(decrypt(encryptedData as string));
-    return {
-      props: {
-        theme,
-        hero,
-      },
-    };
-  }
-  return {
-    props: {},
-  };
-};
-
-export default function creatingBookLoader(theme: number, hero: number) {
+export default function creatingBookLoader() {
   const router = useRouter();
   const [count, setCount] = useState(1);
 
   useEffect(() => {
+    const hero = (doubleDecryptSession("hero") as unknown as number) || 0;
+    const theme = (doubleDecryptSession("theme") as unknown as number) || 0;
+    if (hero === 0 || theme === 0) {
+      router.push("/");
+      return;
+    }
     const fetchData = async () => {
       try {
         const creatingBook = await createNewBook(theme, hero);
-        console.log(creatingBook);
-        const encryptedData = encrypt(JSON.stringify(creatingBook));
-        router.push(`/read/book?data=${encryptedData}`);
+        doubleEncryptSession("book", JSON.stringify(creatingBook));
+        router.push("/read/book");
+        return;
       } catch (error) {
         console.error("Error fetching data:", error);
       }

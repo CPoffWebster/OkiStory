@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { checkCookies } from "../services/cookies";
-import { encrypt } from "@/services/encryption";
+// import { encrypt } from "@/services/encryption";
 import { settingsIcon } from "@/data/icons";
 import Link from "next/link";
 import "./homepage.css";
@@ -8,9 +8,10 @@ import "./homepage.css";
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const user = await checkCookies(context.req);
   if (!user) {
+    // sessionStorage.setItem("redirect", context.resolvedUrl)
     return {
       redirect: {
-        destination: `/login/identifier?state=${encrypt("")}`,
+        destination: `/login/identifier`,
         permanent: false,
       },
     };

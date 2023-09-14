@@ -1,33 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { GetServerSideProps } from "next";
-import { decrypt } from "@/services/encryption";
 import { BooksAttributes } from "@/services/database/models/Books";
 import { getPage } from "@/services/books";
 import { PagesAttributes } from "@/services/database/models/Pages";
 import { arrowLeftIcon, arrowRightIcon, homeIcon } from "@/data/icons";
-import Link from "next/link";
-import "./book.css";
 import { FlippingPages } from "flipping-pages";
+import { doubleDecryptSession } from "@/services/encryption";
+import { useRouter } from "next/router";
+import Link from "next/link";
 import "flipping-pages/dist/style.css";
+import "./book.css";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const encryptedData = context.query.data;
-  if (encryptedData) {
-    const book = JSON.parse(decrypt(encryptedData as string));
-    return {
-      props: { book },
-    };
-  }
-  return {
-    props: {},
-  };
-};
-
-export default function BookReader(props: { book: BooksAttributes }) {
-  const { book } = props;
+export default function BookReader() {
+  const router = useRouter();
+  const [book, setBook] = useState<BooksAttributes>({} as BooksAttributes);
   const [currentPage, setCurrentPage] = useState(0);
   const [pages, setPages] = useState<PagesAttributes[]>([]);
   const isLastPage = pages[currentPage]?.LastPage || false;
+
+  useEffect(() => {
+    const bookString = doubleDecryptSession("book");
+    if (bookString === "") {
+      router.push("/");
+      return;
+    }
+    setBook(JSON.parse(bookString as string) as BooksAttributes);
+  }, []);
 
   // For flipping pages
   const [selected, setSelected] = useState(0);

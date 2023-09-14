@@ -7,7 +7,7 @@ import {
 } from "@/services/storyElements";
 import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
-import { encrypt } from "@/services/encryption";
+import { doubleEncryptSession } from "@/services/encryption";
 import { CharactersAttributes } from "@/services/database/models/Characters";
 
 export interface StoryElement extends CharactersAttributes {}
@@ -27,10 +27,8 @@ export default function story(props: {
   const router = useRouter();
   const [selectionType, setSelectionType] = useState<string>("Theme");
   const [elements, setElements] = useState<StoryElement[]>([]);
-  const [selectedStoryElements, setSelectedStoryElements] = useState<any>({
-    theme: 0,
-    hero: 0,
-  });
+  const [selectedTheme, setSelectedTheme] = useState<number>();
+  // const [selectedHero, setSelectedHero] = useState<number>(); // Will need if we have more story element types
 
   useEffect(() => {
     setElements(props.themes);
@@ -38,17 +36,15 @@ export default function story(props: {
 
   const handleSelectElement = (element: StoryElement): void => {
     if (selectionType === "Theme") {
-      setSelectedStoryElements({ ...selectedStoryElements, theme: element.id });
+      // setSelectedStoryElements({ ...selectedStoryElements, theme: element.id });
+      setSelectedTheme(element.id);
       setSelectionType("Hero");
       setElements(props.characters);
     } else if (selectionType === "Hero") {
-      const encryptedData = encrypt(
-        JSON.stringify({
-          ...selectedStoryElements,
-          hero: element.id,
-        })
-      );
-      router.push(`/creating/book?data=${encryptedData}`);
+      doubleEncryptSession("hero", element.id.toString());
+      doubleEncryptSession("theme", selectedTheme!.toString());
+      router.push("/creating/book");
+      return;
     }
   };
 
@@ -60,6 +56,7 @@ export default function story(props: {
 
     if (selectionType === "Theme") {
       router.push("/");
+      return;
     }
   };
 
