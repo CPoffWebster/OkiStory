@@ -34,7 +34,7 @@ export async function initializeTables() {
  * Gets the database configuration
  */
 export function getDbConfig(): ConnectionSetting {
-    const { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, SQL_LOGGING } = process.env;
+    const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, SQL_LOGGING } = process.env;
 
     const sqlLogging = (SQL_LOGGING) ? JSON.parse(SQL_LOGGING) : false;
     if (DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
@@ -44,8 +44,11 @@ export function getDbConfig(): ConnectionSetting {
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
             },
-            host: DB_HOST,
-            port: parseInt(DB_PORT || '3306'),
+            // host: DB_HOST,
+            host: '/cloudsql/reading-alpha-dev:us-central1:reading-alpha-dev-sql-instance',
+            dialectOptions: {
+                socketPath: '/cloudsql/reading-alpha-dev:us-central1:reading-alpha-dev-sql-instance'
+            },
             pool: {
                 max: 100,
                 acquire: 10000  // The maximum time, in milliseconds, that pool will try to get connection before throwing error
