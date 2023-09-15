@@ -14,9 +14,19 @@ export function connectToDb() {
 
 export async function initializeTables() {
     const { database, user, pass, settings } = getDbConfig();
+    console.log('HERE 1 Initializing tables', database, user, pass, settings)
     const sequelize = new Sequelize(database, user, pass, settings);
+    console.log('HERE 2 sequelize', sequelize)
 
     const db = new ReadingAlphaDB(sequelize);
+
+    console.log('HERE 3 db', db)
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
     db.createTables({ useDev: true });
 }
 
@@ -24,11 +34,10 @@ export async function initializeTables() {
  * Gets the database configuration
  */
 export function getDbConfig(): ConnectionSetting {
-    const { IS_CLOUD, DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, SQL_LOGGING } = process.env;
+    const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, SQL_LOGGING } = process.env;
 
-    const isCloud = (IS_CLOUD) ? JSON.parse(IS_CLOUD) : false;
     const sqlLogging = (SQL_LOGGING) ? JSON.parse(SQL_LOGGING) : false;
-    if (JSON.parse(isCloud) && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
+    if (DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
         return connection(DB_NAME, DB_USER, DB_PASSWORD, {
             dialect: 'mysql',
             define: {
@@ -41,17 +50,6 @@ export function getDbConfig(): ConnectionSetting {
                 acquire: 10000  // The maximum time, in milliseconds, that pool will try to get connection before throwing error
             },
             logging: JSON.parse(sqlLogging) || false,
-        });
-    }
-
-    if (!JSON.parse(isCloud) && DB_NAME && DB_USER && DB_PASSWORD) {
-        return connection(DB_NAME, DB_USER, DB_PASSWORD, {
-            host: '127.0.0.1',
-            dialect: 'mysql',
-            define: {
-                charset: 'utf8',
-                collate: 'utf8_general_ci',
-            },
         });
     }
 
