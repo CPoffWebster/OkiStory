@@ -34,10 +34,11 @@ export async function initializeTables() {
  * Gets the database configuration
  */
 export function getDbConfig(): ConnectionSetting {
-    const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, SQL_LOGGING } = process.env;
+    const { IS_CLOUD, DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, CLOUD_SQL_CONNECTION_NAME, SQL_LOGGING } = process.env;
 
+    const isCloud = (IS_CLOUD) ? JSON.parse(IS_CLOUD) : false;
     const sqlLogging = (SQL_LOGGING) ? JSON.parse(SQL_LOGGING) : false;
-    if (DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
+    if (!JSON.parse(isCloud) && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
         return connection(DB_NAME, DB_USER, DB_PASSWORD, {
             dialect: 'mysql',
             define: {
@@ -53,7 +54,20 @@ export function getDbConfig(): ConnectionSetting {
         });
     }
 
-    throw new Error(`Invalid database connection information`);
+    if (!CLOUD_SQL_CONNECTION_NAME || !DB_USER || !DB_PASSWORD || !DB_NAME) {
+        throw new Error(`Invalid database connection information`);
+    }
+
+    return connection(DB_NAME, DB_USER, DB_PASSWORD, {
+        dialect: 'mysql',
+        define: {
+            charset: 'utf8',
+            collate: 'utf8_general_ci',
+        },
+        dialectOptions: {
+            socketPath: `${CLOUD_SQL_CONNECTION_NAME}`,
+        }
+    });
 }
 
 /**
