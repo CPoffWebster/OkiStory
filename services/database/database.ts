@@ -16,17 +16,17 @@ export async function initializeTables() {
     const { database, user, pass, settings } = getDbConfig();
     console.log('HERE 1 Initializing tables', database, user, pass, settings)
     const sequelize = new Sequelize(database, user, pass, settings);
-    console.log('HERE 2 sequelize', sequelize)
 
     const db = new ReadingAlphaDB(sequelize);
 
-    console.log('HERE 3 db', db)
-    try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
+    sequelize
+        .authenticate()
+        .then(() => {
+            console.log('Connection has been established successfully.');
+        })
+        .catch((err) => {
+            console.log('Unable to connect to the database:', err);
+        });
     db.createTables({ useDev: true });
 }
 
@@ -34,7 +34,7 @@ export async function initializeTables() {
  * Gets the database configuration
  */
 export function getDbConfig(): ConnectionSetting {
-    const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, SQL_LOGGING } = process.env;
+    const { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, SQL_LOGGING } = process.env;
 
     const sqlLogging = (SQL_LOGGING) ? JSON.parse(SQL_LOGGING) : false;
     if (DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
@@ -45,6 +45,7 @@ export function getDbConfig(): ConnectionSetting {
                 collate: 'utf8_general_ci',
             },
             host: DB_HOST,
+            port: parseInt(DB_PORT || '3306'),
             pool: {
                 max: 100,
                 acquire: 10000  // The maximum time, in milliseconds, that pool will try to get connection before throwing error
