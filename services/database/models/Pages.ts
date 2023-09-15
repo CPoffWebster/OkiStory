@@ -19,7 +19,7 @@ export function initPages(sequelize: Sequelize) {
         BookID: { type: DataTypes.INTEGER },
         PageNumber: { type: DataTypes.INTEGER },
         Text: { type: DataTypes.TEXT },
-        Image: { type: DataTypes.STRING(512) },
+        Image: { type: DataTypes.STRING(255) },
         PositiveImagePrompt: { type: DataTypes.TEXT },
         NegativeImagePrompt: { type: DataTypes.TEXT },
         LastPage: { type: DataTypes.BOOLEAN, allowNull: true },

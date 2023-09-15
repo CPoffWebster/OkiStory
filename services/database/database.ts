@@ -14,7 +14,6 @@ export function connectToDb() {
 
 export async function initializeTables() {
     const { database, user, pass, settings } = getDbConfig();
-    console.log('HERE 1 Initializing tables', database, user, pass, settings)
     const sequelize = new Sequelize(database, user, pass, settings);
 
     const db = new ReadingAlphaDB(sequelize);
@@ -38,9 +37,7 @@ export function getDbConfig(): ConnectionSetting {
 
     const isCloud = (IS_CLOUD) ? JSON.parse(IS_CLOUD) : false;
     const sqlLogging = (SQL_LOGGING) ? JSON.parse(SQL_LOGGING) : false;
-    console.log('HERE 2 getDbConfig')
     if (!JSON.parse(isCloud) && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
-        console.log('HERE 3 getDbConfig')
         return connection(DB_NAME, DB_USER, DB_PASSWORD, {
             host: DB_HOST,
             port: 3306,
@@ -62,13 +59,10 @@ export function getDbConfig(): ConnectionSetting {
         });
     }
 
-    console.log('HERE 4 getDbConfig')
     if (!CLOUD_SQL_CONNECTION_NAME || !DB_USER || !DB_PASSWORD || !DB_NAME) {
-        console.log('HERE 5 getDbConfig')
         throw new Error(`Invalid database connection information`);
     }
 
-    console.log('HERE 6 getDbConfig')
     return connection(DB_NAME, DB_USER, DB_PASSWORD, {
         dialect: 'mysql',
         define: {

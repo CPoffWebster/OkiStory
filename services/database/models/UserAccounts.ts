@@ -8,7 +8,7 @@ export function initUserAccounts(sequelize: Sequelize) {
         UserID: { type: DataTypes.INTEGER },
         AccountID: { type: DataTypes.INTEGER },
         Role: { type: DataTypes.STRING(128), defaultValue: 'User' },
-        AccountName: { type: DataTypes.STRING(512) },
+        AccountName: { type: DataTypes.STRING(255) },
         DefaultAccount: { type: DataTypes.BOOLEAN },
     }, {
         sequelize, modelName: 'user_accounts', tableName: `user_accounts`,

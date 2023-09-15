@@ -16,9 +16,9 @@ export function initCharacters(sequelize: Sequelize) {
     Characters.init({
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         Name: { type: DataTypes.STRING(128) },
-        Image: { type: DataTypes.STRING(512) },
-        Description: { type: DataTypes.STRING(512) },
-        GenerationDescription: { type: DataTypes.STRING(2048) },
+        Image: { type: DataTypes.STRING(255) },
+        Description: { type: DataTypes.TEXT },
+        GenerationDescription: { type: DataTypes.TEXT },
         IsDefault: { type: DataTypes.BOOLEAN },
         UserCreatedID: { type: DataTypes.INTEGER, allowNull: true },
     }, {
