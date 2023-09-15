@@ -44,11 +44,7 @@ export function getDbConfig(): ConnectionSetting {
                 charset: 'utf8',
                 collate: 'utf8_general_ci',
             },
-            // host: DB_HOST,
-            host: '/cloudsql/reading-alpha-dev:us-central1:reading-alpha-dev-sql-instance',
-            dialectOptions: {
-                socketPath: '/cloudsql/reading-alpha-dev:us-central1:reading-alpha-dev-sql-instance'
-            },
+            host: DB_HOST,
             pool: {
                 max: 100,
                 acquire: 10000  // The maximum time, in milliseconds, that pool will try to get connection before throwing error
