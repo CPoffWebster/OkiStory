@@ -1,4 +1,3 @@
-move encryption out of JS
 use GUIDs instead of ids
 uploading to GCS
 API keys
@@ -7,5 +6,6 @@ database migrations
 
 Done
 
+- move encryption out of JS
 - connecting to GCS
 -

@@ -2,6 +2,7 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface PagesAttributes {
     id: number;
+    GUID: string;
     BookID: number;
     PageNumber: number;
     Text: string;
@@ -16,6 +17,7 @@ export class Pages extends Model<PagesAttributes> { }
 export function initPages(sequelize: Sequelize) {
     Pages.init({
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+        GUID: { type: DataTypes.STRING(255) },
         BookID: { type: DataTypes.INTEGER },
         PageNumber: { type: DataTypes.INTEGER },
         Text: { type: DataTypes.TEXT },

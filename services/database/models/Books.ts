@@ -2,6 +2,7 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface BooksAttributes {
     id: number;
+    GUID: string;
     Title: string;
     CoverImage: string;
     LocationID: number;
@@ -14,6 +15,7 @@ export class Books extends Model<BooksAttributes> { }
 export function initBooks(sequelize: Sequelize) {
     Books.init({
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+        GUID: { type: DataTypes.STRING(255) },
         Title: { type: DataTypes.STRING(255) },
         CoverImage: { type: DataTypes.STRING(255) },
         LocationID: { type: DataTypes.INTEGER },
