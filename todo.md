@@ -1,11 +1,4 @@
 use GUIDs instead of ids
 uploading to GCS
-API keys
-email for password reset and signup
+API keys vs cookies for making API calls
 database migrations
-
-Done
-
-- move encryption out of JS
-- connecting to GCS
--
