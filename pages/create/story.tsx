@@ -71,7 +71,13 @@ export default function Story(props: {
             key={index}
             onClick={() => handleSelectElement(element)}
           >
-            <Image src={element.Image} alt={element.Name} />
+            {/* <Image src={element.Image} alt={element.Name} /> */}
+            <Image
+              src={`/api/images/getImage?filename=${element.Image}&imageType=${selectionType}`}
+              alt={element.Name}
+              width={500}
+              height={300}
+            />
             <br />
             {element.Name}
           </button>

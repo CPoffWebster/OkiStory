@@ -34,7 +34,7 @@ export default function HomePage() {
       <div className={styles["main-content"]}>
         {/* Left Section */}
         <div className={styles.section}>
-          <Image src="/changeImage.jpg" alt="Books" />
+          <Image src="/changeImage.jpg" alt="Books" width={500} height={300} />
           <Link href="/bookshelf/books">
             <button className={styles.button}>Book Shelf</button>
           </Link>
@@ -42,7 +42,12 @@ export default function HomePage() {
 
         {/* Right Section */}
         <div className={styles.section}>
-          <Image src="/changeImage.jpg" alt="Open Book" />
+          <Image
+            src="/changeImage.jpg"
+            alt="Open Book"
+            width={500}
+            height={300}
+          />
           <Link href="/create/story">
             <button className={styles.button}>New Story</button>
           </Link>
