@@ -37,7 +37,8 @@ export function getDbConfig(): ConnectionSetting {
 
     const isCloud = (IS_CLOUD) ? JSON.parse(IS_CLOUD) : false;
     const sqlLogging = (SQL_LOGGING) ? JSON.parse(SQL_LOGGING) : false;
-    if (!JSON.parse(isCloud) && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
+    console.log('isCloud', isCloud, !isCloud)
+    if (isCloud && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
         return connection(DB_NAME, DB_USER, DB_PASSWORD, {
             host: DB_HOST,
             port: 3306,
@@ -48,6 +49,24 @@ export function getDbConfig(): ConnectionSetting {
             },
             dialectOptions: {
                 socketPath: `${CLOUD_SQL_CONNECTION_NAME}`,
+            },
+            pool: {
+                max: 100,
+                min: 0,
+                acquire: 10000,  // The maximum time, in milliseconds, that pool will try to get connection before throwing error
+                idle: 10000,     // The maximum time, in milliseconds, that a connection can be idle before being released
+            },
+            logging: JSON.parse(sqlLogging) || false,
+        });
+    }
+
+    if (!isCloud && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
+        return connection(DB_NAME, DB_USER, DB_PASSWORD, {
+            host: DB_HOST,
+            dialect: 'mysql',
+            define: {
+                charset: 'utf8',
+                collate: 'utf8_general_ci',
             },
             pool: {
                 max: 100,

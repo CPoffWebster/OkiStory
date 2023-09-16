@@ -37,4 +37,6 @@ next-env.d.ts
 
 # Custom
 .env
+env.local.env
+env.production.env
 tools
