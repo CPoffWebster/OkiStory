@@ -8,7 +8,6 @@ import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
 import { doubleEncryptSession } from "@/services/encryption";
 import { CharactersAttributes } from "@/services/database/models/Characters";
-import Image from "next/image";
 import styles from "./story.module.css";
 
 export interface StoryElement extends CharactersAttributes {}
@@ -71,11 +70,10 @@ export default function Story(props: {
             key={index}
             onClick={() => handleSelectElement(element)}
           >
-            {/* <Image src={element.Image} alt={element.Name} /> */}
-            <Image
+            <img
               src={`/api/images/getImage?filename=${element.Image}&imageType=${selectionType}`}
               alt={element.Name}
-              width={500}
+              width={300}
               height={300}
             />
             <br />

@@ -2,7 +2,6 @@ import { GetServerSideProps } from "next";
 import { checkCookies } from "../services/cookies";
 import { settingsIcon } from "@/data/icons";
 import Link from "next/link";
-import Image from "next/image";
 import styles from "./homepage.module.css";
 // import "./homepage.css";
 
@@ -34,7 +33,7 @@ export default function HomePage() {
       <div className={styles["main-content"]}>
         {/* Left Section */}
         <div className={styles.section}>
-          <Image src="/changeImage.jpg" alt="Books" width={500} height={300} />
+          <img src="/changeImage.jpg" alt="Books" />
           <Link href="/bookshelf/books">
             <button className={styles.button}>Book Shelf</button>
           </Link>
@@ -42,12 +41,7 @@ export default function HomePage() {
 
         {/* Right Section */}
         <div className={styles.section}>
-          <Image
-            src="/changeImage.jpg"
-            alt="Open Book"
-            width={500}
-            height={300}
-          />
+          <img src="/changeImage.jpg" alt="Open Book" />
           <Link href="/create/story">
             <button className={styles.button}>New Story</button>
           </Link>
