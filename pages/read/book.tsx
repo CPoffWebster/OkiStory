@@ -4,11 +4,11 @@ import { getPage } from "@/services/books";
 import { PagesAttributes } from "@/services/database/models/Pages";
 import { arrowLeftIcon, arrowRightIcon, homeIcon } from "@/data/icons";
 import { FlippingPages } from "flipping-pages";
-import { doubleDecryptSession } from "@/services/encryption";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import "flipping-pages/dist/style.css";
 import styles from "./book.module.css";
+import { getSessionStorage } from "@/services/session";
 
 export default function BookReader() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function BookReader() {
   const [pages, setPages] = useState<PagesAttributes[]>([]);
 
   useEffect(() => {
-    const bookString = doubleDecryptSession("book");
+    const bookString = getSessionStorage("book");
     if (bookString === "") {
       router.push("/");
       return;
@@ -39,7 +39,7 @@ export default function BookReader() {
   useEffect(() => {
     // Fetch the next page
     const fetchPage = async (pageNumber: number) => {
-      const page = await getPage(book.id, pageNumber + 1);
+      const page = await getPage(book.GUID, pageNumber + 1);
       setPages((prevPages) => [...prevPages, page]);
     };
 

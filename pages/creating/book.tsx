@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { createNewBook } from "@/services/books";
-import {
-  doubleDecryptSession,
-  doubleEncryptSession,
-} from "@/services/encryption";
 import { useRouter } from "next/router";
+import { getSessionStorage, setSessionStorage } from "@/services/session";
 
 export default function CreatingBookLoader() {
   const router = useRouter();
   const [count, setCount] = useState(1);
 
   useEffect(() => {
-    const hero = (doubleDecryptSession("hero") as unknown as number) || 0;
-    const theme = (doubleDecryptSession("theme") as unknown as number) || 0;
-    if (hero === 0 || theme === 0) {
+    const hero = getSessionStorage("hero");
+    const theme = getSessionStorage("theme");
+    if (hero === "" || theme === "") {
       router.push("/");
       return;
     }
     const fetchData = async () => {
       try {
         const creatingBook = await createNewBook(theme, hero);
-        doubleEncryptSession("book", JSON.stringify(creatingBook));
+        setSessionStorage("book", JSON.stringify(creatingBook));
         router.push("/read/book");
         return;
       } catch (error) {

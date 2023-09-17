@@ -3,11 +3,8 @@ import { errorIcon, eyeOffIcon, eyeOnIcon } from "@/data/icons";
 import LoginLayout from "@/app/components/LoginLayout";
 import axios from "axios";
 import { useRouter } from "next/router";
-import {
-  doubleDecryptSession,
-  doubleEncryptSession,
-} from "@/services/encryption";
 import styles from "./password.module.css";
+import { getSessionStorage, setSessionStorage } from "@/services/session";
 
 export default function Password() {
   const router = useRouter();
@@ -22,7 +19,7 @@ export default function Password() {
   const handleBlur = () => setInputFocused(false);
 
   useEffect(() => {
-    const emailValue = doubleDecryptSession("email");
+    const emailValue = getSessionStorage("email");
     if (emailValue === "") {
       router.push("/");
       return;
@@ -41,7 +38,7 @@ export default function Password() {
   };
 
   const handleEdit = () => {
-    doubleEncryptSession("email", emailValue);
+    setSessionStorage("email", emailValue);
     router.push("/login/identifier");
     return;
   };

@@ -1,12 +1,9 @@
 import React, { useEffect } from "react";
 import { eyeOffIcon, eyeOnIcon } from "@/data/icons";
 import LoginLayout from "@/app/components/LoginLayout";
-import {
-  doubleDecryptSession,
-  doubleEncryptSession,
-} from "@/services/encryption";
 import { useRouter } from "next/router";
 import styles from "./register.module.css";
+import { getSessionStorage, setSessionStorage } from "@/services/session";
 
 export default function Register() {
   const router = useRouter();
@@ -18,7 +15,7 @@ export default function Register() {
   const [continueClicked, setContinueClicked] = React.useState(false);
 
   useEffect(() => {
-    const emailValue = doubleDecryptSession("email");
+    const emailValue = getSessionStorage("email");
     if (emailValue === "") {
       router.push("/");
       return;
@@ -43,7 +40,7 @@ export default function Register() {
   };
 
   const handleEdit = () => {
-    doubleEncryptSession("email", emailValue);
+    setSessionStorage("email", emailValue);
     router.push("/login/identifier");
     return;
   };

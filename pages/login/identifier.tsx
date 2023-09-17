@@ -1,14 +1,11 @@
 import React, { useEffect } from "react";
 import { appleIcon, errorIcon, facebookIcon, googleIcon } from "@/data/icons";
-var validator = require("validator");
+import { getSessionStorage, setSessionStorage } from "@/services/session";
 import LoginLayout from "@/app/components/LoginLayout";
 import { useRouter } from "next/router";
-import {
-  doubleDecryptSession,
-  doubleEncryptSession,
-} from "@/services/encryption";
 import axios from "axios";
 import styles from "./identifier.module.css";
+var validator = require("validator");
 
 export default function Identifier() {
   const router = useRouter();
@@ -20,7 +17,7 @@ export default function Identifier() {
   const handleBlur = () => setInputFocused(false);
 
   useEffect(() => {
-    const emailValue = doubleDecryptSession("email");
+    const emailValue = getSessionStorage("email");
     setEmailValue(emailValue);
   }, []);
 
@@ -37,7 +34,7 @@ export default function Identifier() {
       const exists = await axios.post("/api/users/verifyUser", {
         email: emailValue,
       });
-      doubleEncryptSession("email", emailValue);
+      setSessionStorage("email", emailValue);
       if (exists.data) router.push("/login/password");
       else router.push("/login/register");
       return;

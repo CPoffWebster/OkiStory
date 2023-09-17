@@ -6,8 +6,8 @@ import { BooksAttributes } from "./database/models/Books";
  * @param dataForBookCreation data from the BookCreation workflow
  * @returns created book data
  */
-export async function createNewBook(locationID: number, characterID: number): Promise<BooksAttributes> {
-    // console.log(`createNewBook: locationID: ${locationID}, characterID: ${characterID}`)
+export async function createNewBook(locationGUID: string, characterGUID: string): Promise<BooksAttributes> {
+    // console.log(`createNewBook: locationGUID: ${locationGUID}, characterGUID: ${characterGUID}`)
 
     // Mimic delay
     await delay(3000)
@@ -20,8 +20,8 @@ export async function createNewBook(locationID: number, characterID: number): Pr
  * @param bookID
  * @returns
  */
-export async function getBook(bookID: number): Promise<BooksAttributes> {
-    // console.log(`getBook: bookID: ${bookID}`)
+export async function getBook(bookGUID: string): Promise<BooksAttributes> {
+    // console.log(`getBook: bookGUID: ${bookGUID}`)
 
     // Mimic delay
     await delay()
@@ -29,8 +29,8 @@ export async function getBook(bookID: number): Promise<BooksAttributes> {
     return exampleBook;
 };
 
-export async function getPage(bookID: number, pageNumber: number) {
-    // console.log(`getPage: bookID: ${bookID}, pageNumber: ${pageNumber}`)
+export async function getPage(bookGUID: string, pageNumber: number) {
+    // console.log(`getPage: bookGUID: ${bookGUID}, pageNumber: ${pageNumber}`)
 
     // Mimic delay
     await delay()
