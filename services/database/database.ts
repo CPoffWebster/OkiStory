@@ -9,15 +9,6 @@ export function connectToDb() {
     const { database, user, pass, settings } = getDbConfig();
     const sequelize = new Sequelize(database, user, pass, settings);
 
-    return new ReadingAlphaDB(sequelize);
-}
-
-export async function initializeTables() {
-    const { database, user, pass, settings } = getDbConfig();
-    const sequelize = new Sequelize(database, user, pass, settings);
-
-    const db = new ReadingAlphaDB(sequelize);
-
     sequelize
         .authenticate()
         .then(() => {
@@ -26,7 +17,8 @@ export async function initializeTables() {
         .catch((err) => {
             console.log('Unable to connect to the database:', err);
         });
-    db.createTables({ useDev: true });
+
+    return new ReadingAlphaDB(sequelize);
 }
 
 /**
@@ -37,18 +29,16 @@ export function getDbConfig(): ConnectionSetting {
 
     const isCloud = (IS_CLOUD) ? JSON.parse(IS_CLOUD) : false;
     const sqlLogging = (SQL_LOGGING) ? JSON.parse(SQL_LOGGING) : false;
-    console.log('isCloud', isCloud, !isCloud)
-    if (isCloud && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
+
+
+    if (isCloud && DB_HOST && DB_NAME && DB_USER && DB_PASSWORD) {
         return connection(DB_NAME, DB_USER, DB_PASSWORD, {
-            host: DB_HOST,
-            port: 3306,
+            host: process.env.DB_HOST,
             dialect: 'mysql',
-            define: {
-                // charset: 'utf8',
-                // collate: 'utf8_general_ci',
-            },
             dialectOptions: {
-                socketPath: `${CLOUD_SQL_CONNECTION_NAME}`,
+                ssl: {
+                    rejectUnauthorized: true,
+                }
             },
             pool: {
                 max: 100,
@@ -60,38 +50,26 @@ export function getDbConfig(): ConnectionSetting {
         });
     }
 
-    if (!isCloud && DB_HOST && DB_USER && DB_PASSWORD && DB_NAME) {
-        return connection(DB_NAME, DB_USER, DB_PASSWORD, {
-            host: DB_HOST,
-            dialect: 'mysql',
-            define: {
-                charset: 'utf8',
-                collate: 'utf8_general_ci',
-            },
-            pool: {
-                max: 100,
-                min: 0,
-                acquire: 10000,  // The maximum time, in milliseconds, that pool will try to get connection before throwing error
-                idle: 10000,     // The maximum time, in milliseconds, that a connection can be idle before being released
-            },
-            logging: JSON.parse(sqlLogging) || false,
-        });
-    }
-
-    if (!CLOUD_SQL_CONNECTION_NAME || !DB_USER || !DB_PASSWORD || !DB_NAME) {
+    if (!DB_USER || !DB_PASSWORD || !DB_NAME) {
         throw new Error(`Invalid database connection information`);
     }
 
     return connection(DB_NAME, DB_USER, DB_PASSWORD, {
+        host: DB_HOST,
         dialect: 'mysql',
         define: {
             charset: 'utf8',
             collate: 'utf8_general_ci',
         },
-        dialectOptions: {
-            socketPath: `${CLOUD_SQL_CONNECTION_NAME}`,
-        }
+        pool: {
+            max: 100,
+            min: 0,
+            acquire: 10000,  // The maximum time, in milliseconds, that pool will try to get connection before throwing error
+            idle: 10000,     // The maximum time, in milliseconds, that a connection can be idle before being released
+        },
+        logging: JSON.parse(sqlLogging) || false,
     });
+
 }
 
 /**
