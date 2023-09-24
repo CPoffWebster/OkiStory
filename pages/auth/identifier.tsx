@@ -1,14 +1,29 @@
-import React, { useEffect } from "react";
-import { appleIcon, errorIcon, facebookIcon, googleIcon } from "@/data/icons";
-import { getSessionStorage, setSessionStorage } from "@/services/session";
-import LoginLayout from "@/app/components/LoginLayout";
-import { useRouter } from "next/router";
-import { signIn, useSession } from "next-auth/react";
-import axios from "axios";
+import { signIn, getCsrfToken, getProviders } from "next-auth/react";
+import { GetServerSidePropsContext } from "next";
 import styles from "./identifier.module.css";
+import LoginLayout from "@/app/components/LoginLayout/LoginLayout";
+import React, { useEffect } from "react";
+import { errorIcon } from "@/data/icons";
+import { getSessionStorage, setSessionStorage } from "@/services/session";
+import { useRouter } from "next/router";
+import axios from "axios";
 var validator = require("validator");
 
-export default function Identifier() {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const providers = await getProviders();
+  const csrfToken = await getCsrfToken(context);
+  return {
+    props: {
+      providers,
+      csrfToken,
+    },
+  };
+}
+
+export default function Identifier(props: {
+  providers: Record<string, { id: string; name: string }>;
+  csrfToken: string;
+}) {
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
@@ -87,21 +102,21 @@ export default function Identifier() {
         <span className={styles.orText}>OR</span>
         <span className={styles.line}></span>
       </div>
-      <button onClick={() => signIn("google")}>Continue with Google</button>
-      <button onClick={() => signIn("facebook")}>Continue with Facebook</button>
-      <button onClick={() => signIn("apple")}>Continue with Apple</button>
-      {/* <button className={`${styles.socialButton} ${styles.google}`}>
-        {googleIcon}
-        Continue with Google
-      </button>
-      <button className={`${styles.socialButton} ${styles.facebook}`}>
-        {facebookIcon}
-        Continue with Facebook
-      </button>
-      <button className={`${styles.socialButton} ${styles.apple}`}>
-        {appleIcon}
-        Continue with Apple
-      </button> */}
+      {props.providers &&
+        Object.values(props.providers).map((provider) => {
+          if (provider.id !== "credentials") {
+            return (
+              <button
+                key={provider.name}
+                onClick={() => signIn(provider.id)}
+                className={styles.socialButton}
+              >
+                Sign in with {provider.name}
+              </button>
+            );
+          }
+        })}
+      <div className={styles.signup}>New here? Sign up</div>
     </LoginLayout>
   );
 }

@@ -3,21 +3,40 @@ import { checkCookies } from "../services/cookies";
 import { settingsIcon } from "@/data/icons";
 import Link from "next/link";
 import styles from "./homepage.module.css";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
 // import "./homepage.css";
 
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   // const user = await checkCookies(context.req);
+//   // if (!user) {
+//   //   return {
+//   //     redirect: {
+//   //       destination: `/login/identifier`,
+//   //       permanent: false,
+//   //     },
+//   //   };
+//   // }
+
+//   // return {
+//   //   props: { user: user },
+//   // };
+// };
+
+import { getSession } from "next-auth/react";
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const user = await checkCookies(context.req);
-  if (!user) {
+  const session = await getSession(context);
+  if (!session) {
     return {
       redirect: {
-        destination: `/login/identifier`,
+        destination: "/auth/identifier",
         permanent: false,
       },
     };
   }
-
   return {
-    props: { user: user },
+    props: { session },
   };
 };
 

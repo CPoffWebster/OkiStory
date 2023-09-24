@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { eyeOffIcon, eyeOnIcon } from "@/data/icons";
-import LoginLayout from "@/app/components/LoginLayout";
+import { errorIcon, eyeOffIcon, eyeOnIcon } from "@/data/icons";
+import LoginLayout from "@/app/components/LoginLayout/LoginLayout";
+import axios from "axios";
 import { useRouter } from "next/router";
-import styles from "./register.module.css";
+import styles from "./password.module.css";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
 
-export default function Register() {
+export default function Password() {
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
@@ -13,6 +14,9 @@ export default function Register() {
   const [inputFocused, setInputFocused] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const [continueClicked, setContinueClicked] = React.useState(false);
+
+  const handleFocus = () => setInputFocused(true);
+  const handleBlur = () => setInputFocused(false);
 
   useEffect(() => {
     const emailValue = getSessionStorage("email");
@@ -27,16 +31,10 @@ export default function Register() {
     setShowPassword(!showPassword);
   };
 
-  const handleFocus = () => setInputFocused(true);
-  const handleBlur = () => setInputFocused(false);
-
   const handleChange = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
     setPasswordValue(e.target.value);
-    if (passwordError && e.target.value.length >= 8) {
-      setPasswordError(false);
-    }
   };
 
   const handleEdit = () => {
@@ -48,16 +46,21 @@ export default function Register() {
   // handle password submit
   const handleSubmit = async () => {
     setContinueClicked(true);
-    if (passwordValue.length < 8) {
+    try {
+      const { data } = await axios.post("/api/users/login", {
+        email: emailValue,
+        password: passwordValue,
+      });
+      const { access_token } = data;
+      window.location.assign("/");
+    } catch (err) {
       setPasswordError(true);
-    } else {
-      alert("Registering new users disabled currently");
     }
   };
 
   return (
     <LoginLayout>
-      <h1 className={styles.title}>Create an account</h1>
+      <h1 className={styles.title}>Welcome Back!</h1>
       <div className={styles["input-edit-container"]}>
         <input
           className={styles["email-input-edit"]}
@@ -69,11 +72,13 @@ export default function Register() {
         </button>
       </div>
       <div className={styles["input-password-container"]}>
-        <div className={styles["input-wrapper"]}>
+        <div
+          className={`${styles["input-wrapper"]} ${
+            passwordError ? styles.error : ""
+          }`}
+        >
           <input
-            className={`${styles["password-input"]} ${
-              passwordError ? styles.error : ""
-            }`}
+            className={styles["password-input"]}
             id="password"
             type={showPassword ? "text" : "password"}
             value={passwordValue}
@@ -102,25 +107,20 @@ export default function Register() {
           Password
         </label>
         {continueClicked && (
-          <div className={styles["password-strength-info"]}>
-            <p>Your password must contain:</p>
-            <ul>
-              <li
-                className={
-                  passwordValue.length < 8
-                    ? styles["char-count-red"]
-                    : styles["char-count-green"]
-                }
-              >
-                At least 8 characters
-              </li>
-            </ul>
+          <div className={styles["failed-singin-alert"]}>
+            {errorIcon} Wrong email or password
           </div>
         )}
+      </div>
+      <div>
+        <a href="/forgot-password">Forgot password? - todo</a>
       </div>
       <button className={styles.signInButton} onClick={handleSubmit}>
         Continue
       </button>
+      <div>
+        Don&apos;t have an account? <a href="/signup">Sign up - todo</a>
+      </div>
     </LoginLayout>
   );
 }
