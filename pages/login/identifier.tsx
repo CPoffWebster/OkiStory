@@ -3,6 +3,7 @@ import { appleIcon, errorIcon, facebookIcon, googleIcon } from "@/data/icons";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
 import LoginLayout from "@/app/components/LoginLayout";
 import { useRouter } from "next/router";
+import { signIn, useSession } from "next-auth/react";
 import axios from "axios";
 import styles from "./identifier.module.css";
 var validator = require("validator");
@@ -86,7 +87,10 @@ export default function Identifier() {
         <span className={styles.orText}>OR</span>
         <span className={styles.line}></span>
       </div>
-      <button className={`${styles.socialButton} ${styles.google}`}>
+      <button onClick={() => signIn("google")}>Continue with Google</button>
+      <button onClick={() => signIn("facebook")}>Continue with Facebook</button>
+      <button onClick={() => signIn("apple")}>Continue with Apple</button>
+      {/* <button className={`${styles.socialButton} ${styles.google}`}>
         {googleIcon}
         Continue with Google
       </button>
@@ -97,7 +101,7 @@ export default function Identifier() {
       <button className={`${styles.socialButton} ${styles.apple}`}>
         {appleIcon}
         Continue with Apple
-      </button>
+      </button> */}
     </LoginLayout>
   );
 }
