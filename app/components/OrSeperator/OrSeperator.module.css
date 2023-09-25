@@ -1,0 +1,16 @@
+.orSeparator {
+  display: flex;
+  align-items: center;
+  margin: 16px 0;
+  width: 350px;
+}
+
+.line {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #ccc;
+}
+
+.orText {
+  margin: 0 16px;
+}

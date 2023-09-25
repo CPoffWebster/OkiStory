@@ -1,0 +1,94 @@
+.input-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+  }
+  
+  .input-container label {
+    position: absolute;
+    pointer-events: none;
+    transform: translate(16px, 100%) scale(1);
+    transform-origin: top left;
+    transition: 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
+    color: #6f81a5;
+    font-size: 16px;
+    line-height: 1;
+    left: 0;
+  }
+  
+  .input-container:focus-within label,
+  .input-container label.filled {
+    transform: translate(16px, 2px) scale(0.7);
+    color: #0a53e4;
+  }
+
+  .input-container label.errorFilled {
+    transform: translate(16px, 2px) scale(0.7);
+    color: red;
+  }
+
+  .input-container label.error {
+    color: red;
+  }
+
+
+  .errorText {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+
+  .email-input {
+    padding: 12px;
+    border: gray 1px solid;
+    border-radius: 4px;
+  }
+
+  .email-input:focus {
+    outline: none;
+    border: 1px solid #0a53e4;  /* Blue border when focused */
+  }
+  
+  .email-input.error {
+    border-color: red;
+    border: 1px solid red;
+  }
+
+  .email-input.error:focus {
+    border-color: red;
+    border: 1px solid red;
+  }
+  
+  
+  .input {
+    width: 350px;
+    padding: 12px;
+    border: gray 1px solid;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .input:focus {
+    border-color: green;
+  }
+
+
+  .toggle-password {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 10px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 2;
+    border-radius: 4px;
+    transition: all .5s ease;
+  }
+
+  .toggle-password:hover {
+    background-color: lightgray;
+    transition: all .5s ease;
+  }

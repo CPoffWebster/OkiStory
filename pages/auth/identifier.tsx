@@ -7,6 +7,8 @@ import { errorIcon } from "@/data/icons";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { SignInInput } from "@/app/components/SignInInput/SignInInput";
+import { OrSeperator } from "@/app/components/OrSeperator/OrSeperator";
 var validator = require("validator");
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -27,10 +29,6 @@ export default function Identifier(props: {
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
-  const [inputFocused, setInputFocused] = React.useState(false);
-
-  const handleFocus = () => setInputFocused(true);
-  const handleBlur = () => setInputFocused(false);
 
   useEffect(() => {
     const emailValue = getSessionStorage("email");
@@ -51,8 +49,8 @@ export default function Identifier(props: {
         email: emailValue,
       });
       setSessionStorage("email", emailValue);
-      if (exists.data) router.push("/login/password");
-      else router.push("/login/register");
+      if (exists.data) router.push("/auth/password");
+      else router.push("/auth/register");
       return;
     }
     setEmailError(!isEmailValid); // Set the error state based on email validity
@@ -61,47 +59,21 @@ export default function Identifier(props: {
   return (
     <LoginLayout>
       <h1 className={styles.title}>Reading Alpha</h1>
-      <div className={styles["input-container"]}>
-        <input
-          className={`${styles["email-input"]} ${
-            emailError ? styles.error : ""
-          }`}
-          id="email"
-          type="email"
-          value={emailValue}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-        />
-        <label
-          className={
-            emailValue || inputFocused
-              ? emailError
-                ? styles.errorFilled
-                : styles.filled
-              : ""
-          }
-          htmlFor="email"
-        >
-          Email Address
-        </label>
-        {emailError && (
-          <div className={styles.errorText}>
-            {errorIcon} Invalid email address
-          </div>
-        )}
-      </div>
+      <SignInInput
+        value={emailValue}
+        error={emailError}
+        label="Email"
+        type="email"
+        errorText="Invalid email"
+        onChange={handleChange}
+      />
       <button className={styles.continueButton} onClick={handleSubmit}>
         Continue
       </button>
       <div className={styles.signup}>
         Don&apos;t have an account? <a href="/signup">Sign up</a>
       </div>
-      <div className={styles.orSeparator}>
-        <span className={styles.line}></span>
-        <span className={styles.orText}>OR</span>
-        <span className={styles.line}></span>
-      </div>
+      <OrSeperator />
       {props.providers &&
         Object.values(props.providers).map((provider) => {
           if (provider.id !== "credentials") {
