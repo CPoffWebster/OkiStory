@@ -1,5 +1,15 @@
+/* Override autofill styles */
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+} */
+
+
 .mdc-text-field {
   width: 350px;
+  background-color: white;
 }
 
 .mdc-text-field--invalid .mdc-notched-outline {

@@ -14,11 +14,12 @@ export default function Password() {
   const [passwordError, setPasswordError] = React.useState(false);
 
   useEffect(() => {
-    const emailValue = getSessionStorage("email");
-    if (emailValue === "") {
-      router.push("/");
-      return;
-    }
+    const emailValue = "test email";
+    // const emailValue = getSessionStorage("email");
+    // if (emailValue === "") {
+    //   router.push("/");
+    //   return;
+    // }
     setEmailValue(emailValue);
   }, []);
 
@@ -60,7 +61,7 @@ export default function Password() {
       <h1 className={styles.title}>Welcome Back!</h1>
       <div className={styles["input-edit-container"]}>
         <input
-          className={styles["email-input-edit"]}
+          className={`mdc-text-field--outlined ${styles["email-input-edit"]}`}
           value={emailValue}
           readOnly
         />

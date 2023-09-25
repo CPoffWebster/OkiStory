@@ -3,6 +3,7 @@ import styles from "./SignInInput.module.css";
 import { MDCTextField } from "@material/textfield";
 import "@material/textfield/dist/mdc.textfield.css";
 import { errorIcon, eyeOnIcon, eyeOffIcon } from "@/data/icons";
+import { Tooltip } from "react-tooltip";
 
 interface SignInInputProps {
   value: string;
@@ -58,25 +59,29 @@ const SignInInput = forwardRef<HTMLInputElement, SignInInputProps>(
           <input
             ref={ref}
             type={actualType}
+            style={{ paddingRight: showPasswordToggle ? "50px" : "0" }}
             className={`mdc-text-field__input ${
               error ? "mdc-text-field--invalid" : ""
             }`}
             aria-labelledby={`${label}-id`}
             value={value}
             onChange={onChange}
-            autoComplete={type === "password" ? "new-password" : "on"} // Disables the browser's eye icon
+            // autoComplete={type === "password" ? "new-password" : "on"}
           />
           {showPasswordToggle && (
             <button
               className={styles["toggle-password"]}
               onClick={togglePasswordVisibility}
+              data-tooltip-id="my-tooltip-1"
             >
-              {/* <span className={styles["toggle-tooltip"]}>
-                {showPassword ? "Hide password" : "Show password"}
-              </span> */}
               {showPassword ? eyeOffIcon : eyeOnIcon}
             </button>
           )}
+          <Tooltip
+            id="my-tooltip-1"
+            place="right"
+            content={showPassword ? "Hide password" : "Show password"}
+          />
         </label>
         {error && (
           <div className={styles.errorText}>
