@@ -1,18 +1,15 @@
 import React, { useEffect } from "react";
-import { eyeOffIcon, eyeOnIcon } from "@/data/icons";
 import LoginLayout from "@/app/components/LoginLayout/LoginLayout";
 import { useRouter } from "next/router";
 import styles from "./register.module.css";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
+import { SignInInput } from "@/app/components/SignInInput/SignInInput";
 
 export default function Register() {
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [passwordValue, setPasswordValue] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
-  const [inputFocused, setInputFocused] = React.useState(false);
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [continueClicked, setContinueClicked] = React.useState(false);
 
   useEffect(() => {
     const emailValue = getSessionStorage("email");
@@ -23,16 +20,7 @@ export default function Register() {
     setEmailValue(emailValue);
   }, []);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleFocus = () => setInputFocused(true);
-  const handleBlur = () => setInputFocused(false);
-
-  const handleChange = (e: {
-    target: { value: React.SetStateAction<string> };
-  }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.target.value);
     if (passwordError && e.target.value.length >= 8) {
       setPasswordError(false);
@@ -42,12 +30,9 @@ export default function Register() {
   const handleEdit = () => {
     setSessionStorage("email", emailValue);
     router.push("/login/identifier");
-    return;
   };
 
-  // handle password submit
-  const handleSubmit = async () => {
-    setContinueClicked(true);
+  const handleSubmit = () => {
     if (passwordValue.length < 8) {
       setPasswordError(true);
     } else {
@@ -68,56 +53,15 @@ export default function Register() {
           Edit
         </button>
       </div>
-      <div className={styles["input-password-container"]}>
-        <div className={styles["input-wrapper"]}>
-          <input
-            className={`${styles["password-input"]} ${
-              passwordError ? styles.error : ""
-            }`}
-            id="password"
-            type={showPassword ? "text" : "password"}
-            value={passwordValue}
-            onChange={handleChange}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-          />
-          <button
-            className={styles["toggle-password"]}
-            onClick={togglePasswordVisibility}
-          >
-            {showPassword ? eyeOffIcon : eyeOnIcon}
-          </button>
-        </div>
-
-        <label
-          className={
-            passwordValue || inputFocused
-              ? passwordError
-                ? styles.errorFilled
-                : styles.filled
-              : ""
-          }
-          htmlFor="email"
-        >
-          Password
-        </label>
-        {continueClicked && (
-          <div className={styles["password-strength-info"]}>
-            <p>Your password must contain:</p>
-            <ul>
-              <li
-                className={
-                  passwordValue.length < 8
-                    ? styles["char-count-red"]
-                    : styles["char-count-green"]
-                }
-              >
-                At least 8 characters
-              </li>
-            </ul>
-          </div>
-        )}
-      </div>
+      <SignInInput
+        value={passwordValue}
+        error={passwordError}
+        label="Password"
+        type="password"
+        errorText="Password must be at least 8 characters"
+        showPasswordToggle={true}
+        onChange={handleChange}
+      />
       <button className={styles.signInButton} onClick={handleSubmit}>
         Continue
       </button>

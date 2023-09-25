@@ -37,22 +37,19 @@ export default function Password() {
   // handle password submit
   const handleSubmit = async () => {
     try {
-      // signIn("credentials", {
-      //   email: emailValue,
-      //   password: passwordValue,
-      //   callbackUrl: "/",
-      // });
-      const { data } = await axios.post("/api/users/login", {
+      const { data } = await axios.post("/api/users/verifyLogin", {
         email: emailValue,
         password: passwordValue,
       });
-      signIn("credentials", {
-        email: emailValue,
-        password: passwordValue,
-        callbackUrl: "/",
-      });
-      // const { access_token } = data;
-      // window.location.assign("/");
+      if (data === false) {
+        setPasswordError(true);
+      } else {
+        signIn("credentials", {
+          email: emailValue,
+          password: passwordValue,
+          callbackUrl: "/",
+        });
+      }
     } catch (err) {
       setPasswordError(true);
     }
