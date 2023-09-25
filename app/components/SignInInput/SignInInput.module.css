@@ -15,6 +15,32 @@
   border: none;
   cursor: pointer;
   font-size: 14px;
+  padding: 13px;
+  transition: all .2s ease;
+}
+
+.toggle-password:hover {
+  background-color: lightgray;
+  border-radius: 4px;
+  transition: all .2s ease;
+}
+
+.toggle-tooltip {
+  display: none;
+  position: absolute;
+  top: -20px;
+  right: 0;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  z-index: 1;
+  font-size: 12px;
+  padding: 5px;
+}
+
+.toggle-password:hover .toggle-tooltip {
+  display: block;
 }
 
 .helper-text {

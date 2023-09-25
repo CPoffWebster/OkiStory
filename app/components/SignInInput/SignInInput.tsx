@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef } from "react";
+import React, { useEffect, forwardRef, useState } from "react";
 import styles from "./SignInInput.module.css";
 import { MDCTextField } from "@material/textfield";
 import "@material/textfield/dist/mdc.textfield.css";
@@ -11,11 +11,22 @@ interface SignInInputProps {
   type: string;
   errorText: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  showPasswordToggle?: boolean;
 }
 
 const SignInInput = forwardRef<HTMLInputElement, SignInInputProps>(
   (props, ref) => {
-    const { value, error, label, type, errorText, onChange } = props;
+    const {
+      value,
+      error,
+      label,
+      type,
+      errorText,
+      onChange,
+      showPasswordToggle = false,
+    } = props;
+    const [showPassword, setShowPassword] = useState(false);
+    const actualType = showPassword ? "text" : type;
 
     const labelRef = React.useRef<HTMLLabelElement>(null);
 
@@ -24,6 +35,10 @@ const SignInInput = forwardRef<HTMLInputElement, SignInInputProps>(
         new MDCTextField(labelRef.current);
       }
     }, []);
+
+    const togglePasswordVisibility = () => {
+      setShowPassword(!showPassword);
+    };
 
     return (
       <div className={styles["input-container"]}>
@@ -42,14 +57,26 @@ const SignInInput = forwardRef<HTMLInputElement, SignInInputProps>(
           </span>
           <input
             ref={ref}
-            type={type}
+            type={actualType}
             className={`mdc-text-field__input ${
               error ? "mdc-text-field--invalid" : ""
             }`}
             aria-labelledby={`${label}-id`}
             value={value}
             onChange={onChange}
+            autoComplete={type === "password" ? "new-password" : "on"} // Disables the browser's eye icon
           />
+          {showPasswordToggle && (
+            <button
+              className={styles["toggle-password"]}
+              onClick={togglePasswordVisibility}
+            >
+              {/* <span className={styles["toggle-tooltip"]}>
+                {showPassword ? "Hide password" : "Show password"}
+              </span> */}
+              {showPassword ? eyeOffIcon : eyeOnIcon}
+            </button>
+          )}
         </label>
         {error && (
           <div className={styles.errorText}>
