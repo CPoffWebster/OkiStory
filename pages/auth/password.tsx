@@ -14,12 +14,11 @@ export default function Password() {
   const [passwordError, setPasswordError] = React.useState(false);
 
   useEffect(() => {
-    const emailValue = "test email";
-    // const emailValue = getSessionStorage("email");
-    // if (emailValue === "") {
-    //   router.push("/");
-    //   return;
-    // }
+    const emailValue = getSessionStorage("email");
+    if (emailValue === "") {
+      router.push("/");
+      return;
+    }
     setEmailValue(emailValue);
   }, []);
 
@@ -76,6 +75,7 @@ export default function Password() {
         type="password"
         errorText="Invalid password"
         onChange={handleChange}
+        handleSubmit={handleSubmit}
         showPasswordToggle={true}
       />
       <div>

@@ -46,6 +46,7 @@ export default function Identifier(props: {
 
   // handle email submit
   const handleSubmit = async () => {
+    console.log("handle submit called");
     const isEmailValid = validator.isEmail(emailValue);
     if (isEmailValid) {
       const exists = await axios.post("/api/users/verifyUser", {
@@ -70,6 +71,7 @@ export default function Identifier(props: {
         type="email"
         errorText="Invalid email"
         onChange={handleChange}
+        handleSubmit={handleSubmit}
       />
       <button className={styles.continueButton} onClick={handleSubmit}>
         Continue

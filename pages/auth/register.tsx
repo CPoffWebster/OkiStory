@@ -59,8 +59,9 @@ export default function Register() {
         label="Password"
         type="password"
         errorText="Password must be at least 8 characters"
-        showPasswordToggle={true}
         onChange={handleChange}
+        handleSubmit={handleSubmit}
+        showPasswordToggle={true}
       />
       <button className={styles.signInButton} onClick={handleSubmit}>
         Continue

@@ -12,6 +12,7 @@ interface SignInInputProps {
   type: string;
   errorText: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: () => void | Promise<void>;
   showPasswordToggle?: boolean;
 }
 
@@ -24,6 +25,7 @@ const SignInInput = forwardRef<HTMLInputElement, SignInInputProps>(
       type,
       errorText,
       onChange,
+      handleSubmit,
       showPasswordToggle = false,
     } = props;
     const [showPassword, setShowPassword] = useState(false);
@@ -66,7 +68,9 @@ const SignInInput = forwardRef<HTMLInputElement, SignInInputProps>(
             aria-labelledby={`${label}-id`}
             value={value}
             onChange={onChange}
-            // autoComplete={type === "password" ? "new-password" : "on"}
+            onKeyDown={async (event) => {
+              if (event.key === "Enter") handleSubmit();
+            }}
           />
           {showPasswordToggle && (
             <button

@@ -3,6 +3,7 @@
     flex-direction: column;
     min-height: 100vh;
     justify-content: space-between;
+    background-color: #f8f8f8;
   }  
 
 .container {
@@ -11,7 +12,6 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #f8f8f8;
   }
 
   .logo {
