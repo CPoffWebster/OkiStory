@@ -3,7 +3,7 @@ import LoginLayout from "@/app/components/LoginLayout/LoginLayout";
 import { useRouter } from "next/router";
 import styles from "./register.module.css";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
-import { SignInInput } from "@/app/components/SignInInput/SignInInput";
+import SignInInput from "@/app/components/SignInInput/SignInInput";
 
 export default function Register() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function Register() {
 
   const handleEdit = () => {
     setSessionStorage("email", emailValue);
-    router.push("/login/identifier");
+    router.push("/auth/identifier");
   };
 
   const handleSubmit = () => {

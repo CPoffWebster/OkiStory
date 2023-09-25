@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import styles from "./password.module.css";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
-import { SignInInput } from "@/app/components/SignInInput/SignInInput";
+import SignInInput from "@/app/components/SignInInput/SignInInput";
 import { signIn } from "next-auth/react";
 
 export default function Password() {
@@ -30,7 +30,7 @@ export default function Password() {
 
   const handleEdit = () => {
     setSessionStorage("email", emailValue);
-    router.push("/login/identifier");
+    router.push("/auth/identifier");
     return;
   };
 

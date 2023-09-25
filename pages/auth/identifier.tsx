@@ -2,12 +2,11 @@ import { signIn, getCsrfToken, getProviders } from "next-auth/react";
 import { GetServerSidePropsContext } from "next";
 import styles from "./identifier.module.css";
 import LoginLayout from "@/app/components/LoginLayout/LoginLayout";
-import React, { useEffect } from "react";
-import { errorIcon } from "@/data/icons";
+import React, { useEffect, useRef } from "react";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
 import { useRouter } from "next/router";
 import axios from "axios";
-import { SignInInput } from "@/app/components/SignInInput/SignInInput";
+import SignInInput from "@/app/components/SignInInput/SignInInput";
 import { OrSeperator } from "@/app/components/OrSeperator/OrSeperator";
 var validator = require("validator");
 
@@ -29,10 +28,14 @@ export default function Identifier(props: {
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const emailValue = getSessionStorage("email");
     setEmailValue(emailValue);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, []);
 
   const handleChange = (e: {
@@ -60,6 +63,7 @@ export default function Identifier(props: {
     <LoginLayout>
       <h1 className={styles.title}>Reading Alpha</h1>
       <SignInInput
+        ref={inputRef}
         value={emailValue}
         error={emailError}
         label="Email"
