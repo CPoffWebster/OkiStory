@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import SignInInput from "@/app/components/SignInInput/SignInInput";
 import { OrSeperator } from "@/app/components/OrSeperator/OrSeperator";
+import { googleIcon } from "@/data/icons";
 var validator = require("validator");
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -80,7 +81,8 @@ export default function Identifier(props: {
         Don&apos;t have an account? <a href="/signup">Sign up</a>
       </div> */}
       <OrSeperator />
-      {props.providers &&
+      {provider("google", "Google", googleIcon)}
+      {/* {props.providers &&
         Object.values(props.providers).map((provider) => {
           if (provider.id !== "credentials") {
             return (
@@ -89,11 +91,23 @@ export default function Identifier(props: {
                 onClick={() => signIn(provider.id)}
                 className={styles.socialButton}
               >
-                Sign in with {provider.name}
+                {googleIcon} Continue with {provider.name}
               </button>
             );
           }
-        })}
+        })} */}
     </LoginLayout>
+  );
+}
+
+function provider(id: string, name: string, icon: JSX.Element): JSX.Element {
+  return (
+    <button
+      key={name}
+      onClick={() => signIn(id)}
+      className={styles.socialButton}
+    >
+      {icon} Continue with {name}
+    </button>
   );
 }

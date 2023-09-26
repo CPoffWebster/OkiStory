@@ -21,6 +21,7 @@
     cursor: pointer;
     border: gray 1px solid;
     border-radius: 4px;
+    transition: all .2s ease;
   }
   
   .continueButton:hover {
@@ -29,6 +30,7 @@
 
   .socialButton:hover {
     background-color: lightgray;
+    transition: all .2s ease;
   }
   
   .socialButton {
