@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { checkLoginDB } from "@/services/users";
+import { verifyUserLogin } from "@/services/users";
 import GoogleProvider from "next-auth/providers/google";
 // import FacebookProvider from "next-auth/providers/facebook";
 // import AppleProvider from "next-auth/providers/apple"
@@ -14,9 +14,9 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials: Record<"email" | "password", string> | undefined) {
-        const result = await checkLoginDB(credentials!.email, credentials!.password);
+        const result = await verifyUserLogin(credentials!.email, credentials!.password);
 
-        if (result.error) {
+        if (!result) {
           return null;
         }
 
@@ -34,13 +34,13 @@ export const authOptions = {
     //   clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
     // }),
   ],
-  // pages: {
-  // signIn: '/auth/identifier',
-  // signOut: '/auth/signout',
-  // error: '/auth/error', // Error code passed in query string as ?error=
-  // verifyRequest: '/auth/verify-request', // (used for check email message)
-  // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
-  // }
+  pages: {
+    signIn: '/auth/identifier',
+    signOut: '/auth/identifier',
+    error: '/auth/identifier', // Error code passed in query string as ?error=
+    // verifyRequest: '/auth/verify-request', // (used for check email message)
+    // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+  }
 };
 
 export default NextAuth(authOptions)

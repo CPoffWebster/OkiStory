@@ -1,4 +1,4 @@
-import { checkLoginDB, verifyUserLogin } from '@/services/users';
+import { verifyUserLogin } from '@/services/users';
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

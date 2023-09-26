@@ -82,20 +82,6 @@ export default function Identifier(props: {
       </div> */}
       <OrSeperator />
       {provider("google", "Google", googleIcon)}
-      {/* {props.providers &&
-        Object.values(props.providers).map((provider) => {
-          if (provider.id !== "credentials") {
-            return (
-              <button
-                key={provider.name}
-                onClick={() => signIn(provider.id)}
-                className={styles.socialButton}
-              >
-                {googleIcon} Continue with {provider.name}
-              </button>
-            );
-          }
-        })} */}
     </LoginLayout>
   );
 }
