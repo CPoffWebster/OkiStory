@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { checkLoginDB } from "@/services/users";
+import { verifyUserLogin } from "@/services/users";
 import GoogleProvider from "next-auth/providers/google";
 // import FacebookProvider from "next-auth/providers/facebook";
 // import AppleProvider from "next-auth/providers/apple"
@@ -14,9 +14,9 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials: Record<"email" | "password", string> | undefined) {
-        const result = await checkLoginDB(credentials!.email, credentials!.password);
+        const result = await verifyUserLogin(credentials!.email, credentials!.password);
 
-        if (result.error) {
+        if (!result) {
           return null;
         }
 
