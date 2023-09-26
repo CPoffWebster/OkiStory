@@ -2,20 +2,7 @@
 import { connectToDb } from './database/database';
 import bcrypt from 'bcrypt';
 import { UsersAttributes } from './database/models/Users';
-
-/**
- * Insert a user into the database
- * @param Email 
- * @param Password 
- */
-export async function saveUser(email: string, password: string) {
-    const db = connectToDb();
-    const saltRounds = 11;
-    const hash = bcrypt.hashSync(password, saltRounds);
-
-    await db.tables.Users.create({ Email: email, Password: hash });
-    console.log("User inserted: " + email);
-}
+import { Profile } from 'next-auth';
 
 /**
  * Checks if the user exists in the database
@@ -50,6 +37,11 @@ export async function verifyUserLogin(email: string, password: string): Promise<
             return false;
         }
 
+        if (!user.Password) {
+            console.log(`Email: "${email}" has no password.`)
+            return false;
+        }
+
         const match = await bcrypt.compare(password, user.Password);
         if (!match) {
             console.log(`Email: "${email}" entered invalid password.`)
@@ -60,6 +52,55 @@ export async function verifyUserLogin(email: string, password: string): Promise<
         return false;
     }
 
-    // db.tables.Users.update({ LastLogin: new Date() }, { where: { Email: email } });
+    db.tables.Users.update({ LastLogin: new Date() }, { where: { Email: email } });
     return true;
+}
+
+/**
+ * Insert a user into the database
+ * @param Email 
+ * @param Password 
+ */
+export async function saveUser(email: string, password: string) {
+    const db = connectToDb();
+    const saltRounds = 11;
+    const hash = bcrypt.hashSync(password, saltRounds);
+
+    await db.tables.Users.create({ Email: email, Password: hash });
+    console.log("User inserted: " + email);
+}
+
+/**
+ * Verifies if the user exists in the database. If not, creates a new account.
+ * @param profile provider profile
+ * @returns 
+ */
+export async function verifyUserProvider(profile: Profile | any) {
+    console.log('PROFILE HERE', profile)
+    const { iis, sub, email, email_verified, name, locale } = profile;
+    const db = connectToDb();
+    const user = await db.tables.Users.findOne({ where: { Email: email } }) as unknown as UsersAttributes;
+
+    if (user !== null) {
+        if (user.Password === null && user.Provider === iis) {
+            console.log(`Email: "${email}" found under provider: "${iis}".`);
+            await db.tables.Users.update({ LastLogin: new Date() }, { where: { Email: email } });
+            return true;
+        } else {
+            throw new Error(`Email: "${email}" found under provider: "${iis}".`);
+        }
+    }
+
+    if (user === null) {
+        console.log(`Email: "${email}" not found under provider: "${iis}". Creating new account.`);
+        await db.tables.Users.create({
+            Email: email,
+            Provider: iis,
+            ProviderAccountId: sub,
+            UserName: name,
+            VerifiedEmail: email_verified,
+            Language: locale,
+        });
+        return true;
+    }
 }

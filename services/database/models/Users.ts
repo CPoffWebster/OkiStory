@@ -4,11 +4,12 @@ export interface UsersAttributes {
     id?: number;
     Email: string;
     LastLogin?: Date;
-    Password: string;
-    Provider: string;
-    UserName: string;
-    ProviderAccountId: string;
-    VerifiedEmail: boolean;
+    Password?: string;
+    Provider?: string;
+    UserName?: string;
+    ProviderAccountId?: string;
+    VerifiedEmail?: boolean;
+    Language?: string;
 }
 
 export class Users extends Model<UsersAttributes> { }
@@ -23,6 +24,7 @@ export function initUsers(sequelize: Sequelize) {
         UserName: { type: DataTypes.STRING(255), allowNull: true },
         ProviderAccountId: { type: DataTypes.STRING(255), allowNull: true },
         VerifiedEmail: { type: DataTypes.BOOLEAN, defaultValue: false },
+        Language: { type: DataTypes.STRING(255), allowNull: true },
     }, {
         sequelize, modelName: 'users', tableName: `users`,
         timestamps: true,

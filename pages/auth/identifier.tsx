@@ -1,4 +1,4 @@
-import { signIn, getCsrfToken, getProviders } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { GetServerSidePropsContext } from "next";
 import styles from "./identifier.module.css";
 import LoginLayout from "@/app/components/LoginLayout/LoginLayout";
@@ -11,23 +11,15 @@ import { OrSeperator } from "@/app/components/OrSeperator/OrSeperator";
 import { googleIcon } from "@/data/icons";
 var validator = require("validator");
 
-// import GoogleButton from "react-google-button";
-
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const providers = await getProviders();
-  const csrfToken = await getCsrfToken(context);
+  const error = (context.query.error as string) || null;
   return {
-    props: {
-      providers,
-      csrfToken,
-    },
+    props: { error },
   };
 }
 
-export default function Identifier(props: {
-  providers: Record<string, { id: string; name: string }>;
-  csrfToken: string;
-}) {
+export default function Identifier(props: { error: string }) {
+  console.log("LOOK HERE", props.error);
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
@@ -65,7 +57,17 @@ export default function Identifier(props: {
 
   return (
     <LoginLayout>
-      <h1 className={styles.title}>Reading Alpha</h1>
+      <h1 className={styles.title}>Oki Story</h1>
+      {props.error && props.error === "identity_provider_mismatch" && (
+        <div className={styles.error}>
+          <p style={{ textAlign: "center" }}>
+            You tried signing in with a different authentication <br></br>
+            method than the one you used during signup. Please <br></br>
+            try again using your original authentication method.<br></br>
+            <br></br>
+          </p>
+        </div>
+      )}
       <SignInInput
         ref={inputRef}
         value={emailValue}
@@ -84,7 +86,6 @@ export default function Identifier(props: {
       </div> */}
       <OrSeperator />
       {provider("google", "Google", googleIcon)}
-      {/* <GoogleButton className="max-auto mt-16"/> */}
     </LoginLayout>
   );
 }
@@ -94,7 +95,7 @@ function provider(id: string, name: string, icon: JSX.Element): JSX.Element {
     <button
       key={name}
       onClick={() => {
-        signIn("google", { callbackUrl: "/" });
+        signIn(id, { callbackUrl: "/" });
       }}
       className={styles.socialButton}
     >

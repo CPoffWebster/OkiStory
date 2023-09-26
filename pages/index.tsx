@@ -25,7 +25,7 @@ export default function HomePage() {
     <div className={styles.container}>
       <div className={styles.header}>
         <button>{settingsIcon}</button>
-        <h1>Reading Alpha</h1>
+        <h1>Oki Story</h1>
         <div></div> {/* Empty div for layout balance */}
       </div>
 

@@ -1,7 +1,7 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { verifyUserLogin } from "@/services/users";
+import { verifyUserLogin, verifyUserProvider } from "@/services/users";
 // import FacebookProvider from "next-auth/providers/facebook";
 
 const authOptions: AuthOptions = {
@@ -39,14 +39,12 @@ const authOptions: AuthOptions = {
     error: '/auth/identifier',
   },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ profile }) {
       try {
-        // Your Sign In logic here
-        console.log('SIGN IN CALLED HERE', user, account, profile, email, credentials)
+        await verifyUserProvider(profile);
         return true;
       } catch (error) {
-        console.error("Sign In Error", error);
-        return false;
+        throw new Error("identity_provider_mismatch");
       }
     },
   }
