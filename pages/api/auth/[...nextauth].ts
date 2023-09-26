@@ -34,13 +34,13 @@ export const authOptions = {
     //   clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
     // }),
   ],
-  // pages: {
-  // signIn: '/auth/identifier',
-  // signOut: '/auth/signout',
-  // error: '/auth/error', // Error code passed in query string as ?error=
-  // verifyRequest: '/auth/verify-request', // (used for check email message)
-  // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
-  // }
+  pages: {
+    signIn: '/auth/identifier',
+    signOut: '/auth/identifier',
+    error: '/auth/identifier', // Error code passed in query string as ?error=
+    // verifyRequest: '/auth/verify-request', // (used for check email message)
+    // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+  }
 };
 
 export default NextAuth(authOptions)
