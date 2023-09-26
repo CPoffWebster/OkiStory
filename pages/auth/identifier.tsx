@@ -11,6 +11,8 @@ import { OrSeperator } from "@/app/components/OrSeperator/OrSeperator";
 import { googleIcon } from "@/data/icons";
 var validator = require("validator");
 
+// import GoogleButton from "react-google-button";
+
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const providers = await getProviders();
   const csrfToken = await getCsrfToken(context);
@@ -82,6 +84,7 @@ export default function Identifier(props: {
       </div> */}
       <OrSeperator />
       {provider("google", "Google", googleIcon)}
+      {/* <GoogleButton className="max-auto mt-16"/> */}
     </LoginLayout>
   );
 }
@@ -90,7 +93,9 @@ function provider(id: string, name: string, icon: JSX.Element): JSX.Element {
   return (
     <button
       key={name}
-      onClick={() => signIn(id)}
+      onClick={() => {
+        signIn("google", { callbackUrl: "/" });
+      }}
       className={styles.socialButton}
     >
       {icon} Continue with {name}

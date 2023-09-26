@@ -1,11 +1,10 @@
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { verifyUserLogin } from "@/services/users";
 import GoogleProvider from "next-auth/providers/google";
+import { verifyUserLogin } from "@/services/users";
 // import FacebookProvider from "next-auth/providers/facebook";
-// import AppleProvider from "next-auth/providers/apple"
 
-export const authOptions = {
+const authOptions: AuthOptions = {
   secret: process.env.NEXT_AUTH_SECRET!,
   providers: [
     CredentialsProvider({
@@ -37,10 +36,20 @@ export const authOptions = {
   pages: {
     signIn: '/auth/identifier',
     signOut: '/auth/identifier',
-    error: '/auth/identifier', // Error code passed in query string as ?error=
-    // verifyRequest: '/auth/verify-request', // (used for check email message)
-    // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+    error: '/auth/identifier',
+  },
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      try {
+        // Your Sign In logic here
+        console.log('SIGN IN CALLED HERE', user, account, profile, email, credentials)
+        return true;
+      } catch (error) {
+        console.error("Sign In Error", error);
+        return false;
+      }
+    },
   }
 };
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);
