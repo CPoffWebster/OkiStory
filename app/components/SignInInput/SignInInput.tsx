@@ -97,4 +97,6 @@ const SignInInput = forwardRef<HTMLInputElement, SignInInputProps>(
   }
 );
 
+SignInInput.displayName = "SignInInput";
+
 export default SignInInput;
