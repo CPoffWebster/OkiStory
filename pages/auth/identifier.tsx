@@ -76,9 +76,9 @@ export default function Identifier(props: {
       <button className={styles.continueButton} onClick={handleSubmit}>
         Continue
       </button>
-      <div className={styles.signup}>
+      {/* <div className={styles.signup}>
         Don&apos;t have an account? <a href="/signup">Sign up</a>
-      </div>
+      </div> */}
       <OrSeperator />
       {props.providers &&
         Object.values(props.providers).map((provider) => {
@@ -94,7 +94,6 @@ export default function Identifier(props: {
             );
           }
         })}
-      <div className={styles.signup}>New here? Sign up</div>
     </LoginLayout>
   );
 }

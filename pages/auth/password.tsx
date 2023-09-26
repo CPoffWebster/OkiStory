@@ -78,9 +78,6 @@ export default function Password() {
         handleSubmit={handleSubmit}
         showPasswordToggle={true}
       />
-      <div>
-        <a href="/forgot-password">Forgot password? - todo</a>
-      </div>
       <button className={styles.signInButton} onClick={handleSubmit}>
         Continue
       </button>
