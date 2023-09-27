@@ -16,15 +16,3 @@ export default function App({
     </SessionProvider>
   );
 }
-
-// import "bootstrap/dist/css/bootstrap.min.css";
-// import "./style.css"
-
-// export default function MyApp({ Component, pageProps }) {
-//   return <Component {...pageProps} />
-//   // return (
-//   //   <SessionProvider session={session}>
-//   //     <Component {...pageProps} />
-//   //   </SessionProvider>
-//   // )
-// }

@@ -9,6 +9,7 @@ import axios from "axios";
 import SignInInput from "@/app/components/SignInInput/SignInInput";
 import { OrSeperator } from "@/app/components/OrSeperator/OrSeperator";
 import { googleIcon } from "@/data/icons";
+import axiosInstance from "@/libs/axiosInstance";
 var validator = require("validator");
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -19,7 +20,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 }
 
 export default function Identifier(props: { error: string }) {
-  console.log("LOOK HERE", props.error);
   const router = useRouter();
   const [emailValue, setEmailValue] = React.useState("");
   const [emailError, setEmailError] = React.useState(false);
@@ -44,7 +44,7 @@ export default function Identifier(props: { error: string }) {
     console.log("handle submit called");
     const isEmailValid = validator.isEmail(emailValue);
     if (isEmailValid) {
-      const exists = await axios.post("/api/users/verifyUser", {
+      const exists = await axiosInstance.post("/api/users/verifyUser", {
         email: emailValue,
       });
       setSessionStorage("email", emailValue);
