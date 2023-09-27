@@ -37,6 +37,10 @@ export default function Register() {
       setPasswordError(true);
     } else {
       alert("Registering new users disabled currently");
+      // const { data } = await axiosInstance("/api/users/registerUser", {
+      //   email: emailValue,
+      //   password: passwordValue,
+      // });
     }
   };
 

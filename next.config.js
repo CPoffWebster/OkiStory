@@ -1,16 +1,4 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
-    reactStrictMode: true,
-
-    middleware: [
-        {
-            handler: 'middleware.ts',
-            config: {
-                matcher: '/api/*',
-            }
-        }
-    ]
-    
-}
+const nextConfig = {}
 
 module.exports = nextConfig

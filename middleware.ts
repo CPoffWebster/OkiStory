@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    const apiKey = request.headers.get('x-api-key');
-    console.log("LOOK HERE IN API", apiKey, request);
+    const apiKey = request.headers.get('apiKey');
 
     if (!apiKey || apiKey !== process.env.API_KEY) {
         return new Response('Unauthorized', { status: 401 });
@@ -12,5 +11,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: '/api/:path*',
+    matcher: '/api/users/:path*',
 };

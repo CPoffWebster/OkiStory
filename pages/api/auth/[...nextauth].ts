@@ -39,8 +39,11 @@ const authOptions: AuthOptions = {
     error: '/auth/identifier',
   },
   callbacks: {
-    async signIn({ profile }) {
+    async signIn({ profile, credentials }) {
       try {
+        if (!profile && credentials) {
+          return await verifyUserLogin(credentials.email.toString(), credentials.password.toString());
+        }
         await verifyUserProvider(profile);
         return true;
       } catch (error) {

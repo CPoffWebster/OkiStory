@@ -6,6 +6,7 @@ import styles from "./password.module.css";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
 import SignInInput from "@/app/components/SignInInput/SignInInput";
 import { signIn } from "next-auth/react";
+import { axiosInstance } from "@/utils/axiosInstance";
 
 export default function Password() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function Password() {
   // handle password submit
   const handleSubmit = async () => {
     try {
-      const { data } = await axios.post("/api/users/verifyLogin", {
+      const { data } = await axiosInstance("/api/users/verifyLogin", {
         email: emailValue,
         password: passwordValue,
       });

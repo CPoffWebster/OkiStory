@@ -3,6 +3,7 @@ import { connectToDb } from './database/database';
 import bcrypt from 'bcrypt';
 import { UsersAttributes } from './database/models/Users';
 import { Profile } from 'next-auth';
+import { CredentialInput } from 'next-auth/providers/credentials';
 
 /**
  * Checks if the user exists in the database
@@ -76,26 +77,25 @@ export async function saveUser(email: string, password: string) {
  * @returns 
  */
 export async function verifyUserProvider(profile: Profile | any) {
-    console.log('PROFILE HERE', profile)
-    const { iis, sub, email, email_verified, name, locale } = profile;
+    const { iss, sub, email, email_verified, name, locale } = profile;
     const db = connectToDb();
     const user = await db.tables.Users.findOne({ where: { Email: email } }) as unknown as UsersAttributes;
 
     if (user !== null) {
-        if (user.Password === null && user.Provider === iis) {
-            console.log(`Email: "${email}" found under provider: "${iis}".`);
+        if (user.Password === null && user.Provider === iss) {
+            console.log(`Email: "${email}" found under provider: "${iss}".`);
             await db.tables.Users.update({ LastLogin: new Date() }, { where: { Email: email } });
             return true;
         } else {
-            throw new Error(`Email: "${email}" found under provider: "${iis}".`);
+            throw new Error(`Email: "${email}" found under provider: "${iss}".`);
         }
     }
 
     if (user === null) {
-        console.log(`Email: "${email}" not found under provider: "${iis}". Creating new account.`);
+        console.log(`Email: "${email}" not found under provider: "${iss}". Creating new account.`);
         await db.tables.Users.create({
             Email: email,
-            Provider: iis,
+            Provider: iss,
             ProviderAccountId: sub,
             UserName: name,
             VerifiedEmail: email_verified,

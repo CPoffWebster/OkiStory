@@ -5,11 +5,10 @@ import LoginLayout from "@/app/components/LoginLayout/LoginLayout";
 import React, { useEffect, useRef } from "react";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
 import { useRouter } from "next/router";
-import axios from "axios";
 import SignInInput from "@/app/components/SignInInput/SignInInput";
 import { OrSeperator } from "@/app/components/OrSeperator/OrSeperator";
 import { googleIcon } from "@/data/icons";
-import axiosInstance from "@/libs/axiosInstance";
+import { axiosInstance } from "@/utils/axiosInstance";
 var validator = require("validator");
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -41,10 +40,9 @@ export default function Identifier(props: { error: string }) {
 
   // handle email submit
   const handleSubmit = async () => {
-    console.log("handle submit called");
     const isEmailValid = validator.isEmail(emailValue);
     if (isEmailValid) {
-      const exists = await axiosInstance.post("/api/users/verifyUser", {
+      const exists = await axiosInstance("/api/users/verifyUser", {
         email: emailValue,
       });
       setSessionStorage("email", emailValue);
