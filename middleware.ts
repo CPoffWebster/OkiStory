@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-    const apiKey = request.headers.get('apiKey');
-    console.log("middleware", apiKey, process.env.API_KEY)
+    const host = request.headers.get('host');
 
-    if (!apiKey || apiKey !== process.env.API_KEY) {
+    console.log("LOOK HERE", host, process.env.HOST_NAME)
+    if (!host || host !== process.env.HOST_NAME) {
         return new Response('Unauthorized', { status: 401 });
     }
 

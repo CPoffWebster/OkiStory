@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import SignInInput from "@/app/components/SignInInput/SignInInput";
 import { OrSeperator } from "@/app/components/OrSeperator/OrSeperator";
 import { googleIcon } from "@/data/icons";
-import { axiosInstance } from "@/utils/axiosInstance";
+import axios from "axios";
 var validator = require("validator");
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
@@ -42,7 +42,7 @@ export default function Identifier(props: { error: string }) {
   const handleSubmit = async () => {
     const isEmailValid = validator.isEmail(emailValue);
     if (isEmailValid) {
-      const exists = await axiosInstance("/api/users/verifyUser", {
+      const exists = await axios.post("/api/users/verifyUser", {
         email: emailValue,
       });
       setSessionStorage("email", emailValue);
