@@ -6,7 +6,8 @@ const axiosInstance = axios.create();
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
     (config) => {
-        const apiKey = process.env.NEXT_PUBLIC_API_URL || '';
+        const apiKey = process.env.NEXT_PUBLIC_API_KEY || '';
+        console.log("AXIOS INTERCEPTOR", apiKey, process.env.NEXT_PUBLIC_API_KEY)
         config.headers['x-api-key'] = apiKey;
         return config;
     },
