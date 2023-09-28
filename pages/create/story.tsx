@@ -59,7 +59,7 @@ export default function Story(props: {
       <div className={styles.header}>
         <span onClick={handleBack}>{arrowLeftIcon}</span>
         <h2 className={styles.title}>
-          Choose your <u>{selectionType}</u>!{" "}
+          Choose your <u className={styles.titleFiller}>{selectionType}</u>!{" "}
         </h2>
         <div></div>
       </div>
