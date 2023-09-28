@@ -1,40 +1,69 @@
 /* General layout */
 .container {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  /* Header layout */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  /* Main content layout */
-  .main-content {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 40px;
-  }
-  
-  /* Each section layout */
-  .section {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  /* Image styling */
-  .section img {
-    width: 50%;
-  }
-  
-  /* Button styling */
-  .button {
-    margin-top: 20px;
-    font-size: 24px;
-  }
-  
+  text-align: center;
+  padding: 20px;
+}
+
+/* Header layout */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings {
+  background-color: white;
+}
+
+.title {
+  font-size: 4vw;
+  font-weight: bold;
+}
+
+/* Main content layout */
+.main-content {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+/* Each section layout */
+.section {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Image styling */
+.section img {
+  width: 28vw;
+  height: 28vw;
+  position: relative;
+}
+
+/* Button styling */
+.button {
+  width: 35vw;
+  height: 8vw;
+  margin-top: 1vw;
+  font-size: calc(3vw + 2vh + 0.2vmin);
+}
+
+/* Left Button Specific Styling */
+.button-left {
+  background: transparent;
+  color: #000000;
+}
+
+/* Right Button Specific Styling */
+.button-right {
+  background: purple;
+  color: white;
+}
+
+
+.button:hover {
+  transform: translateY(-2px);
+}

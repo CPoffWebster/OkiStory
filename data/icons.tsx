@@ -6,6 +6,10 @@ export const settingsIcon = (
       strokeLinecap: "round",
       strokeLinejoin: "round",
       strokeWidth: "32px",
+      backgroundColor: "white",
+      // background-color: white;
+      // width: 7vw;
+      // height: 7vw;
     }}
   >
     <svg

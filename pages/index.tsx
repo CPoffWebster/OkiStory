@@ -24,25 +24,41 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <button>{settingsIcon}</button>
-        <h1>Oki Story</h1>
+        <button
+          className={`${styles.settings} ${["clickable-container-small"]}`}
+        >
+          {settingsIcon}
+        </button>
+        <h1 className={styles.title}>Oki Story</h1>
         <div></div> {/* Empty div for layout balance */}
       </div>
 
       <div className={styles["main-content"]}>
         {/* Left Section */}
         <div className={styles.section}>
-          <img src="/changeImage.jpg" alt="Books" />
+          <img src="/book_pile.png" alt="Books" />
           <Link href="/bookshelf/books">
-            <button className={styles.button}>Book Shelf</button>
+            <button
+              className={`${styles.button} ${styles["button-left"]} ${[
+                "clickable-container-large",
+              ]}`}
+            >
+              Book Shelf
+            </button>
           </Link>
         </div>
 
         {/* Right Section */}
         <div className={styles.section}>
-          <img src="/changeImage.jpg" alt="Open Book" />
+          <img src="/happy_book.png" alt="Open Book" />
           <Link href="/create/story">
-            <button className={styles.button}>New Story</button>
+            <button
+              className={`${styles.button} ${styles["button-right"]} ${[
+                "clickable-container-large",
+              ]}`}
+            >
+              New Story
+            </button>
           </Link>
         </div>
       </div>
