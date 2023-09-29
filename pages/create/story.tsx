@@ -57,7 +57,12 @@ export default function Story(props: {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <span onClick={handleBack}>{arrowLeftIcon}</span>
+        <span
+          onClick={handleBack}
+          className={`${styles.leftClick} ${["clickable-container-small"]}`}
+        >
+          {arrowLeftIcon}
+        </span>
         <h2 className={styles.title}>
           Choose your <u className={styles.titleFiller}>{selectionType}</u>!{" "}
         </h2>
@@ -65,20 +70,21 @@ export default function Story(props: {
       </div>
       <div className={styles["selection-container"]}>
         {elements.map((element, index) => (
-          <button
-            className={styles["selection-button"]}
-            key={index}
-            onClick={() => handleSelectElement(element)}
-          >
-            <img
-              src={`/api/images/getImage?filename=${element.Image}&imageType=${selectionType}`}
-              alt={element.Name}
-              width={300}
-              height={300}
-            />
-            <br />
-            {element.Name}
-          </button>
+          <span onClick={() => handleSelectElement(element)} key={index}>
+            <div
+              className={`${styles["selection-button"]} ${[
+                "clickable-container-large",
+              ]}`}
+            >
+              <img
+                src={`/api/images/getImage?filename=${element.Image}&imageType=${selectionType}`}
+                alt={element.Name}
+                width={300}
+                height={300}
+              />
+            </div>
+            <span className={styles["section-name"]}>{element.Name}</span>
+          </span>
         ))}
       </div>
     </div>

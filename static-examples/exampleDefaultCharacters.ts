@@ -28,13 +28,13 @@ export const exampleDefaultCharacters: CharactersAttributes[] = [
         GenerationDescription: "",
         IsDefault: true
     },
-    {
-        id: 4,
-        GUID: '123456789058',
-        Name: "Character 4",
-        Image: "nba.jpg",
-        Description: "Character 4",
-        GenerationDescription: "",
-        IsDefault: true
-    },
+    // {
+    //     id: 4,
+    //     GUID: '123456789058',
+    //     Name: "Character 4",
+    //     Image: "nba.jpg",
+    //     Description: "Character 4",
+    //     GenerationDescription: "",
+    //     IsDefault: true
+    // },
 ];

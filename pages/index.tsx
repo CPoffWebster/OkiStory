@@ -24,11 +24,9 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <button
-          className={`${styles.settings} ${["clickable-container-small"]}`}
-        >
+        <span className={`${styles.settings} ${["clickable-container-small"]}`}>
           {settingsIcon}
-        </button>
+        </span>
         <h1 className={styles.title}>Oki Story</h1>
         <div></div> {/* Empty div for layout balance */}
       </div>

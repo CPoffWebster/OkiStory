@@ -28,13 +28,13 @@ export const exampleDefaultLocations: LocationsAttributes[] = [
         GenerationDescription: "",
         IsDefault: true
     },
-    {
-        id: 4,
-        GUID: '1234567890584',
-        Name: "Location 4",
-        Image: "nba.jpg",
-        Description: "Location 4",
-        GenerationDescription: "",
-        IsDefault: true
-    },
+    // {
+    //     id: 4,
+    //     GUID: '1234567890584',
+    //     Name: "Location 4",
+    //     Image: "nba.jpg",
+    //     Description: "Location 4",
+    //     GenerationDescription: "",
+    //     IsDefault: true
+    // },
 ];

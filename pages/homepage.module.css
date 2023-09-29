@@ -1,14 +1,13 @@
 /* General layout */
 .container {
   text-align: center;
-  padding: 20px;
 }
 
 /* Header layout */
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .settings {
@@ -24,7 +23,7 @@
 .main-content {
   display: flex;
   justify-content: space-between;
-  margin-top: 40px;
+  margin-top: 3vw;
 }
 
 /* Each section layout */
