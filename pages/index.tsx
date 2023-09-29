@@ -2,7 +2,6 @@ import { GetServerSideProps } from "next";
 import { settingsIcon } from "@/data/icons";
 import Link from "next/link";
 import styles from "./homepage.module.css";
-
 import { getSession } from "next-auth/react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

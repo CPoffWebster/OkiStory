@@ -30,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const storage = getStorage();
-    const stream = await storage.getReadStream(`gs://${charactersBucket}/${filename}`);
+    const stream = await storage.getReadStream(`gs://${bucket}/${filename}`);
     if (!stream) {
         res.status(404).end();
         return;

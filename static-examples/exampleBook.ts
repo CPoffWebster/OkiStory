@@ -5,7 +5,7 @@ export const exampleBook: BooksAttributes = {
     id: 1,
     GUID: '1234567890',
     Title: "The Bear in the Forest",
-    CoverImage: "https://placebear.com/300/300",
+    CoverImage: "nba.jpg",
     LocationID: 1,
     CharacterID: 1,
     UserID: 1,
@@ -18,7 +18,7 @@ export const examplePages: PagesAttributes[] = [
         BookID: 1,
         PageNumber: 1,
         Text: "Once upon a time, there was a bear in a forest.",
-        Image: "https://placebear.com/300/300",
+        Image: "nba.jpg",
         PositiveImagePrompt: "",
         NegativeImagePrompt: ""
     },
@@ -28,7 +28,7 @@ export const examplePages: PagesAttributes[] = [
         BookID: 1,
         PageNumber: 2,
         Text: "The bear lived in a cave.",
-        Image: "https://placebear.com/300/300",
+        Image: "nba.jpg",
         PositiveImagePrompt: "",
         NegativeImagePrompt: ""
     },
@@ -38,7 +38,7 @@ export const examplePages: PagesAttributes[] = [
         BookID: 1,
         PageNumber: 3,
         Text: "The bear ate berries and honey.",
-        Image: "https://placebear.com/300/300",
+        Image: "nba.jpg",
         PositiveImagePrompt: "",
         NegativeImagePrompt: ""
     },
@@ -48,7 +48,8 @@ export const examplePages: PagesAttributes[] = [
         BookID: 1,
         PageNumber: 4,
         Text: "The bear was happy.",
-        Image: "https://placebear.com/300/300",
+        Image: "nba.jpg",
+        // Image: "https://placebear.com/300/300",
         PositiveImagePrompt: "",
         NegativeImagePrompt: "",
         LastPage: true
