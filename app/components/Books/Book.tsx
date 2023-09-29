@@ -39,6 +39,30 @@ const Book: React.FC = () => {
   }, []);
 
   return (
+    // <div className={styles.book}>
+    //   <div id="pages" className={styles.pages}>
+    //     <div className={styles.page}>
+    //       <div className={`${styles.pageContent} ${styles.front}`}>
+    //         <p>
+    //           Open Me, <br />
+    //           please!
+    //         </p>
+    //       </div>
+    //       <div className={`${styles.pageContent} ${styles.back}`}>
+    //         <p>Another Side</p>
+    //       </div>
+    //     </div>
+    //     <div className={styles.page}></div>
+    //     <div className={styles.page}>
+    //       <div className={`${styles.pageContent} ${styles.front}`}>
+    //         <p>Hello there!</p>
+    //       </div>
+    //       <div className={`${styles.pageContent} ${styles.back}`}>
+    //         <p>More Content</p>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
     <div className={styles.book}>
       <div id="pages" className={styles.pages}>
         <div className={styles.page}>
@@ -46,10 +70,42 @@ const Book: React.FC = () => {
             Open Me, <br />
             please!
           </p>
+          <p>
+            Open Me, <br />
+            please!
+          </p>
         </div>
-        <div className={styles.page}></div>
         <div className={styles.page}>
-          <p>Hello there!</p>
+          <img
+            src="/book_pile.png"
+            alt="Books"
+            style={{
+              width: "90%",
+              height: "90%",
+              objectFit: "cover",
+            }}
+          />
+        </div>
+        <div className={styles.page}>
+          <p
+            style={{
+              fontSize: "3rem",
+              fontWeight: "bold",
+              textAlign: "center",
+              paddingTop: "2rem",
+            }}
+          >
+            Hello there!
+          </p>
+          <p
+            style={{
+              fontSize: "2rem",
+              textAlign: "center",
+            }}
+          >
+            More ContentMore ContentMore ContentMore ContentMore ContentMore
+            ContentMore ContentMore Content
+          </p>
         </div>
         <div className={styles.page}></div>
         <div className={styles.page}></div>
