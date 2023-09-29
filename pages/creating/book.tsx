@@ -18,7 +18,7 @@ export default function CreatingBookLoader() {
       try {
         const creatingBook = await createNewBook(theme, hero);
         setSessionStorage("book", JSON.stringify(creatingBook));
-        router.push("/read/book");
+        router.push(`/read/${creatingBook.GUID}`);
         return;
       } catch (error) {
         console.error("Error fetching data:", error);
