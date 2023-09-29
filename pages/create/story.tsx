@@ -72,15 +72,14 @@ export default function Story(props: {
         {elements.map((element, index) => (
           <span onClick={() => handleSelectElement(element)} key={index}>
             <div
-              className={`${styles["selection-button"]} ${[
+              className={`${styles["selection"]} ${[
                 "clickable-container-large",
               ]}`}
             >
               <img
                 src={`/api/images/getImage?filename=${element.Image}&imageType=${selectionType}`}
+                className={styles["selection-image"]}
                 alt={element.Name}
-                width={300}
-                height={300}
               />
             </div>
             <span className={styles["section-name"]}>{element.Name}</span>

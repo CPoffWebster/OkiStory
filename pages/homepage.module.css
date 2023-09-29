@@ -23,13 +23,13 @@
 .main-content {
   display: flex;
   justify-content: space-between;
-  margin-top: 3vw;
+  margin-top: 2vw;
 }
 
 /* Each section layout */
 .section {
   flex: 1;
-  padding: 20px;
+  padding: 1vw;
   display: flex;
   flex-direction: column;
   align-items: center;
