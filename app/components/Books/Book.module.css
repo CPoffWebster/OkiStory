@@ -10,6 +10,19 @@
     transform-style: preserve-3d;
     backface-visibility: hidden;
     border-radius: 4px;
+    padding-bottom: 3rem;
+}
+
+.navButtons {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 1vw;
+}
+.button {
+  padding: 1.8vw .5vw;
+  cursor: pointer;
+  background-color: purple;
+  color: white;
 }
 
 .page {

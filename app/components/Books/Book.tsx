@@ -1,5 +1,38 @@
 import React, { useEffect } from "react";
 import styles from "./Book.module.css";
+import { homeIcon } from "@/data/icons";
+import { useRouter } from "next/router";
+
+type PageProps = {
+  content: React.ReactNode;
+  className?: string;
+  index: number;
+};
+
+const Page: React.FC<PageProps> = ({ content, className, index }) => {
+  const router = useRouter();
+  const pageRef = React.useRef<HTMLDivElement>(null);
+
+  const returnHome = () => {
+    router.push("/");
+  };
+
+  return (
+    <div ref={pageRef} className={`${styles.page} ${styles.centerContent}`}>
+      {content}
+      {index % 2 !== 1 && (
+        <div className={styles.navButtons}>
+          <span
+            className={`${styles.button} ${["clickable-container-small"]}`}
+            onClick={returnHome}
+          >
+            {homeIcon}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const Book: React.FC = () => {
   useEffect(() => {
@@ -38,33 +71,31 @@ const Book: React.FC = () => {
     });
   }, []);
 
+  const pagesContent = [
+    "Open Me, please!",
+    <img src="/book_pile.png" alt="Books" className={`${styles.image}`} />,
+    <p className={styles.text}>
+      More content... More content... More content... More content... More
+      content... More content...
+    </p>,
+    "More content... image",
+    "More content...",
+    "More content... image",
+    "More content...",
+    "More content... image",
+    "More content...",
+  ];
+
   return (
     <div className={styles.book}>
-      <div id="pages" className={styles.pages}>
-        <div className={styles.page}>
-          <p>
-            Open Me, <br />
-            please!
-          </p>
-          <p>
-            Open Me, <br />
-            please!
-          </p>
-        </div>
-        <div className={`${styles.page} ${styles.centerContent}`}>
-          <img src="/book_pile.png" alt="Books" className={styles.image} />
-        </div>
-        <div className={`${styles.page} ${styles.centerContent}`}>
-          <p className={styles.text}>
-            More ContentMore ContentMore ContentMore ContentMore ContentMore
-            ContentMore ContentMore Content
-          </p>
-        </div>
-        <div className={styles.page}></div>
-        <div className={styles.page}></div>
-        <div className={styles.page}></div>
-        <div className={styles.page}></div>
-      </div>
+      {pagesContent.map((content, index) => (
+        <Page
+          key={index}
+          content={content}
+          index={index}
+          className={index % 2 === 0 ? styles.centerContent : ""}
+        />
+      ))}
     </div>
   );
 };
