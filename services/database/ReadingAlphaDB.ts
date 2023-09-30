@@ -6,6 +6,7 @@ import { initBooks } from './models/Books';
 import { initPages } from './models/Pages';
 import { initCharacters } from './models/Characters';
 import { initLocations } from './models/Locations';
+import { initTextGenerations } from './models/TextGenerations';
 
 
 type ReadingAlphaTables = ReturnType<typeof initializeTables>;
@@ -77,7 +78,7 @@ export class ReadingAlphaDB {
     public async createTables(options: { useDev?: boolean } = {}) {
         const syncOptions: SyncOptions = (options.useDev === true)
             ? ({ alter: true, force: true })  //  Force if dev
-            : ({ alter: false, force: false });  // Don't force it.  We're in prod
+            : ({ alter: true, force: false });  // Don't force it.  We're in prod
 
         await this.tables.Users.sync(syncOptions)
         await this.tables.UserAccounts.sync(syncOptions)
@@ -86,6 +87,7 @@ export class ReadingAlphaDB {
         await this.tables.Pages.sync(syncOptions)
         await this.tables.Characters.sync(syncOptions)
         await this.tables.Locations.sync(syncOptions)
+        await this.tables.TextGenerations.sync(syncOptions)
     }
 }
 
@@ -97,7 +99,8 @@ function initializeTables(sequelize: Sequelize) {
         Books: initBooks(sequelize),
         Pages: initPages(sequelize),
         Characters: initCharacters(sequelize),
-        Locations: initLocations(sequelize)
+        Locations: initLocations(sequelize),
+        TextGenerations: initTextGenerations(sequelize),
     }
     return tables;
 }

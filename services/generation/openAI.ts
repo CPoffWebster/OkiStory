@@ -2,6 +2,8 @@
 
 
 import OpenAI from 'openai';
+import { connectToDb } from '../database/database';
+import { TextGenerations } from '../database/models/TextGenerations';
 
 const openai = new OpenAI({
     apiKey: process.env["OPENAI_API_KEY"],
@@ -9,23 +11,31 @@ const openai = new OpenAI({
 
 
 export async function generateText() {
-    const stream = await openai.chat.completions.create({
-        // model: 'gpt-4',
-        model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: textPrompt }],
-        stream: true,
-    });
+    try {
+        const db = connectToDb();
+        const model = 'gpt-3.5-turbo';
+        const stream = await openai.chat.completions.create({
+            // model: 'gpt-4',
+            model: model,
+            messages: [{ role: 'user', content: textPrompt }],
+            stream: true,
+        });
 
-    let generatedText = '';
-    for await (const part of stream) {
-        generatedText += part.choices[0]?.delta?.content || '';
-        console.log('part:', generatedText)
-        // process.stdout.write(part.choices[0]?.delta?.content || '');
+        let generatedText = '';
+        for await (const part of stream) {
+            generatedText += part.choices[0]?.delta?.content || '';
+            console.log('part:', generatedText)
+            // process.stdout.write(part.choices[0]?.delta?.content || '');
+        }
+
+        console.log('generatedText:', generatedText);
+        TextGenerations.saveOpenAITextGeneration(textPrompt.length, generatedText.length, 0, model);
+
+        return generatedText;
+    } catch (error) {
+        console.log('error:', error);
+        return '';
     }
-
-    console.log('generatedText:', generatedText);
-
-    return generatedText;
 };
 
 
