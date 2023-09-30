@@ -1,13 +1,15 @@
-import { Storage } from '@google-cloud/storage';
+import { Bucket, Storage } from '@google-cloud/storage';
 
 export const charactersBucket = process.env.CHARACTERS_GCS_BUCKET!;
 export const locationsBucket = process.env.LOCATIONS_GCS_BUCKET!;
 export const booksBucket = process.env.BOOKS_GCS_BUCKET!;
+export const textGenerationsBucket = process.env.TEXT_GENERATIONS_GCS_BUCKET!;
 
 export function getStorage() {
     const storage = new Storage();
 
     return {
+        getBucket: (bucketName: string) => getBucket(bucketName),
         getReadStream: (url: string) => getReadStream(url),
     };
 
@@ -35,6 +37,10 @@ export function getStorage() {
                 const remoteFile = bucket.file(filename);
                 return remoteFile.createReadStream();
             },
+
+            async upload(filename: string, stream: NodeJS.ReadableStream) {
+                return uploadStream(bucket, filename, stream);
+            }
         }
     }
 }
@@ -45,4 +51,23 @@ export function parseGsUrl(urlString: string) {
     if (match === null) { return null; }
     const [, host, pathToFind] = match;
     return { host, pathToFind };
+}
+
+export async function uploadStream(bucket: Bucket, filename: string, stream: NodeJS.ReadableStream) {
+    //  Creates an object that represents the destination
+    const newFile = bucket.file(filename, {})
+    console.log('Uploading', filename);
+    return new Promise<string>((ok, rej) => {
+        //  Create a writable stream on Google Storage bucket
+        const destinationWriteStream = newFile.createWriteStream();
+
+        // We're going to pipe our input stream to the storage bucket
+        stream
+            .pipe(destinationWriteStream)
+            .on('error', function (err) { rej(err); })
+            .on('finish', function () {
+                ok(filename);
+            })
+    })
+
 }

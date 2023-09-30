@@ -4,6 +4,9 @@
 import OpenAI from 'openai';
 import { connectToDb } from '../database/database';
 import { TextGenerations } from '../database/models/TextGenerations';
+import { getStorage, textGenerationsBucket } from '../storage';
+import { v4 as uuidv4 } from 'uuid';
+import { Readable } from 'stream';
 
 const openai = new OpenAI({
     apiKey: process.env["OPENAI_API_KEY"],
@@ -11,25 +14,25 @@ const openai = new OpenAI({
 
 
 export async function generateText() {
+    const startTime = performance.now();
     try {
-        const db = connectToDb();
-        const model = 'gpt-3.5-turbo';
+        const model = 'gpt-3.5-turbo'; // 'gpt-4
+        const prompt = textPrompt;
+        // const prompt = "Say Hello World"; // textPrompt;
+        // const generatedText = `{ "response": "Hello World" }`;
         const stream = await openai.chat.completions.create({
-            // model: 'gpt-4',
             model: model,
-            messages: [{ role: 'user', content: textPrompt }],
+            messages: [{ role: 'user', content: prompt }],
             stream: true,
         });
 
         let generatedText = '';
         for await (const part of stream) {
             generatedText += part.choices[0]?.delta?.content || '';
-            console.log('part:', generatedText)
-            // process.stdout.write(part.choices[0]?.delta?.content || '');
         }
 
-        console.log('generatedText:', generatedText);
-        TextGenerations.saveOpenAITextGeneration(textPrompt.length, generatedText.length, 0, model);
+        const endTime = performance.now();
+        saveGeneratedTextRecord(prompt, generatedText, endTime - startTime, model);
 
         return generatedText;
     } catch (error) {
@@ -38,6 +41,33 @@ export async function generateText() {
     }
 };
 
+/**
+ * Saves the generated text to the database and to Google Cloud Storage
+ * @param prompt 
+ * @param generatedText 
+ * @param seconds 
+ * @param model 
+ */
+async function saveGeneratedTextRecord(prompt: string, generatedText: string, seconds: number, model: string) {
+    connectToDb();
+    const storage = getStorage();
+    const textBucket = storage.getBucket(textGenerationsBucket);
+
+    const generatedTextOutput: generatedTextOutput = JSON.parse(generatedText);
+    const dataStream = Readable.from(JSON.stringify(JSON.stringify({
+        ...generatedTextOutput,
+        prompt
+    })));
+
+
+    const guid = uuidv4();
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()}`;
+
+    console.log('Uploading', `${formattedDate}/${guid}.json`, 'to', textGenerationsBucket)
+    await textBucket.upload(`${formattedDate}/${guid}.json`, dataStream);
+    await TextGenerations.saveOpenAITextGeneration(guid, prompt.length, generatedText.length, seconds, model);
+}
 
 const childrenAge = 5;
 
@@ -134,3 +164,17 @@ Character: ${characters[0]}
 Setting: ${settings[0]}
 Theme: ${themes[0].name}; ${themes[0].desc}
 `
+interface generatedTextOutput {
+    title: string;
+    titleImageDescription: string;
+    character: string;
+    setting: string;
+    theme: string;
+    pages: generatedTextPage[];
+}
+
+interface generatedTextPage {
+    pageNumber: number;
+    text: string;
+    imageDescription: string;
+}
