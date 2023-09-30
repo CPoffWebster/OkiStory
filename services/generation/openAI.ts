@@ -112,6 +112,7 @@ The output should strictly follow this structure:
     "theme": "",
     "pages": [
         {
+            "pageNumber": 1,
             "text": "",
             "imageDescription": ""
         }
