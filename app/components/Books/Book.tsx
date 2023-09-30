@@ -72,18 +72,44 @@ const Book: React.FC = () => {
   }, []);
 
   const pagesContent = [
-    "Open Me, please!",
-    <img src="/book_pile.png" alt="Books" className={`${styles.image}`} />,
-    <p className={styles.text}>
+    <p key="title_text" className={styles.text}>
       More content... More content... More content... More content... More
       content... More content...
     </p>,
-    "More content... image",
-    "More content...",
-    "More content... image",
-    "More content...",
-    "More content... image",
-    "More content...",
+    <img
+      key="page1_image"
+      src="/book_pile.png"
+      alt="Books"
+      className={`${styles.image}`}
+    />,
+    <p key="page1_text" className={styles.text}>
+      More content... More content... More content... More content... More
+      content... More content...
+    </p>,
+    <img
+      key="page2_image"
+      src="/happy_book.png"
+      alt="Books"
+      className={`${styles.image}`}
+    />,
+    <p key="page2_text" className={styles.text}>
+      More content... More content... More content... More content... More
+      content... More content...
+    </p>,
+    <img
+      key="page3_image"
+      src="/book_pile.png"
+      alt="Books"
+      className={`${styles.image}`}
+    />,
+    <p key="page3_text" className={styles.text}>
+      More content... More content... More content... More content... More
+      content... More content...
+    </p>,
+    <p key="back_cover" className={styles.text}>
+      More content... More content... More content... More content... More
+      content... More content...
+    </p>,
   ];
 
   return (
