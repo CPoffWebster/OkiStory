@@ -1,17 +1,41 @@
-
-
-
 import OpenAI from 'openai';
 import { connectToDb } from '../database/database';
 import { TextGenerations } from '../database/models/TextGenerations';
 import { getStorage, textGenerationsBucket } from '../storage';
 import { v4 as uuidv4 } from 'uuid';
 import { Readable } from 'stream';
+import { generatedTextStory } from '@/static-examples/exampleBook';
 
 const openai = new OpenAI({
     apiKey: process.env["OPENAI_API_KEY"],
 });
 
+export async function testGenerateText() {
+    async function sleep(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    const startTime = performance.now();
+    const streamText = JSON.stringify(generatedTextStory);
+
+    // Calculate the time to sleep between each character so the total duration is approx 45 seconds
+    const sleepTime = Math.floor(30000 / streamText.length);
+
+    let generatedText = '';
+
+    for (const char of streamText) {
+        generatedText += char;
+        console.log(`Generated Text  ${(performance.now() - startTime).toFixed(2)}: ${generatedText}`)
+        await sleep(sleepTime);
+    }
+
+    const endTime = performance.now();
+
+    // Your code to save or use generatedText
+    // For example: saveGeneratedTextRecord(prompt, generatedText, endTime - startTime, 'Simulated Model');
+    console.log(`Generated Text: ${generatedText}`);
+    console.log(`Time taken for API call: ${(endTime - startTime).toFixed(2)}ms`);
+}
 
 export async function generateText() {
     const startTime = performance.now();
