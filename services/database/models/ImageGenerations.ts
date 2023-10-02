@@ -8,7 +8,6 @@ export interface ImageGenerationsAttributes {
     Type: string;
     APICallMilliSeconds: number;
     Input: string;
-    GeneratedURL: string;
     GCSLocation: string;
     EstimatedPrice: number;
 }
@@ -25,7 +24,7 @@ export class ImageGenerations extends Model<ImageGenerationsAttributes> {
      * @param generatedURL
      * @param gCSLocation 
      */
-    static async saveOpenAIImageGeneration(guid: string, model: string, type: string, seconds: number, input: string, generatedURL: string, gCSLocation: string) {
+    static async saveOpenAIImageGeneration(guid: string, model: string, type: string, seconds: number, input: string, gCSLocation: string) {
         let price = 0;
         switch (model) {
             case ('1024x1024'):
@@ -46,7 +45,6 @@ export class ImageGenerations extends Model<ImageGenerationsAttributes> {
             Type: type,
             APICallMilliSeconds: seconds,
             Input: input,
-            GeneratedURL: generatedURL,
             GCSLocation: gCSLocation,
             EstimatedPrice: price
         });
@@ -62,7 +60,6 @@ export function initImageGenerations(sequelize: Sequelize) {
         Type: { type: DataTypes.STRING(128), allowNull: false },
         APICallMilliSeconds: { type: DataTypes.INTEGER, allowNull: false },
         Input: { type: DataTypes.TEXT, allowNull: false },
-        GeneratedURL: { type: DataTypes.TEXT, allowNull: false },
         GCSLocation: { type: DataTypes.STRING(256), allowNull: false },
         EstimatedPrice: { type: DataTypes.DECIMAL(10, 8), allowNull: false }
     }, {

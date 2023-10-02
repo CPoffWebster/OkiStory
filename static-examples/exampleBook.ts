@@ -118,10 +118,10 @@ export const generatedTextStory = {
 }
 
 export const generatedImage = {
-    created: 1696199878,
+    created: 1696208997,
     data: [
         {
-            url: 'https://oaidalleapiprodscus.blob.core.windows.net/private/org-RISWxyNpKXIW2Rq6pM5wQBUA/user-7YXHnRuMfPhcuHLB47XtCEW7/img-0eqIgcxSUaHuLKA15lu3Mfsl.png?st=2023-10-01T21%3A37%3A58Z&se=2023-10-01T23%3A37%3A58Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-10-01T17%3A04%3A24Z&ske=2023-10-02T17%3A04%3A24Z&sks=b&skv=2021-08-06&sig=bydZpxKAgnp1%2Bl1w2hPnMJUk78yTpTTA6fyqZjvq3yo%3D'
+            url: 'https://oaidalleapiprodscus.blob.core.windows.net/private/org-RISWxyNpKXIW2Rq6pM5wQBUA/user-7YXHnRuMfPhcuHLB47XtCEW7/img-ZXQH3COF7hJwxz5GVmAkCSwh.png?st=2023-10-02T00%3A09%3A57Z&se=2023-10-02T02%3A09%3A57Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2023-10-02T00%3A18%3A46Z&ske=2023-10-03T00%3A18%3A46Z&sks=b&skv=2021-08-06&sig=2ts1n0s/jiRUdvjJQzKIqKnPwUFSjtRkgmFrFGX1Rnc%3D'
         }
     ]
 }

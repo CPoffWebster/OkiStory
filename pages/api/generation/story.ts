@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { generateText, testGenerateText } from '@/services/generation/chatGPT';
-import { generateImage } from '@/services/generation/dalle';
+import { generateImage, testGenerateImage } from '@/services/generation/dalle';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     console.log('api/generation/story API Route Triggered');
@@ -8,6 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // const generatedText = await generateText();
     // const generatedText = await testGenerateText();
     const generatedText = await generateImage();
+    // const generatedText = await testGenerateImage();
 
 
     res.status(200).json({ generatedText });
