@@ -82,7 +82,12 @@ export default function Password() {
         Continue
       </button>
       <div>
-        Don&apos;t have an account? <a href="/signup">Sign up - todo</a>
+        <a
+          onClick={() => setSessionStorage("email", emailValue)}
+          href="/auth/reset-password"
+        >
+          Forgot password?
+        </a>
       </div>
     </LoginLayout>
   );
