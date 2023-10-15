@@ -25,6 +25,7 @@ export async function testGenerateText() {
 
     for (const char of streamText) {
         generatedText += char;
+        // console.log(generatedText)
         textGenerationEmitter.emit('textGenerated', generatedText);
         await sleep(.01);
     }

@@ -22,40 +22,48 @@ async function createBookInRealTime() {
     // Page streaming variables
     let pageStarted = false;
     let mostRecentPage = 0;
-    const pageList: generatedTextPage[] = [];
+    let pageList: generatedTextPage[] = [];
     const keyValueMap = new Map<string, string>();
 
+    // Log when an object or array opens or closes
+    parser.on('openobject', (key: string) => {
+        // console.log(`openobject: ${key}`);
+        // parsingLogic(key, 'pageNumber');
+    });
+
     parser.on('key', (key: string) => {
+        console.log(key)
         currentKey = key;
     });
 
+    function parsingLogic(currentKey: string, value: any) {
+        if (!pageStarted && currentKey === 'pages') {
+            console.log('SETTING TO PAGES...', `Received complete value for key ${currentKey}: ${value}`)
+            pageStarted = true;
+
+            // pageList = new Array(keyValueMap.get('pageCount') as unknown as number);
+            // Create pageList with of length "pageCount" all with empty objects
+            // In python this would be: pageList = [{} for i in range(pageCount)]
+            pageList = Array.from({ length: keyValueMap.get('pageCount') as unknown as number }, () => ({} as generatedTextPage));
+        }
+
+        if (!keyValueMap.has(currentKey)) {
+            if (typeof value === 'string' && value.includes('{')) return;
+
+            if (!pageStarted) {
+                keyValueMap.set(currentKey, value);
+            } else {
+                if (currentKey === 'pageNumber') mostRecentPage = value;
+                (pageList[mostRecentPage] as { [key: string]: any })[currentKey] = value;
+            }
+        }
+
+        // Your logic here
+    }
+
     parser.on('value', (value: any) => {
         if (currentKey !== null) {
-            // console.log(`Received complete value for key ${currentKey}: ${value}`);
-
-
-            // if (currentKey === 'pageNumber') console.log(`Received complete value for key ${currentKey}: ${value}`);
-            if (!pageStarted && currentKey === 'pages') {
-                console.log('HIT HERE', `Received complete value for key ${currentKey}: ${value}`)
-                pageStarted = true;
-                console.log(keyValueMap)
-            }
-
-            if (!keyValueMap.has(currentKey)) {
-                if (typeof value === 'string' && value.includes('{')) return;
-
-                if (!pageStarted) {
-                    keyValueMap.set(currentKey, value);
-                } else {
-                    if (currentKey === 'pageNumber') mostRecentPage = value;
-                    if (pageList[mostRecentPage] === null) pageList[mostRecentPage] = new generatedTextPage();
-                    (pageList[mostRecentPage] as { [key: string]: any })[currentKey] = value;
-                    // keyValueMap.set(currentKey, value);
-                }
-
-                // console.log(keyValueMap)
-            }
-            // Your logic here
+            parsingLogic(currentKey, value);
         }
         currentKey = null;
     });
@@ -69,6 +77,7 @@ async function createBookInRealTime() {
     });
 
     textGenerationEmitter.on('textGenerated', (newText: string) => {
+        // {"pageCount":3,"pages":[{"pageNumber":1,"text":"tex 1","imageDescription":"img1"},{"pageNumber":2,"text":"tex 2","imageDescription":"img2"},{"pageNumber":4,"text":"tex 4","imageDescription":"img3"}]}
         parser.write(newText);
     });
 

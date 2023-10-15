@@ -64,25 +64,45 @@ export const examplePages: PagesAttributes[] = [
 //     "setting": "setting value"
 // }
 export const generatedTextStory = {
-    "pageCount": 3,
+    "pageCount": 1,
     "pages": [
         {
             "pageNumber": 1,
-            "text": "Once upon a time, in a magical forest, there lived a kind and gentle Teddy Bear named Teddy. Teddy loved to explore and learn new things.",
-            "imageDescription": "A cute illustration of Teddy Bear with a smile on its face, standing in front of a beautiful forest filled with vibrant green trees and colorful flowers."
+            "text": "sssss",
+            "imageDescription": "aaaaa"
         },
-        {
-            "pageNumber": 2,
-            "text": "One sunny day, while walking through the forest, Teddy saw a little bunny caught in a thorny bush. The bunny was scared and needed help.",
-            "imageDescription": "An adorable illustration of Teddy Bear reaching out to grab hold of the thorny bush, while the frightened bunny looks up at Teddy with big, pleading eyes."
-        },
-        {
-            "pageNumber": 3,
-            "text": "Teddy carefully untangled the bunny from the thorny bush, making sure not to hurt it. The bunny hopped away happily, thanking Teddy for saving it.",
-            "imageDescription": "A heartwarming illustration of Teddy Bear gently removing the thorny branches from the bunny's fur, with the bunny looking relieved and grateful."
-        }
+        // {
+        //     "pageNumber": 2,
+        //     "text": "sssss",
+        //     "imageDescription": "aaaaa"
+        // },
+        // {
+        //     "pageNumber": 4,
+        //     "text": "sssss",
+        //     "imageDescription": "aaaaa"
+        // }
     ]
 }
+// export const generatedTextStory = {
+//     "pageCount": 3,
+//     "pages": [
+//         {
+//             "pageNumber": 1,
+//             "text": "Once upon a time, in a magical forest, there lived a kind and gentle Teddy Bear named Teddy. Teddy loved to explore and learn new things.",
+//             "imageDescription": "A cute illustration of Teddy Bear with a smile on its face, standing in front of a beautiful forest filled with vibrant green trees and colorful flowers."
+//         },
+//         {
+//             "pageNumber": 2,
+//             "text": "One sunny day, while walking through the forest, Teddy saw a little bunny caught in a thorny bush. The bunny was scared and needed help.",
+//             "imageDescription": "An adorable illustration of Teddy Bear reaching out to grab hold of the thorny bush, while the frightened bunny looks up at Teddy with big, pleading eyes."
+//         },
+//         {
+//             "pageNumber": 3,
+//             "text": "Teddy carefully untangled the bunny from the thorny bush, making sure not to hurt it. The bunny hopped away happily, thanking Teddy for saving it.",
+//             "imageDescription": "A heartwarming illustration of Teddy Bear gently removing the thorny branches from the bunny's fur, with the bunny looking relieved and grateful."
+//         }
+//     ]
+// }
 // export const generatedTextStory = {
 //     "title": "The Adventure of Teddy Bear",
 //     "titleImageDescription": "A colorful illustration of a teddy bear holding a small backpack, standing against a background of tall green trees in a forest.",
