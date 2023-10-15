@@ -13,9 +13,14 @@ const openai = new OpenAI({
 });
 
 export async function testGenerateImage() {
+    async function sleep(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     const prompt = "A cute baby sea otter";
     const size = '256x256'; // 256x256, 512x512, or 1024x1024 
     const image = generatedImage;
+    await sleep(5000);
     await saveGeneratedImageRecord(prompt, image.data[0].url!, 0, 'test');
 
     console.log(image);

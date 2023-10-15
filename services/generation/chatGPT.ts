@@ -5,6 +5,9 @@ import { getStorage, textGenerationsBucket } from '../storage';
 import { v4 as uuidv4 } from 'uuid';
 import { Readable } from 'stream';
 import { generatedTextStory } from '@/static-examples/exampleBook';
+import { EventEmitter } from 'events';
+
+export const textGenerationEmitter = new EventEmitter();
 
 const openai = new OpenAI({
     apiKey: process.env["OPENAI_API_KEY"],
@@ -15,26 +18,16 @@ export async function testGenerateText() {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    const startTime = performance.now();
+    // const startTime = performance.now();
     const streamText = JSON.stringify(generatedTextStory);
-
-    // Calculate the time to sleep between each character so the total duration is approx 45 seconds
-    const sleepTime = Math.floor(30000 / streamText.length);
 
     let generatedText = '';
 
     for (const char of streamText) {
         generatedText += char;
-        console.log(`Generated Text  ${(performance.now() - startTime).toFixed(2)}: ${generatedText}`)
-        await sleep(sleepTime);
+        textGenerationEmitter.emit('textGenerated', generatedText);
+        await sleep(.01);
     }
-
-    const endTime = performance.now();
-
-    // Your code to save or use generatedText
-    // For example: saveGeneratedTextRecord(prompt, generatedText, endTime - startTime, 'Simulated Model');
-    console.log(`Generated Text: ${generatedText}`);
-    console.log(`Time taken for API call: ${(endTime - startTime).toFixed(2)}ms`);
 }
 
 export async function generateText() {
@@ -169,16 +162,17 @@ Consistency is key: ensure that the characters and settings maintain a uniform s
 
 The output should strictly follow this structure:
 {
-    "title": "",
-    "titleImageDescription": "",
-    "character": "",
-    "setting": "",
-    "theme": "",
+    "title": string,
+    "titleImageDescription": string,
+    "character": string,
+    "setting": string,
+    "theme": string,
+    "pageCount": number,
     "pages": [
         {
-            "pageNumber": 1,
-            "text": "",
-            "imageDescription": ""
+            "pageNumber": number,
+            "text": string,
+            "imageDescription": string
         }
     ]
 }
@@ -188,17 +182,18 @@ Character: ${characters[0]}
 Setting: ${settings[0]}
 Theme: ${themes[0].name}; ${themes[0].desc}
 `
-interface generatedTextOutput {
+export interface generatedTextOutput {
     title: string;
     titleImageDescription: string;
     character: string;
     setting: string;
     theme: string;
+    pageCount: number;
     pages: generatedTextPage[];
 }
 
-interface generatedTextPage {
-    pageNumber: number;
-    text: string;
-    imageDescription: string;
+export class generatedTextPage {
+    pageNumber!: number;
+    text!: string;
+    imageDescription!: string;
 }
