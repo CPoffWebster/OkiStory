@@ -64,23 +64,28 @@ export const examplePages: PagesAttributes[] = [
 //     "setting": "setting value"
 // }
 export const generatedTextStory = {
-    "pageCount": 1,
+    "title": "sssss",
+    "titleImageDescription": "aaaaa",
+    "character": "Teddy Bear",
+    "setting": "Forest",
+    "theme": "sssss",
+    "pageCount": 3,
     "pages": [
         {
             "pageNumber": 1,
             "text": "sssss",
             "imageDescription": "aaaaa"
         },
-        // {
-        //     "pageNumber": 2,
-        //     "text": "sssss",
-        //     "imageDescription": "aaaaa"
-        // },
-        // {
-        //     "pageNumber": 4,
-        //     "text": "sssss",
-        //     "imageDescription": "aaaaa"
-        // }
+        {
+            "pageNumber": 2,
+            "text": "sssss",
+            "imageDescription": "aaaaa"
+        },
+        {
+            "pageNumber": 3,
+            "text": "sssss",
+            "imageDescription": "aaaaa"
+        }
     ]
 }
 // export const generatedTextStory = {

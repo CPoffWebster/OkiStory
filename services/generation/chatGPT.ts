@@ -183,15 +183,18 @@ Character: ${characters[0]}
 Setting: ${settings[0]}
 Theme: ${themes[0].name}; ${themes[0].desc}
 `
-export interface generatedTextOutput {
-    title: string;
-    titleImageDescription: string;
-    character: string;
-    setting: string;
-    theme: string;
-    pageCount: number;
-    pages: generatedTextPage[];
+export class generatedTextOutput {
+    title!: string;
+    titleImageDescription!: string;
+    character!: string;
+    setting!: string;
+    theme!: string;
+    pageCount!: number;
+    pages!: generatedTextPage[];
 }
+
+export const propertyParsingNames = ['title', 'titleImageDescription', 'character', 'setting', 'theme', 'pageCount', 'pages'];
+export const propertyParsingListNames = ['pageNumber', 'text', 'imageDescription'];
 
 export class generatedTextPage {
     pageNumber!: number;
