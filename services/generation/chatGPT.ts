@@ -18,14 +18,10 @@ export async function testGenerateText() {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // const startTime = performance.now();
-    const streamText = JSON.stringify(generatedTextStory);
-
     let generatedText = '';
-
+    const streamText = JSON.stringify(generatedTextStory);
     for (const char of streamText) {
         generatedText += char;
-        // console.log(generatedText)
         textGenerationEmitter.emit('textGenerated', generatedText);
         await sleep(.01);
     }
@@ -35,18 +31,17 @@ export async function generateText() {
     const startTime = performance.now();
     try {
         const model = 'gpt-3.5-turbo'; // 'gpt-4
-        const prompt = textPrompt;
-        // const prompt = "Say Hello World"; // textPrompt;
-        // const generatedText = `{ "response": "Hello World" }`;
+        const prompt = textPrompt; // "Say Hello World";
         const stream = await openai.chat.completions.create({
             model: model,
             messages: [{ role: 'user', content: prompt }],
             stream: true,
         });
 
-        let generatedText = '';
+        let generatedText = ''; // `{ "response": "Hello World" }`
         for await (const part of stream) {
             generatedText += part.choices[0]?.delta?.content || '';
+            textGenerationEmitter.emit('textGenerated', generatedText);
         }
 
         const endTime = performance.now();

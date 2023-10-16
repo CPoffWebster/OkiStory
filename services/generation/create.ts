@@ -15,6 +15,7 @@ async function createBookInRealTime() {
     let currentPageIndex = 0;
     let pageStarted = false;
 
+    // Listen for the text generation event
     textGenerationEmitter.on('textGenerated', (newText: string) => {
         generatedText = newText.substring(textIndex);
         fullGeneratedText = newText;
@@ -23,26 +24,12 @@ async function createBookInRealTime() {
         if (generatedText.includes(`"pages":[`)) {
             pageStarted = true;
             for (const key of propertyParsingNames) {
-                const pattern = `"${key}":`;
-                const startIdx = generatedText.indexOf(pattern);
-
-                if (startIdx === -1) continue;
-
-                let endIdx, value;
-                const valueStartIdx = startIdx + pattern.length;
-
-                if (generatedText.charAt(valueStartIdx) === '"') {
-                    // String value
-                    endIdx = generatedText.indexOf('"', valueStartIdx + 1);
-                    value = generatedText.substring(valueStartIdx + 1, endIdx);
-                } else {
-                    // Numeric or otherwise
-                    endIdx = generatedText.indexOf(',', valueStartIdx);
-                    value = generatedText.substring(valueStartIdx, endIdx);
+                const result = parseJsonKey(key, newText);
+                if (result !== null) {
+                    const [value, endIdx] = result;
+                    keyValueMap.set(key, value);
+                    generatedText = generatedText.substring(endIdx + 1);
                 }
-
-                keyValueMap.set(key, value);
-                generatedText = generatedText.substring(endIdx + 1);
             }
 
             pageList = Array.from({ length: keyValueMap.get('pageCount') as unknown as number }, () => ({} as generatedTextPage));
@@ -50,29 +37,16 @@ async function createBookInRealTime() {
         }
 
         // Get the keys and values for each page
-        if (pageStarted && generatedText.includes(`}`)) {
+        if (pageStarted && generatedText.includes(`}`) && generatedText !== ']}') {
             for (const key of propertyParsingListNames) {
-                const pattern = `"${key}":`;
-                const startIdx = generatedText.indexOf(pattern);
-
-                if (startIdx === -1) continue;
-
-                let endIdx, value;
-                const valueStartIdx = startIdx + pattern.length;
-
-                if (generatedText.charAt(valueStartIdx) === '"') {
-                    // String value
-                    endIdx = generatedText.indexOf('"', valueStartIdx + 1);
-                    value = generatedText.substring(valueStartIdx + 1, endIdx);
-                } else {
-                    // Numeric or otherwise
-                    endIdx = generatedText.indexOf(',', valueStartIdx);
-                    value = generatedText.substring(valueStartIdx, endIdx);
+                const result = parseJsonKey(key, newText);
+                if (result !== null) {
+                    const [value, _endIdx] = result;
+                    (pageList[currentPageIndex] as any)[key] = value;
                 }
-
-                (pageList[currentPageIndex] as any)[key] = value;
             }
 
+            // console.log(pageList[currentPageIndex])
             currentPageIndex++;
             textIndex = newText.indexOf(`}`, textIndex) + 1;
         }
@@ -80,9 +54,36 @@ async function createBookInRealTime() {
 
     await testGenerateText();
 
-    // Signal the end of the stream (Optional)
     console.log("DONE: testGenerateText")
     console.log(keyValueMap, pageList)
+}
+
+/**
+ * Parses the generated text for a given page key
+ * @param key from propertyParsingListNames of page keys
+ * @param generatedText 
+ * @returns value of the key
+ */
+function parseJsonKey(key: string, generatedText: string): [string | number, number] | null {
+    const pattern = `"${key}":`;
+    const startIdx = generatedText.indexOf(pattern);
+
+    if (startIdx === -1) return null;
+
+    let endIdx, value;
+    const valueStartIdx = startIdx + pattern.length;
+
+    if (generatedText.charAt(valueStartIdx) === '"') {
+        // String value
+        endIdx = generatedText.indexOf('"', valueStartIdx + 1);
+        value = generatedText.substring(valueStartIdx + 1, endIdx);
+    } else {
+        // Numeric or otherwise
+        endIdx = generatedText.indexOf(',', valueStartIdx);
+        value = generatedText.substring(valueStartIdx, endIdx);
+    }
+
+    return [value, endIdx];
 }
 
 export function createTitlePage() {
