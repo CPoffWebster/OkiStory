@@ -9,8 +9,7 @@ export const exampleBook: BooksAttributes = {
     GeneratedTextID: 1,
     LocationID: 1,
     CharacterID: 1,
-    Theme: '',
-    LongTheme: '',
+    ThemeID: 0,
     PageCount: 4,
     UserID: 1,
 }
@@ -50,9 +49,6 @@ export const examplePages: PagesAttributes[] = [
 // export const generatedTextStory = {
 //     "title": "sssss",
 //     "titleImageDescription": "aaaaa",
-//     "character": "Teddy Bear",
-//     "setting": "Forest",
-//     "theme": "sssss",
 //     "pageCount": 3,
 //     "pages": [
 //         {
@@ -95,9 +91,6 @@ export const examplePages: PagesAttributes[] = [
 export const generatedTextStory = {
     "title": "The Adventure of Teddy Bear",
     "titleImageDescription": "A colorful illustration of a teddy bear holding a small backpack, standing against a background of tall green trees in a forest.",
-    "character": "Teddy Bear",
-    "setting": "Forest",
-    "theme": "Responsibility and Ethics",
     "pageCount": 3,
     "pages": [
         {
@@ -120,9 +113,6 @@ export const generatedTextStory = {
 // export const generatedTextStory = {
 //     "title": "The Adventure of Teddy Bear",
 //     "titleImageDescription": "A colorful illustration of a teddy bear holding a small backpack, standing against a background of tall green trees in a forest.",
-//     "character": "Teddy Bear",
-//     "setting": "Forest",
-//     "theme": "Responsibility and Ethics",
 //     "pageCount": 10,
 //     "pages": [
 //         {

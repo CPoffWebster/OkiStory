@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import { connectToDb } from '../database/database';
-import { TextGenerations } from '../database/models/TextGenerations';
+import { TextGenerations, TextGenerationsAttributes } from '../database/models/TextGenerations';
 import { getStorage, textGenerationsBucket } from '../storage';
 import { v4 as uuidv4 } from 'uuid';
 import { Readable } from 'stream';
@@ -13,7 +13,11 @@ const openai = new OpenAI({
     apiKey: process.env["OPENAI_API_KEY"],
 });
 
-export async function testGenerateText() {
+export async function testGenerateText(prompt: string, model: string, generation: TextGenerationsAttributes) {
+    console.log('STARTED: testGenerateText')
+    model = 'not used: this is a test';
+
+    const startTime = performance.now();
     async function sleep(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -25,13 +29,15 @@ export async function testGenerateText() {
         textGenerationEmitter.emit('textGenerated', generatedText);
         await sleep(.01);
     }
+
+    const endTime = performance.now();
+    await updateGeneratedTextRecord(prompt, generation, generatedText, endTime - startTime);
+    console.log('DONE: testGenerateText took', endTime - startTime, 'ms');
 }
 
-export async function generateText() {
+export async function generateText(prompt: string, model: string, generation: TextGenerationsAttributes) {
     const startTime = performance.now();
     try {
-        const model = 'gpt-3.5-turbo'; // 'gpt-4
-        const prompt = textPrompt; // "Say Hello World";
         const stream = await openai.chat.completions.create({
             model: model,
             messages: [{ role: 'user', content: prompt }],
@@ -45,28 +51,23 @@ export async function generateText() {
         }
 
         const endTime = performance.now();
-        saveGeneratedTextRecord(prompt, generatedText, endTime - startTime, model);
-
-        return generatedText;
+        await updateGeneratedTextRecord(prompt, generation, generatedText, endTime - startTime);
     } catch (error) {
         console.log('error:', error);
-        return '';
     }
 };
 
 /**
- * Saves the generated text to the database and to Google Cloud Storage
- * @param prompt 
- * @param generatedText 
- * @param seconds 
- * @param model 
+ * Upload the generated text to GCS and update the database record
+ * @param prompt prompt used to generate the text
+ * @param generation database record
+ * @param generatedText generated text
+ * @param seconds time it took to generate the text
  */
-async function saveGeneratedTextRecord(prompt: string, generatedText: string, seconds: number, model: string) {
-    connectToDb();
+async function updateGeneratedTextRecord<T>(prompt: string, generation: TextGenerationsAttributes, generatedText: string, seconds: number) {
     const storage = getStorage();
     const textBucket = storage.getBucket(textGenerationsBucket);
-
-    const generatedTextOutput: generatedTextOutput = JSON.parse(generatedText);
+    const generatedTextOutput: T = JSON.parse(generatedText);
     const dataStream = Readable.from(JSON.stringify(JSON.stringify({
         ...generatedTextOutput,
         prompt
@@ -77,122 +78,24 @@ async function saveGeneratedTextRecord(prompt: string, generatedText: string, se
     const currentDate = new Date();
     const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()}`;
 
-    console.log('Uploading', `${formattedDate}/${guid}.json`, 'to', textGenerationsBucket)
-    await textBucket.upload(`${formattedDate}/${guid}.json`, dataStream);
-    await TextGenerations.saveOpenAITextGeneration(guid, prompt.length, generatedText.length, seconds, model);
-}
+    generation.GCSLocation = `${formattedDate}/${guid}.json`;
+    console.log('Uploading', generation.GCSLocation, 'to', textGenerationsBucket)
+    await textBucket.upload(generation.GCSLocation, dataStream);
 
-const childrenAge = 5;
-
-const characters = [
-    "Teddy Bear",
-    "Raccoon",
-    "Pink Pig"
-];
-
-const settings = [
-    "Forest",
-    "Desert",
-    "Grasslands"
-];
-
-const themes = [
-    {
-        name: "Responsibility and Ethics",
-        desc: "Stories that teach children about the importance of being responsible, making moral choices, and understanding the consequences of their actions, whether in everyday situations or grand adventures."
-    },
-    {
-        name: "Problem-Solving and Critical Thinking",
-        desc: "Stories where characters face puzzles, mysteries, or challenges that require logic, reasoning, and out-of-the-box solutions to resolve."
-    },
-    {
-        name: "Acceptance and Self-Love",
-        desc: "Narratives that highlight the importance of self-acceptance, understanding one's unique qualities, and realizing that everyone has a special place in the world."
-    },
-    {
-        name: "Growth and Change",
-        desc: "Narratives that follow characters as they grow, evolve, and navigate transitions, such as moving homes, growing older, or gaining a new sibling."
-    },
-    {
-        name: "Empathy and Kindness",
-        desc: "Stories that teach the importance of being kind, understanding different perspectives, and showing compassion to others, even if they seem different."
-    },
-    {
-        name: "Understanding Emotions",
-        desc: "Books that delve into feelings, helping children identify, understand, and express their emotions, from happiness and love to anger and sadness."
-    },
-    {
-        name: "Discovery and Adventure",
-        desc: "Tales of exploration, whether it's discovering a new world, going on a treasure hunt, or learning about the wonders of the universe."
-    },
-    {
-        name: "Family and Relationships",
-        desc: "Stories focusing on family bonds, the joy of having siblings, or adjusting to a new family structure (like with blended families or adoption)."
-    },
-    {
-        name: "Courage and Bravery",
-        desc: "Narratives where characters face their fears, whether it's starting a new school, facing a bully, or venturing into an unknown place."
-    },
-    {
-        name: "Friendship and Unity",
-        desc: "Stories that emphasize the importance of friends and coming together to overcome challenges. They demonstrate how diverse groups can work together for a common cause."
+    let inputPrice = 0;
+    let outputPrice = 0;
+    switch (generation.Model) {
+        case 'gpt-3.5-turbo':
+            inputPrice = 0.0000015;
+            outputPrice = 0.000002;
+            break;
+        case 'GPT-4':
+            inputPrice = 0.00003;
+            outputPrice = 0.00006;
+            break;
     }
-];
-
-
-const textPrompt = `
-You are a seasoned writer specializing in children's books that captivate young minds and hearts. 
-Your stories are not only engaging but also memorable, staying with children for a lifetime. 
-You have a unique talent for describing art in picture books in such a way that an AI could easily generate those images.
-
-
-Please create a children's storybook aimed at children aged ${childrenAge}. 
-The story should be simple, utilizing basic action words and straightforward descriptions. 
-The narrative should be structured in a way that makes it easy to create matching images.
-
-The narrative should be well-structured with a distinct beginning, middle, and end, avoiding any cliffhangers or abrupt stops. 
-Each page, inclusive of the title page, should come with an accompanying image description. 
-These descriptions should be crafted to suit hand-drawn, simple designs appropriate for picture books. 
-Consistency is key: ensure that the characters and settings maintain a uniform style throughout the story, both in textual description and in the envisioned artwork.
-
-
-The output should strictly follow this structure:
-{
-    "title": string,
-    "titleImageDescription": string,
-    "character": string,
-    "setting": string,
-    "theme": string,
-    "pageCount": number,
-    "pages": [
-        {
-            "pageNumber": number,
-            "text": string,
-            "imageDescription": string
-        }
-    ]
-}
-
-Given the directions above, create a story with the following parameters:
-Character: ${characters[0]}
-Setting: ${settings[0]}
-Theme: ${themes[0].name}; ${themes[0].desc}
-`
-export class generatedTextOutput {
-    title!: string;
-    titleImageDescription!: string;
-    character!: string;
-    setting!: string;
-    theme!: string;
-    pageCount!: number;
-    pages!: generatedTextPage[];
-}
-
-export const propertyParsingNames = ['title', 'titleImageDescription', 'character', 'setting', 'theme', 'pageCount', 'pages'];
-export const propertyParsingListNames = ['pageNumber', 'text', 'imageDescription'];
-
-export class generatedTextPage {
-    pageNumber!: number;
-    text!: string;
-    imageDescription!: string;
+    generation.OutputCharacters = generatedText.length;
+    generation.APICallMilliSeconds = seconds;
+    generation.EstimatedPrice = (generation.InputCharacters * inputPrice) + (generation.OutputCharacters * outputPrice);
+    await TextGenerations.updateGeneration(generation);
 }

@@ -8,7 +8,18 @@ export interface PagesAttributes {
     Text: string;
 }
 
-export class Pages extends Model<PagesAttributes> { }
+export class Pages extends Model<PagesAttributes> {
+    static async save(page: PagesAttributes) {
+        const [pages, created] = (await Pages.findOrCreate({
+            where: {
+                BookID: page.BookID,
+                PageNumber: page.PageNumber
+            },
+            defaults: page
+        }))
+        return { pages, created }
+    }
+}
 
 export function initPages(sequelize: Sequelize) {
     Pages.init({

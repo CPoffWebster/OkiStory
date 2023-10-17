@@ -2,59 +2,44 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface TextGenerationsAttributes {
     id?: number;
-    GUID: string;
     Company: string;
     Model: string;
-    APICallMilliSeconds: number;
     InputCharacters: number;
-    OutputCharacters: number;
-    EstimatedPrice: number;
+    OutputCharacters?: number;
+    APICallMilliSeconds?: number;
+    EstimatedPrice?: number;
+    GCSLocation?: string;
 }
 
 export class TextGenerations extends Model<TextGenerationsAttributes> {
 
-    /**
-     * Save a record of text generation to the database
-     * @param inputCharacters 
-     * @param outputCharacters 
-     * @param seconds time it took to generate the text
-     * @param model 
-     */
-    static async saveOpenAITextGeneration(guid: string, inputCharacters: number, outputCharacters: number, seconds: number, model: string) {
-        let inputPrice = 0;
-        let outputPrice = 0;
-        switch (model) {
-            case 'gpt-3.5-turbo':
-                inputPrice = 0.0000015;
-                outputPrice = 0.000002;
-                break;
-            case 'GPT-4':
-                inputPrice = 0.00003;
-                outputPrice = 0.00006;
-                break;
-        }
-        await TextGenerations.create({
-            Company: 'OpenAI',
-            GUID: guid,
-            Model: model,
-            APICallMilliSeconds: seconds,
-            InputCharacters: inputCharacters,
-            OutputCharacters: outputCharacters,
-            EstimatedPrice: (inputCharacters * inputPrice) + (outputCharacters * outputPrice)
-        });
+    static async createGeneration(textGeneration: TextGenerationsAttributes) {
+        const textGenerationInstance = await TextGenerations.create(textGeneration);
+        return textGenerationInstance.get({ plain: true });
+    }
+
+    static async updateGeneration(textGeneration: TextGenerationsAttributes) {
+        await TextGenerations.update(
+            textGeneration,
+            {
+                where: {
+                    id: textGeneration.id
+                }
+            }
+        );
     }
 }
 
 export function initTextGenerations(sequelize: Sequelize) {
     TextGenerations.init({
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        GUID: { type: DataTypes.UUID, allowNull: false },
         Company: { type: DataTypes.STRING(128), allowNull: false },
         Model: { type: DataTypes.STRING(128), allowNull: false },
-        APICallMilliSeconds: { type: DataTypes.INTEGER, allowNull: false },
-        InputCharacters: { type: DataTypes.INTEGER, allowNull: false },
-        OutputCharacters: { type: DataTypes.INTEGER, allowNull: false },
-        EstimatedPrice: { type: DataTypes.DECIMAL(10, 8), allowNull: false }
+        APICallMilliSeconds: { type: DataTypes.INTEGER, allowNull: true },
+        InputCharacters: { type: DataTypes.INTEGER, allowNull: true },
+        OutputCharacters: { type: DataTypes.INTEGER, allowNull: true },
+        EstimatedPrice: { type: DataTypes.DECIMAL(10, 8), allowNull: true },
+        GCSLocation: { type: DataTypes.STRING(256), allowNull: true },
     }, {
         sequelize, modelName: 'text_generations', tableName: `text_generations`,
         timestamps: true

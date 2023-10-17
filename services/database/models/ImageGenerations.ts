@@ -2,14 +2,13 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface ImageGenerationsAttributes {
     id?: number;
-    GUID: string;
     Company: string;
     Model: string;
     Type: string;
     APICallMilliSeconds: number;
     Input: string;
-    GCSLocation: string;
     EstimatedPrice: number;
+    GCSLocation?: string;
 }
 
 export class ImageGenerations extends Model<ImageGenerationsAttributes> {
@@ -24,7 +23,7 @@ export class ImageGenerations extends Model<ImageGenerationsAttributes> {
      * @param generatedURL
      * @param gCSLocation 
      */
-    static async saveOpenAIImageGeneration(guid: string, model: string, type: string, seconds: number, input: string, gCSLocation: string) {
+    static async saveOpenAIImageGeneration(model: string, type: string, seconds: number, input: string, gCSLocation: string) {
         let price = 0;
         switch (model) {
             case ('1024x1024'):
@@ -39,7 +38,6 @@ export class ImageGenerations extends Model<ImageGenerationsAttributes> {
         }
 
         await ImageGenerations.create({
-            GUID: guid,
             Company: 'OpenAI',
             Model: model,
             Type: type,
@@ -54,14 +52,13 @@ export class ImageGenerations extends Model<ImageGenerationsAttributes> {
 export function initImageGenerations(sequelize: Sequelize) {
     ImageGenerations.init({
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        GUID: { type: DataTypes.UUID, allowNull: false },
         Company: { type: DataTypes.STRING(128), allowNull: false },
         Model: { type: DataTypes.STRING(128), allowNull: false },
         Type: { type: DataTypes.STRING(128), allowNull: false },
-        APICallMilliSeconds: { type: DataTypes.INTEGER, allowNull: false },
+        APICallMilliSeconds: { type: DataTypes.INTEGER, allowNull: true },
         Input: { type: DataTypes.TEXT, allowNull: false },
-        GCSLocation: { type: DataTypes.STRING(256), allowNull: false },
-        EstimatedPrice: { type: DataTypes.DECIMAL(10, 8), allowNull: false }
+        EstimatedPrice: { type: DataTypes.DECIMAL(10, 8), allowNull: false },
+        GCSLocation: { type: DataTypes.STRING(256), allowNull: true },
     }, {
         sequelize, modelName: 'image_generations', tableName: `image_generations`,
         timestamps: true

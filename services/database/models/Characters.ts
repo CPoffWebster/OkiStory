@@ -11,7 +11,11 @@ export interface CharactersAttributes {
     UserCreatedID?: number;
 }
 
-export class Characters extends Model<CharactersAttributes> { }
+export class Characters extends Model<CharactersAttributes> {
+    static async getCharacter(id: number) {
+        return await Characters.findOne({ where: { id: id } });
+    }
+}
 
 export function initCharacters(sequelize: Sequelize) {
     Characters.init({
