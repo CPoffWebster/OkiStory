@@ -6,6 +6,7 @@ import styles from "./password.module.css";
 import { getSessionStorage, setSessionStorage } from "@/services/session";
 import SignInInput from "@/app/components/SignInInput/SignInInput";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 export default function Password() {
   const router = useRouter();
@@ -82,12 +83,12 @@ export default function Password() {
         Continue
       </button>
       <div>
-        <a
+        <Link
           onClick={() => setSessionStorage("email", emailValue)}
           href="/auth/reset-password"
         >
           Forgot password?
-        </a>
+        </Link>
       </div>
     </LoginLayout>
   );

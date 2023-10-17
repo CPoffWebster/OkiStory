@@ -7,6 +7,7 @@ import SignInInput from "@/app/components/SignInInput/SignInInput";
 import axios from "axios";
 var validator = require("validator");
 import styles from "./reset-password.module.css";
+import Link from "next/link";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const error = (context.query.error as string) || null;
@@ -75,12 +76,12 @@ export default function ResetPassword() {
         Continue
       </button>
       <div>
-        <a
+        <Link
           onClick={() => setSessionStorage("email", emailValue)}
           href="/auth/identifier"
         >
           Back to Login
-        </a>
+        </Link>
       </div>
     </LoginLayout>
   );

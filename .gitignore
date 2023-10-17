@@ -42,3 +42,4 @@ env.production.env
 tools
 
 .vscode
+.vscode/launch.json

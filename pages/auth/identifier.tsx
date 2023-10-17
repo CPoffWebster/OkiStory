@@ -80,7 +80,7 @@ export default function Identifier(props: { error: string }) {
         Continue
       </button>
       {/* <div className={styles.signup}>
-        Don&apos;t have an account? <a href="/signup">Sign up</a>
+        Don&apos;t have an account? <Link href="/signup">Sign up</Link>
       </div> */}
       <OrSeperator />
       {provider("google", "Google", googleIcon)}
