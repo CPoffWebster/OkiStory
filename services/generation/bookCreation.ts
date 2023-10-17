@@ -47,6 +47,11 @@ async function initiateBookCreation(newBook: BooksAttributes) {
     createInRealTime(newBook);
 }
 
+/**
+ * Creates a book in real time
+ * As the text is generated, it is parsed and saved to the database for the book and each page
+ * @param newBook 
+ */
 async function createInRealTime(newBook: BooksAttributes) {
     console.log('START: createInRealTime')
 
@@ -93,9 +98,7 @@ async function createInRealTime(newBook: BooksAttributes) {
 
     // Start the text generation
     await generateText(prompt, model, textGenerationWithID);
-
     console.log("DONE: createInRealTime")
-    // console.log(keyValueMap, pageList)
 }
 
 /**
