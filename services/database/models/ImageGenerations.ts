@@ -13,39 +13,20 @@ export interface ImageGenerationsAttributes {
 
 export class ImageGenerations extends Model<ImageGenerationsAttributes> {
 
-    /**
-     * Saves the generated text to the database
-     * @param guid 
-     * @param model 
-     * @param type 
-     * @param seconds 
-     * @param input 
-     * @param generatedURL
-     * @param gCSLocation 
-     */
-    static async saveOpenAIImageGeneration(model: string, type: string, seconds: number, input: string, gCSLocation: string) {
-        let price = 0;
-        switch (model) {
-            case ('1024x1024'):
-                price = .02;
-                break;
-            case ('512x512'):
-                price = .018;
-                break;
-            case ('256x256'):
-                price = .016;
-                break;
-        }
+    static async createGeneration(imageGeneration: ImageGenerationsAttributes) {
+        const imageGenerationInstance = await ImageGenerations.create(imageGeneration);
+        return imageGenerationInstance.get({ plain: true });
+    }
 
-        await ImageGenerations.create({
-            Company: 'OpenAI',
-            Model: model,
-            Type: type,
-            APICallMilliSeconds: seconds,
-            Input: input,
-            GCSLocation: gCSLocation,
-            EstimatedPrice: price
-        });
+    static async updateGeneration(imageGeneration: ImageGenerationsAttributes) {
+        await ImageGenerations.update(
+            imageGeneration,
+            {
+                where: {
+                    id: imageGeneration.id
+                }
+            }
+        );
     }
 }
 

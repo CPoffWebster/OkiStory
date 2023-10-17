@@ -1,5 +1,4 @@
 import OpenAI from 'openai';
-import { connectToDb } from '../database/database';
 import { TextGenerations, TextGenerationsAttributes } from '../database/models/TextGenerations';
 import { getStorage, textGenerationsBucket } from '../storage';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,48 +12,50 @@ const openai = new OpenAI({
     apiKey: process.env["OPENAI_API_KEY"],
 });
 
-export async function testGenerateText(prompt: string, model: string, generation: TextGenerationsAttributes) {
-    console.log('STARTED: testGenerateText')
-    model = 'not used: this is a test';
-
-    const startTime = performance.now();
-    async function sleep(ms: number) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    let generatedText = '';
-    const streamText = JSON.stringify(generatedTextStory);
-    for (const char of streamText) {
-        generatedText += char;
-        textGenerationEmitter.emit('textGenerated', generatedText);
-        await sleep(.01);
-    }
-
-    const endTime = performance.now();
-    await updateGeneratedTextRecord(prompt, generation, generatedText, endTime - startTime);
-    console.log('DONE: testGenerateText took', endTime - startTime, 'ms');
-}
-
+/**
+ * Generate text using the OpenAI API
+ * If the model is 'test', it will use the example text
+ * @param prompt generate text from this prompt
+ * @param model model to use
+ * @param generation generated text record
+ */
 export async function generateText(prompt: string, model: string, generation: TextGenerationsAttributes) {
+    console.log('STARTED: generateText:', model)
+    let generatedText = ''; // `{ "response": "Hello World" }`
+    let endTime = 0;
     const startTime = performance.now();
-    try {
-        const stream = await openai.chat.completions.create({
-            model: model,
-            messages: [{ role: 'user', content: prompt }],
-            stream: true,
-        });
 
-        let generatedText = ''; // `{ "response": "Hello World" }`
-        for await (const part of stream) {
-            generatedText += part.choices[0]?.delta?.content || '';
+    if (model === 'test') {
+        const streamText = JSON.stringify(generatedTextStory);
+        for (const char of streamText) {
+            generatedText += char;
             textGenerationEmitter.emit('textGenerated', generatedText);
+            await new Promise(resolve => setTimeout(resolve, .01))
         }
 
         const endTime = performance.now();
         await updateGeneratedTextRecord(prompt, generation, generatedText, endTime - startTime);
-    } catch (error) {
-        console.log('error:', error);
+    } else {
+        try {
+            const stream = await openai.chat.completions.create({
+                model: model,
+                messages: [{ role: 'user', content: prompt }],
+                stream: true,
+            });
+
+            for await (const part of stream) {
+                generatedText += part.choices[0]?.delta?.content || '';
+                textGenerationEmitter.emit('textGenerated', generatedText);
+            }
+
+            endTime = performance.now();
+            await updateGeneratedTextRecord(prompt, generation, generatedText, endTime - startTime);
+        } catch (error) {
+            console.log('error:', error);
+        }
     }
+
+    console.log('DONE: generateText', endTime - startTime, 'ms');
 };
 
 /**
@@ -92,6 +93,10 @@ async function updateGeneratedTextRecord<T>(prompt: string, generation: TextGene
         case 'GPT-4':
             inputPrice = 0.00003;
             outputPrice = 0.00006;
+            break;
+        case 'test':
+            inputPrice = 0;
+            outputPrice = 0;
             break;
     }
     generation.OutputCharacters = generatedText.length;

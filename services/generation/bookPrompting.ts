@@ -51,6 +51,18 @@ export async function bookPrompt(characterID: number, locationID: number, themeI
     `;
 }
 
+export function imagePrompt(imageDescription: string, characterID: number, locationID: number, styleID: number): string {
+    return `
+        You are a seasoned artist specializing in children's book art that captivate young minds and hearts.
+        Your art is not only engaging but also memorable, staying with children for a lifetime.
+        
+        Image Description: ${imageDescription}
+        Character: ${characters[characterID]}
+        Setting: ${settings[locationID]}
+        Style: picture book drawing
+    `;
+}
+
 
 const childrenAge = 5;
 
