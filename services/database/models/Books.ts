@@ -14,14 +14,21 @@ export interface BooksAttributes {
 }
 
 export class Books extends Model<BooksAttributes> {
-    static async save(book: BooksAttributes) {
-        const [books, created] = (await Books.findOrCreate({
-            where: {
-                GUID: book.GUID,
-            },
-            defaults: book
-        }))
-        return { books, created }
+
+    static async createBook(book: BooksAttributes) {
+        const newBook = await Books.create(book);
+        return newBook.get({ plain: true });
+    }
+
+    static async updateBook(book: BooksAttributes) {
+        await Books.update(
+            book,
+            {
+                where: {
+                    id: book.id
+                }
+            }
+        );
     }
 }
 
