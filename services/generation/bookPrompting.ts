@@ -1,5 +1,15 @@
 import { Characters } from "../database/models/Characters";
 
+export async function getStoryIDs(characterID: number, locationID: number, themeID: number, styleID: number = 0): Promise<string[]> {
+    const character = characters[0]; // await Characters.getCharacter(characterID);
+    const location = settings[0]; // await Locations.getLocation(locationID);
+    const themeName = themes[0].name;
+    const themeDesc = themes[0].desc;
+    const style = styles[0];
+    // styleID: number
+    return [character, location, themeName, themeDesc, style]
+}
+
 /**
  * Create a book prompt that is used to generate a book
  * @param characterID 
@@ -7,17 +17,10 @@ import { Characters } from "../database/models/Characters";
  * @param themeID 
  * @returns book prompt string
  */
-export async function bookPrompt(characterID: number, locationID: number, themeID: number): Promise<string> {
-    const character = characters[0]; // await Characters.getCharacter(characterID);
-    const location = settings[0]; // await Locations.getLocation(locationID);
-    const themeName = themes[0].name;
-    const themeDesc = themes[0].desc;
-
-    return `
-    You are a seasoned writer specializing in children's books that captivate young minds and hearts.
+export async function bookPrompt(character: string, location: string, themeName: string, themeDesc: string): Promise<string> {
+    return `You are a seasoned writer specializing in children's books that captivate young minds and hearts.
     Your stories are not only engaging but also memorable, staying with children for a lifetime.
     You have a unique talent for describing art in picture books in such a way that an AI could easily generate those images.
-    
     
     Please create a children's storybook aimed at children aged ${childrenAge}.
     The story should be simple, utilizing basic action words and straightforward descriptions.
@@ -27,7 +30,6 @@ export async function bookPrompt(characterID: number, locationID: number, themeI
     Each page, inclusive of the title page, should come with an accompanying image description.
     These descriptions should be crafted to suit hand-drawn, simple designs appropriate for picture books.
     Consistency is key: ensure that the characters and settings maintain a uniform style throughout the story, both in textual description and in the envisioned artwork.
-    
     
     The output should strictly follow this structure:
     {
@@ -51,20 +53,23 @@ export async function bookPrompt(characterID: number, locationID: number, themeI
     `;
 }
 
-export function imagePrompt(imageDescription: string, characterID: number, locationID: number, styleID: number): string {
-    return `
-        You are a seasoned artist specializing in children's book art that captivate young minds and hearts.
+export function imagePrompt(imageDescription: string, character: string, location: string, style: string): string {
+    return `You are a seasoned artist specializing in children's book art that captivate young minds and hearts.
         Your art is not only engaging but also memorable, staying with children for a lifetime.
         
         Image Description: ${imageDescription}
-        Character: ${characters[characterID]}
-        Setting: ${settings[locationID]}
-        Style: picture book drawing
+        Character: ${character}
+        Setting: ${location}
+        Style: ${style}
     `;
 }
 
 
 const childrenAge = 5;
+
+const styles = [
+    'Childrens book drawing'
+]
 
 const characters = [
     "Teddy Bear",

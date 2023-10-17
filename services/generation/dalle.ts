@@ -91,23 +91,3 @@ async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGen
     generation.EstimatedPrice = price;
     await ImageGenerations.updateGeneration(generation);
 }
-
-// async function saveGeneratedImageRecord(prompt: string, imageUrl: string, seconds: number, model: "256x256" | "512x512" | "1024x1024" | 'test') {
-//     connectToDb();
-//     const storage = getStorage();
-//     const imageBucket = storage.getBucket(booksBucket);
-
-
-//     // Download the image and convert it to a stream
-//     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-//     const imageStream = Readable.from(Buffer.from(response.data, 'binary'));
-
-//     const guid = uuidv4();
-//     const currentDate = new Date();
-//     const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()}`;
-
-//     console.log('Uploading', `${formattedDate}/${guid}.png`, 'to', booksBucket);
-
-//     await imageBucket.upload(`${formattedDate}/${guid}.png`, imageStream);
-//     await ImageGenerations.saveOpenAIImageGeneration(guid, model, 'create', seconds, prompt, `${formattedDate}/${guid}.png`);
-// }

@@ -1,10 +1,11 @@
 import { connectToDb } from "../database/database";
 import { Books, BooksAttributes } from "../database/models/Books";
-import { ImageGenerationsAttributes } from "../database/models/ImageGenerations";
+import { ImageGenerations, ImageGenerationsAttributes } from "../database/models/ImageGenerations";
 import { TextGenerations, TextGenerationsAttributes } from "../database/models/TextGenerations";
-import { bookPrompt, imagePrompt } from "./bookPrompting";
+import { bookPrompt, getStoryIDs, imagePrompt } from "./bookPrompting";
 import { generateText, textGenerationEmitter } from "./chatGPT";
 import { v4 as uuidv4 } from 'uuid';
+import { generateImage } from "./dalle";
 
 class generatedTextOutput {
     title!: string;
@@ -57,13 +58,15 @@ async function createInRealTime(newBook: BooksAttributes) {
 
     // Create the text generation record
     const model = process.env.TEXT_GENERATION_MODEL || 'test'
-    const prompt = await bookPrompt(newBook.CharacterID, newBook.LocationID, newBook.ThemeID);
+    const [character, location, themeName, themeDesc, style] = await getStoryIDs(newBook.CharacterID, newBook.LocationID, newBook.ThemeID);
+    const prompt = await bookPrompt(character, location, themeName, themeDesc);
     const generation: TextGenerationsAttributes = {
         Company: 'OpenAI',
         Model: model,
         InputCharacters: prompt.length,
     };
     const textGenerationWithID: TextGenerationsAttributes = await TextGenerations.createGeneration(generation);
+    newBook.GeneratedTextID = textGenerationWithID.id!;
 
     // Listen for the text generation event
     textGenerationEmitter.on('textGenerated', (newText: string) => {
@@ -75,7 +78,7 @@ async function createInRealTime(newBook: BooksAttributes) {
             [keyValueMap, pageList, textIndex] = createBookInRealTime(generatedText, newText, keyValueMap, pageList, textIndex);
             if (textIndex !== 0) {
                 bookOverall = false;
-                saveBook(newBook, keyValueMap, textGenerationWithID);
+                saveBook(newBook, keyValueMap, character, location, style);
             }
         } else {
             const currTextIndex = textIndex;
@@ -124,32 +127,35 @@ function createBookInRealTime(generatedText: string, newText: string, keyValueMa
     return [keyValueMap, pageList, textIndex];
 }
 
-async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, string | number>, textGenerationWithID: TextGenerationsAttributes) {
-
-    let imageGenerationWithID: ImageGenerationsAttributes;
+/**
+ * Saves the book to the database
+ * Starts the image generation for the cover page
+ * @param newBook update the book with the generated text and image
+ * @param keyValueMap values from generated text
+ * @param character 
+ * @param location 
+ * @param style 
+ */
+async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, string | number>, character: string, location: string, style: string) {
 
     // Create the image generation record
-    // 'titleImageDescription', 'character', 'setting'
-    // const model = process.env.IMAGE_GENERATION_MODEL || 'test'
-    // const prompt = imagePrompt(keyValueMap.get('titleImageDescription'));
-    // const generation: ImageGenerationsAttributes = {
-    //     Company: 'OpenAI',
-    //     Model: model,
-    //     InputCharacters: prompt.length,
-    // };
-    // imageGenerationWithID = await ImageGenerations.createGeneration(generation) as unknown as ImageGenerationsAttributes;
+    const model = process.env.IMAGE_GENERATION_MODEL as "256x256" | "512x512" | "1024x1024" | "test" || 'test'
+    const prompt = imagePrompt(keyValueMap.get('titleImageDescription')!.toString(), character, location, style);
+    const generation: ImageGenerationsAttributes = {
+        Company: 'OpenAI',
+        Model: model,
+        Type: 'create',
+        Input: prompt,
+    };
+    const imageGenerationWithID = await ImageGenerations.createGeneration(generation) as unknown as ImageGenerationsAttributes;
 
-
-
-    // const
     newBook.Title = keyValueMap.get('title') as string;
-    newBook.GeneratedTextID = textGenerationWithID.id!;
-    newBook.GeneratedImageID = 0;
+    newBook.GeneratedImageID = imageGenerationWithID.id!;
     newBook.PageCount = keyValueMap.get('pageCount') as number;
     await Books.save(newBook);
 
     // Start the image generation
-    // await generateImage();
+    await generateImage(prompt, model, imageGenerationWithID);
 }
 
 /**

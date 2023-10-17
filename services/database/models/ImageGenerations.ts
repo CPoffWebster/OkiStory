@@ -5,9 +5,9 @@ export interface ImageGenerationsAttributes {
     Company: string;
     Model: string;
     Type: string;
-    APICallMilliSeconds: number;
     Input: string;
-    EstimatedPrice: number;
+    APICallMilliSeconds?: number;
+    EstimatedPrice?: number;
     GCSLocation?: string;
 }
 
@@ -36,9 +36,9 @@ export function initImageGenerations(sequelize: Sequelize) {
         Company: { type: DataTypes.STRING(128), allowNull: false },
         Model: { type: DataTypes.STRING(128), allowNull: false },
         Type: { type: DataTypes.STRING(128), allowNull: false },
-        APICallMilliSeconds: { type: DataTypes.INTEGER, allowNull: true },
         Input: { type: DataTypes.TEXT, allowNull: false },
-        EstimatedPrice: { type: DataTypes.DECIMAL(10, 8), allowNull: false },
+        APICallMilliSeconds: { type: DataTypes.INTEGER, allowNull: true },
+        EstimatedPrice: { type: DataTypes.DECIMAL(10, 8), allowNull: true },
         GCSLocation: { type: DataTypes.STRING(256), allowNull: true },
     }, {
         sequelize, modelName: 'image_generations', tableName: `image_generations`,
