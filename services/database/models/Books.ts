@@ -11,6 +11,9 @@ export interface BooksAttributes {
     ThemeID: number;
     UserID: number;
     PageCount: number;
+
+    // Not in database
+    imageGCSLocation?: any; // location of image from GeneratedImageID
 }
 
 export class Books extends Model<BooksAttributes> {
@@ -30,6 +33,22 @@ export class Books extends Model<BooksAttributes> {
             }
         );
     }
+
+    static async getUserBooks(userID: number, count: number, offset: number): Promise<BooksAttributes[] | null> {
+        const books = await Books.findAll({
+            limit: count,
+            offset: offset,
+            order: [
+                ['createdAt', 'DESC']
+            ],
+            where: {
+                UserID: userID
+            }
+        });
+
+        return books ? books.map(book => book.get({ plain: true })) : null;
+    }
+
 }
 
 export function initBooks(sequelize: Sequelize) {

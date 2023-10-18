@@ -1,65 +1,158 @@
-import { getBook } from "@/services/books";
 import { BooksAttributes } from "@/services/database/models/Books";
 import { GetServerSideProps } from "next";
-import styles from "./cover.module.css";
+// import styles from "./cover.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Book from "@/app/components/Books/Book";
 
+import { getPage } from "@/services/books";
+import { PagesAttributes } from "@/services/database/models/Pages";
+import { arrowLeftIcon, arrowRightIcon, homeIcon } from "@/data/icons";
+import { FlippingPages } from "flipping-pages";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import "flipping-pages/dist/style.css";
+import styles from "./book.module.css";
+import { getSessionStorage } from "@/services/session";
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const id = context.query.id as unknown as string; // Access 'id' directly
-  const book = await getBook(id);
+  console.log("LOOK HERE");
+  const guid = context.query.id as unknown as string; // Access 'id' directly
   return {
-    props: { book },
+    props: { guid },
   };
 };
 
-export default function CoverPage(props: { book: BooksAttributes }) {
-  return (
-    <div>
-      <Book />
-    </div>
-  );
-  // const [flippedPages, setFlippedPages] = useState<number[]>([]);
-  // const totalPages = 7; // Number of pages
+export default function GetBookData(props: { guid: string }) {
+  const [book, setBook] = useState<BooksAttributes | null>(null);
+  const [pages, setPages] = useState<PagesAttributes[]>([]);
+
+  useEffect(() => {
+    const id = props.guid;
+    const intervalId = setInterval(async () => {
+      // const fetchedBook = await getBook(id);
+      // if (fetchedBook) {
+      //   setBook(fetchedBook);
+      //   clearInterval(intervalId);
+      // }
+    }, 1000);
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, []);
+
+  useEffect(() => {
+    if (book) {
+      const intervalId = setInterval(async () => {
+        const pageIndex = 0;
+        const fetchedPages = await getPage(book.GUID, pageIndex); // Assume getPages fetches all pages for a book
+        // if (fetchedPages && fetchedPages.length > 0) {
+        // setPages(fetchedPages);
+        // clearInterval(intervalId);
+        // }
+      }, 1000);
+
+      return () => clearInterval(intervalId); // Cleanup on unmount
+    }
+  }, [book]);
+
+  // return <Book />;
+  // return {book && pages.length > 0 ? <BookReader book={book} pages={pages} /> : 'Loading...'}
+}
+
+interface BookReaderProps {
+  book: BooksAttributes;
+  pages: PagesAttributes[];
+}
+
+const BookReader: React.FC<BookReaderProps> = ({ book, pages }) => {
+  const router = useRouter();
+  // const [book, setBook] = useState<BooksAttributes>(
+  //   bookValues as BooksAttributes
+  // );
+  const [currentPage, setCurrentPage] = useState(0);
+  // const [pages, setPages] = useState<PagesAttributes[]>([]);
 
   // useEffect(() => {
-  //   const pages = Array.from(document.getElementsByClassName('page'));
-  //   for (let i = 0; i < pages.length; i++) {
-  //     const page = pages[i] as HTMLElement;
-  //     if (i % 2 === 0) {
-  //       page.style.zIndex = `${totalPages - i}`;
-  //     }
+  //   const bookString = getSessionStorage("book");
+  //   if (bookString === "") {
+  //     router.push("/");
+  //     return;
   //   }
+  //   setBook(JSON.parse(bookString as string) as BooksAttributes);
   // }, []);
 
-  // const handlePageClick = (pageNum: number) => {
-  //   if (pageNum % 2 === 0) {
-  //     setFlippedPages((prev) => prev.filter((p) => p !== pageNum && p !== pageNum - 1));
-  //   } else {
-  //     setFlippedPages((prev) => [...prev, pageNum, pageNum + 1]);
-  //   }
-  // };
+  // For flipping pages
+  const [selected, setSelected] = useState(0);
 
-  // return (
-  //   <div className={styles.container}>
-  //     <div className={styles.book}>
-  //       <div className={styles.pages}>
-  //         {Array.from({ length: totalPages }, (_, index) => {
-  //           const isFlipped = flippedPages.includes(index + 1);
-  //           return (
-  //             <div
-  //               key={index}
-  //               className={`${styles.page} ${isFlipped ? 'flipped' : ''}`}
-  //               onClick={() => handlePageClick(index + 1)}
-  //             >
-  //               {index === 0 && <p className={styles.pageContent}>Open Me, <br />please!</p>}
-  //               {index === 2 && <p className={styles.pageContent}>Hello there!</p>}
-  //             </div>
-  //           );
-  //         })}
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
-}
+  useEffect(() => {
+    setCurrentPage(selected);
+  }, [selected]);
+
+  useEffect(() => {
+    setSelected(currentPage);
+  }, [currentPage]);
+
+  // useEffect(() => {
+  //   // Fetch the next page
+  //   const fetchPage = async (pageNumber: number) => {
+  //     const page = await getPage(book.GUID, pageNumber + 1);
+  //     setPages((prevPages) => [...prevPages, page]);
+  //   };
+
+  //   if (currentPage > 0 && currentPage >= pages.length) {
+  //     fetchPage(currentPage);
+  //   }
+  // }, [currentPage]);
+
+  const back = () => {
+    setCurrentPage(Math.max(currentPage - 1, 0));
+  };
+
+  const next = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  useEffect(() => {
+    const iframe = document.getElementById(
+      "flipping-pages-iframe"
+    ) as HTMLIFrameElement;
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ selected: selected }, "*");
+    }
+  }, [selected]);
+
+  return (
+    <div className={styles.App}>
+      <div className={styles.container}>
+        <FlippingPages
+          direction="right-to-left"
+          selected={selected}
+          onSwipeEnd={setSelected}
+        >
+          <div className={styles.page}>
+            <img src={book.GeneratedImageID.toString()} alt="cover" />
+            <h1>{book.Title}</h1>
+          </div>
+          {pages.map((page, index) => (
+            <div className={styles.page} key={index}>
+              <img
+                src={page.GeneratedImageID.toString()}
+                alt={`page-${index}`}
+              />
+              <p>{page.Text}</p>
+            </div>
+          ))}
+        </FlippingPages>
+      </div>
+      <div className={styles.navigation}>
+        <p>last todo</p>
+        {currentPage > 0 && <span onClick={back}>{arrowLeftIcon}</span>}
+        {<span onClick={next}>{arrowRightIcon}</span>}
+        <Link href="/">
+          <span className={styles["home-icon-wrapper"]}>{homeIcon}</span>
+        </Link>
+      </div>
+      <div className={styles["page-count"]}>Page {currentPage + 1}</div>
+    </div>
+  );
+};

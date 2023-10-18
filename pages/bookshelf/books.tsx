@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-// import fetchBooks from '../api/fetchBooks';  // Replace with your actual API
 import styles from "./books.module.css";
 import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
-
-const testBook = {
-  title: "Test Book",
-};
+import axios from "axios";
+import { BooksAttributes } from "@/services/database/models/Books";
 
 export default function BookShelf() {
   const router = useRouter();
-  const [books, setBooks] = useState([testBook, testBook, testBook]); // State to hold books
+  const [books, setBooks] = useState<BooksAttributes[] | null>(null); // State to hold books
 
   const handleBack = (): void => {
     router.push("/");
@@ -19,19 +16,20 @@ export default function BookShelf() {
   };
 
   useEffect(() => {
-    // Simulate fetching the access token; replace with your actual method
-    const accessToken = "your_access_token_here";
-
-    // Fetch books
-    // fetchBooks(accessToken).then(data => {
-    //   setBooks(data);
-    // });
+    const fetchData = async () => {
+      const response = await axios.post("/api/read/getUserBooks", {
+        userID: 1,
+        count: 3,
+        offset: 0,
+      });
+      setBooks(response.data.bookList);
+    };
+    fetchData();
   }, []);
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        {/* <Link href="/">{arrowLeftIcon}</Link> */}
         <span
           onClick={handleBack}
           className={`${styles.leftClick} ${["clickable-container-small"]}`}
@@ -42,11 +40,21 @@ export default function BookShelf() {
         <div></div> {/* Empty div for layout balance */}
       </div>
       <ul className={styles["book-list"]}>
-        {books.map((book, index) => (
-          <li key={index} className={styles["book-list-item"]}>
-            {book.title}
-          </li>
-        ))}
+        {books ? (
+          books.map((book, index) => (
+            <li key={index} className={styles["book-list-item"]}>
+              {book.Title} {book.id}
+              {/* todo add default image */}
+              <img
+                src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
+                alt="Book cover"
+                loading="lazy"
+              />
+            </li>
+          ))
+        ) : (
+          <li>Loading...</li>
+        )}
       </ul>
     </div>
   );

@@ -1,5 +1,7 @@
 import { exampleBook, examplePages } from "@/static-examples/exampleBook";
-import { BooksAttributes } from "./database/models/Books";
+import { Books, BooksAttributes } from "./database/models/Books";
+import { ImageGenerations } from "./database/models/ImageGenerations";
+import { booksBucket, getStorage } from "./storage";
 
 /**
  * Create a new book using data from the BookCreation workflow
@@ -10,38 +12,40 @@ export async function createNewBook(locationGUID: string, characterGUID: string)
     // console.log(`createNewBook: locationGUID: ${locationGUID}, characterGUID: ${characterGUID}`)
 
     // Mimic delay
-    await delay(3000)
+    await new Promise((res) => setTimeout(res, 3000));
 
     return exampleBook;
 };
 
 /**
- *
- * @param bookID
- * @returns
+ * 
+ * @param userID 
+ * @param count 
+ * @param offset 
+ * @returns 
  */
-export async function getBook(bookGUID: string): Promise<BooksAttributes> {
-    // console.log(`getBook: bookGUID: ${bookGUID}`)
+export async function getBooks(userID: number, count: number, offset: number) {
+    const books = await Books.getUserBooks(userID, count, offset);
+    if (books === null) return null;
 
-    // Mimic delay
-    await delay()
+    const booksWithPhotoStream = await Promise.all(
+        books.map(async (book) => {
+            // const storage = getStorage();
+            const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID);
+            // const imageStream = await storage.getReadStream(`gs://${booksBucket}/${imageGeneration?.GCSLocation}`);
+            book.imageGCSLocation = `${imageGeneration?.GCSLocation}`;
+            return book;
+        })
+    );
 
-    return exampleBook;
-};
+    return booksWithPhotoStream;
+}
 
 export async function getPage(bookGUID: string, pageNumber: number) {
     // console.log(`getPage: bookGUID: ${bookGUID}, pageNumber: ${pageNumber}`)
 
     // Mimic delay
-    await delay()
+    await new Promise((res) => setTimeout(res, 3000));
 
     return examplePages[pageNumber - 1];
-}
-
-async function delay(timeout: number = 1000) {
-    // Mimic delay
-    const delay = (ms: number | undefined) =>
-        new Promise((res) => setTimeout(res, ms));
-    await delay(timeout);
-    return;
 }

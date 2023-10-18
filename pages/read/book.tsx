@@ -74,12 +74,12 @@ export default function BookReader() {
           onSwipeEnd={setSelected}
         >
           <div className={styles.page}>
-            <img src={book.CoverImage} alt="cover" />
+            <img src={book.GeneratedImageID} alt="cover" />
             <h1>{book.Title}</h1>
           </div>
           {pages.map((page, index) => (
             <div className={styles.page} key={index}>
-              <img src={page.Image} alt={`page-${index}`} />
+              <img src={page.GeneratedImageID} alt={`page-${index}`} />
               <p>{page.Text}</p>
             </div>
           ))}

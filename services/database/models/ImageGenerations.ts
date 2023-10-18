@@ -28,6 +28,11 @@ export class ImageGenerations extends Model<ImageGenerationsAttributes> {
             }
         );
     }
+
+    static async getGeneration(id: number): Promise<ImageGenerationsAttributes | null> {
+        const imageGeneration = await ImageGenerations.findByPk(id);
+        return imageGeneration ? imageGeneration.get({ plain: true }) : null;
+    }
 }
 
 export function initImageGenerations(sequelize: Sequelize) {
