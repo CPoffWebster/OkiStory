@@ -34,6 +34,15 @@ export class Books extends Model<BooksAttributes> {
         );
     }
 
+    static async getBook(guid: string) {
+        const book = await Books.findOne({
+            where: {
+                GUID: guid
+            }
+        });
+        return book ? book.get({ plain: true }) : null;
+    }
+
     static async getUserBooks(userID: number, count: number, offset: number): Promise<BooksAttributes[] | null> {
         const books = await Books.findAll({
             limit: count,
@@ -48,7 +57,6 @@ export class Books extends Model<BooksAttributes> {
 
         return books ? books.map(book => book.get({ plain: true })) : null;
     }
-
 }
 
 export function initBooks(sequelize: Sequelize) {

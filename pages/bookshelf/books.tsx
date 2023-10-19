@@ -27,6 +27,11 @@ export default function BookShelf() {
     fetchData();
   }, []);
 
+  const handleSelectElement = (book: BooksAttributes): void => {
+    const serializedData = encodeURIComponent(JSON.stringify(book));
+    router.push(`/read/${book.GUID}`); // ?data=${serializedData}`);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -37,7 +42,7 @@ export default function BookShelf() {
           {arrowLeftIcon}
         </span>
         <h2 className={styles.title}>My Book Shelf</h2>
-        <div></div> {/* Empty div for layout balance */}
+        <div></div>
       </div>
       <ul className={styles["book-list"]}>
         {books ? (

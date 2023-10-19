@@ -16,7 +16,18 @@ export default function CreatingBookLoader() {
     }
     const fetchData = async () => {
       try {
-        const creatingBook = await createNewBook(theme, hero);
+        const creatingBook = {
+          id: 1,
+          GUID: "1234567890",
+          Title: "The Bear in the Forest",
+          GeneratedImageID: 1,
+          GeneratedTextID: 1,
+          LocationID: 1,
+          CharacterID: 1,
+          ThemeID: 0,
+          PageCount: 4,
+          UserID: 1,
+        }; // await createNewBook(theme, hero);
         setSessionStorage("book", JSON.stringify(creatingBook));
         router.push(`/read/${creatingBook.GUID}`);
         return;

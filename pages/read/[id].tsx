@@ -16,7 +16,6 @@ import styles from "./book.module.css";
 import { getSessionStorage } from "@/services/session";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log("LOOK HERE");
   const guid = context.query.id as unknown as string; // Access 'id' directly
   return {
     props: { guid },
@@ -28,13 +27,17 @@ export default function GetBookData(props: { guid: string }) {
   const [pages, setPages] = useState<PagesAttributes[]>([]);
 
   useEffect(() => {
-    const id = props.guid;
+    console.log("calling again...");
     const intervalId = setInterval(async () => {
-      // const fetchedBook = await getBook(id);
-      // if (fetchedBook) {
-      //   setBook(fetchedBook);
-      //   clearInterval(intervalId);
-      // }
+      const response = await axios.post("/api/read/getBook", {
+        guid: props.guid,
+      });
+      if (response.data.book) {
+        // console.log("LOOK HERE", response.data.book);
+        setBook(response.data.book);
+        clearInterval(intervalId);
+        return;
+      }
     }, 1000);
 
     return () => clearInterval(intervalId); // Cleanup on unmount
@@ -44,7 +47,7 @@ export default function GetBookData(props: { guid: string }) {
     if (book) {
       const intervalId = setInterval(async () => {
         const pageIndex = 0;
-        const fetchedPages = await getPage(book.GUID, pageIndex); // Assume getPages fetches all pages for a book
+        // const fetchedPages = await getPage(book.GUID, pageIndex); // Assume getPages fetches all pages for a book
         // if (fetchedPages && fetchedPages.length > 0) {
         // setPages(fetchedPages);
         // clearInterval(intervalId);
@@ -57,6 +60,11 @@ export default function GetBookData(props: { guid: string }) {
 
   // return <Book />;
   // return {book && pages.length > 0 ? <BookReader book={book} pages={pages} /> : 'Loading...'}
+  return (
+    <>
+      {book ? <BookReader book={book} pages={pages} /> : <div>Loading...</div>}
+    </>
+  );
 }
 
 interface BookReaderProps {
@@ -71,6 +79,13 @@ const BookReader: React.FC<BookReaderProps> = ({ book, pages }) => {
   // );
   const [currentPage, setCurrentPage] = useState(0);
   // const [pages, setPages] = useState<PagesAttributes[]>([]);
+  return (
+    <div>
+      <Book />
+    </div>
+  );
+  // const [flippedPages, setFlippedPages] = useState<number[]>([]);
+  // const totalPages = 7; // Number of pages
 
   // useEffect(() => {
   //   const bookString = getSessionStorage("book");

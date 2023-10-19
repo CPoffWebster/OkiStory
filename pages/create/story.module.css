@@ -26,7 +26,7 @@
     color: purple;
   }
 
-/* Container to hold all the buttons */
+/* Container to hold all the elements */
 .selection-container {
     display: flex;
     justify-content: center;

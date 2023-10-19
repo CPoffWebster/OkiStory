@@ -2,6 +2,15 @@
 .container {
     text-align: center;
   }
+
+/* Container to hold all the elements */
+.selection-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 3vw;
+}
   
   /* Header styling */
   .header {

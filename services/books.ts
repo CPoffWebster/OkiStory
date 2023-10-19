@@ -18,27 +18,35 @@ export async function createNewBook(locationGUID: string, characterGUID: string)
 };
 
 /**
- * 
+ * Get the bookshelf list of books for a user
  * @param userID 
- * @param count 
- * @param offset 
+ * @param count x number of books
+ * @param offset x number of books to skip
  * @returns 
  */
 export async function getBooks(userID: number, count: number, offset: number) {
     const books = await Books.getUserBooks(userID, count, offset);
     if (books === null) return null;
 
-    const booksWithPhotoStream = await Promise.all(
+    const booksWithPhotoLocation = await Promise.all(
         books.map(async (book) => {
             // const storage = getStorage();
             const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID);
-            // const imageStream = await storage.getReadStream(`gs://${booksBucket}/${imageGeneration?.GCSLocation}`);
             book.imageGCSLocation = `${imageGeneration?.GCSLocation}`;
             return book;
         })
     );
 
-    return booksWithPhotoStream;
+    return booksWithPhotoLocation;
+}
+
+export async function getBookByGUID(guid: string) {
+    const book = await Books.getBook(guid);
+    if (book === null) return null;
+
+    const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID);
+    book.imageGCSLocation = `${imageGeneration?.GCSLocation}`;
+    return book;
 }
 
 export async function getPage(bookGUID: string, pageNumber: number) {
