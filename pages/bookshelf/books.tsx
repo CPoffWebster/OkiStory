@@ -29,7 +29,7 @@ export default function BookShelf() {
 
   const handleSelectElement = (book: BooksAttributes): void => {
     const serializedData = encodeURIComponent(JSON.stringify(book));
-    router.push(`/read/${book.GUID}`); // ?data=${serializedData}`);
+    router.push(`/read/${book.GUID}`);
   };
 
   return (
@@ -44,23 +44,30 @@ export default function BookShelf() {
         <h2 className={styles.title}>My Book Shelf</h2>
         <div></div>
       </div>
-      <ul className={styles["book-list"]}>
+      <div className={styles["selection-container"]}>
         {books ? (
           books.map((book, index) => (
-            <li key={index} className={styles["book-list-item"]}>
-              {book.Title} {book.id}
-              {/* todo add default image */}
-              <img
-                src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
-                alt="Book cover"
-                loading="lazy"
-              />
-            </li>
+            <span onClick={() => handleSelectElement(book)} key={index}>
+              <div
+                className={`${styles["selection"]} ${[
+                  "clickable-container-large",
+                ]}`}
+              >
+                <img
+                  src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
+                  alt="Book cover"
+                  loading="lazy"
+                />
+              </div>
+              <span className={styles["section-name"]}>
+                {book.Title} {book.id}
+              </span>
+            </span>
           ))
         ) : (
           <li>Loading...</li>
         )}
-      </ul>
+      </div>
     </div>
   );
 }

@@ -6,6 +6,9 @@ export interface PagesAttributes {
     PageNumber: number;
     GeneratedImageID: number;
     Text: string;
+
+    // Not in database
+    imageGCSLocation?: any; // location of image from GeneratedImageID
 }
 
 export class Pages extends Model<PagesAttributes> {
@@ -18,6 +21,16 @@ export class Pages extends Model<PagesAttributes> {
             defaults: page
         }))
         return { pages, created }
+    }
+
+    static async getBookPages(bookID: number) {
+        const pages = await Pages.findAll({
+            where: {
+                BookID: bookID
+            }
+        });
+
+        return pages ? pages.map(page => page.get({ plain: true })) : null;
     }
 }
 

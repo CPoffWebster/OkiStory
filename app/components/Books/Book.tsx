@@ -34,7 +34,12 @@ const Page: React.FC<PageProps> = ({ content, className, index }) => {
   );
 };
 
-const Book: React.FC = () => {
+interface BookReaderProps {
+  pagesContent: React.JSX.Element[];
+}
+
+// const Book: React.FC = () => {
+const Book: React.FC<BookReaderProps> = ({ pagesContent }) => {
   useEffect(() => {
     const pages = Array.from(
       document.getElementsByClassName(styles.page)
@@ -71,46 +76,46 @@ const Book: React.FC = () => {
     });
   }, []);
 
-  const pagesContent = [
-    <p key="title_text" className={styles.text}>
-      More content... More content... More content... More content... More
-      content... More content...
-    </p>,
-    <img
-      key="page1_image"
-      src="/book_pile.png"
-      alt="Books"
-      className={`${styles.image}`}
-    />,
-    <p key="page1_text" className={styles.text}>
-      More content... More content... More content... More content... More
-      content... More content...
-    </p>,
-    <img
-      key="page2_image"
-      src="/happy_book.png"
-      alt="Books"
-      className={`${styles.image}`}
-    />,
-    <p key="page2_text" className={styles.text}>
-      More content... More content... More content... More content... More
-      content... More content...
-    </p>,
-    <img
-      key="page3_image"
-      src="/book_pile.png"
-      alt="Books"
-      className={`${styles.image}`}
-    />,
-    <p key="page3_text" className={styles.text}>
-      More content... More content... More content... More content... More
-      content... More content...
-    </p>,
-    <p key="back_cover" className={styles.text}>
-      More content... More content... More content... More content... More
-      content... More content...
-    </p>,
-  ];
+  // const pagesContent = [
+  //   <p key="title_text" className={styles.text}>
+  //     More content... More content... More content... More content... More
+  //     content... More content...
+  //   </p>,
+  //   <img
+  //     key="page1_image"
+  //     src="/book_pile.png"
+  //     alt="Books"
+  //     className={`${styles.image}`}
+  //   />,
+  //   <p key="page1_text" className={styles.text}>
+  //     More content... More content... More content... More content... More
+  //     content... More content...
+  //   </p>,
+  //   <img
+  //     key="page2_image"
+  //     src="/happy_book.png"
+  //     alt="Books"
+  //     className={`${styles.image}`}
+  //   />,
+  //   <p key="page2_text" className={styles.text}>
+  //     More content... More content... More content... More content... More
+  //     content... More content...
+  //   </p>,
+  //   <img
+  //     key="page3_image"
+  //     src="/book_pile.png"
+  //     alt="Books"
+  //     className={`${styles.image}`}
+  //   />,
+  //   <p key="page3_text" className={styles.text}>
+  //     More content... More content... More content... More content... More
+  //     content... More content...
+  //   </p>,
+  //   <p key="back_cover" className={styles.text}>
+  //     More content... More content... More content... More content... More
+  //     content... More content...
+  //   </p>,
+  // ];
 
   return (
     <div className={styles.book}>

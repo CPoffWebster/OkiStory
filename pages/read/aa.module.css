@@ -1,0 +1,11 @@
+.coverImage {
+    width: 50%;
+    height: 50%;
+    object-fit: cover;
+}
+
+.image {
+  width: 90%;
+  height: 90%;
+  object-fit: cover;
+}

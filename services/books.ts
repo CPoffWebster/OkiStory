@@ -2,6 +2,7 @@ import { exampleBook, examplePages } from "@/static-examples/exampleBook";
 import { Books, BooksAttributes } from "./database/models/Books";
 import { ImageGenerations } from "./database/models/ImageGenerations";
 import { booksBucket, getStorage } from "./storage";
+import { Pages, PagesAttributes } from "./database/models/Pages";
 
 /**
  * Create a new book using data from the BookCreation workflow
@@ -40,7 +41,12 @@ export async function getBooks(userID: number, count: number, offset: number) {
     return booksWithPhotoLocation;
 }
 
-export async function getBookByGUID(guid: string) {
+/**
+ * Get a book by its GUID
+ * @param guid 
+ * @returns 
+ */
+export async function getBookByGUID(guid: string): Promise<BooksAttributes | null> {
     const book = await Books.getBook(guid);
     if (book === null) return null;
 
@@ -49,11 +55,23 @@ export async function getBookByGUID(guid: string) {
     return book;
 }
 
-export async function getPage(bookGUID: string, pageNumber: number) {
-    // console.log(`getPage: bookGUID: ${bookGUID}, pageNumber: ${pageNumber}`)
+/**
+ * Get the pages for a book
+ * @param bookID 
+ * @returns 
+ */
+export async function getPagesByBookId(bookID: number): Promise<PagesAttributes[] | null> {
+    const pages = await Pages.getBookPages(bookID);
+    if (pages === null) return null;
 
-    // Mimic delay
-    await new Promise((res) => setTimeout(res, 3000));
+    const pagesWithPhotoLocation = await Promise.all(
+        pages.map(async (page) => {
+            // const storage = getStorage();
+            const imageGeneration = await ImageGenerations.getGeneration(page.GeneratedImageID);
+            page.imageGCSLocation = `${imageGeneration?.GCSLocation}`;
+            return page;
+        })
+    );
 
-    return examplePages[pageNumber - 1];
+    return pagesWithPhotoLocation;
 }
