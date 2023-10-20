@@ -17,19 +17,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default function GetBookData(props: { guid: string }) {
   const [book, setBook] = useState<BooksAttributes | null>(null);
+  const [pages, setPages] = useState<PagesAttributes[]>([]);
   const [coverPage, setCoverPage] = useState<React.JSX.Element | null>(null); // pagesContent[0]
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
 
   useEffect(() => {
     console.log("calling books");
     const intervalId = setInterval(async () => {
-      // console.log("GET BOOK HERE", book);
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
       });
       const data = response.data.book;
       if (data) {
-        // console.log(data);
         setBook(data);
         const coverPage = (
           <div>
@@ -61,6 +60,7 @@ export default function GetBookData(props: { guid: string }) {
       });
       const data = response.data.pages;
       if (data) {
+        setPages(data);
         const updatePagesContent: React.JSX.Element[] = [];
         updatePagesContent.push(coverPage!);
         for (let i = 0; i < data.length; i++) {
@@ -98,7 +98,13 @@ export default function GetBookData(props: { guid: string }) {
   // return <Book />;
   // return {book && pages.length > 0 ? <BookReader book={book} pages={pages} /> : 'Loading...'}
   return (
-    <>{book ? <Book pagesContent={pagesContent} /> : <div>Loading...</div>}</>
+    <>
+      {book ? (
+        <Book pagesContent={pagesContent} book={book} pages={pages} />
+      ) : (
+        <div>Loading...</div>
+      )}
+    </>
   );
 }
 

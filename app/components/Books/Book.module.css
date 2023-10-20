@@ -17,13 +17,25 @@
   position: absolute;
   bottom: 0;
   margin-bottom: 1vw;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1vw; /* Optional: padding on both sides to keep items away from the edges */
 }
-.button {
-  padding: 1.8vw .5vw;
+
+.button,
+.buttonHome {
+  padding: .5vw .5vw;
   cursor: pointer;
+}
+
+.buttonHome {
   background-color: purple;
   color: white;
 }
+
 
 .page {
     width: 50%;
@@ -34,7 +46,7 @@
     transition: transform 1.4s;
     backface-visibility: hidden;
     transform-style: preserve-3d;
-    cursor: pointer;
+    /* cursor: pointer; */
     user-select: none;
     background-color: #f0f0f0;
 }
@@ -64,7 +76,7 @@
   }
   
   .page:nth-child(even) {
-    pointer-events: none;
+    /* pointer-events: none; */
     transform: rotateY(180deg);
     transform-origin: 100% 0;
     left: 0;
@@ -73,28 +85,28 @@
   }
   
   .page:nth-child(odd) {
-    pointer-events: all;
+    /* pointer-events: all; */
     transform: rotateY(0deg);
     right: 0;
     border-radius: 0 4px 4px 0;
     background-image: linear-gradient(to right, rgba(0, 0, 0, .15) 0%, rgba(0, 0, 0, 0) 10%);
   }
   
-  .page:nth-child(odd):hover {
+  /* .page:nth-child(odd):hover {
     transform: rotateY(-15deg);
-  }
+  } */
   
   .page.flipped:nth-child(odd) {
-    pointer-events: none;
+    /* pointer-events: none; */
     transform: rotateY(-180deg);
   }
   
   .page.flipped:nth-child(even) {
-    pointer-events: all;
+    /* pointer-events: all; */
     transform: rotateY(0deg);
   }
   
-  .page.flipped:nth-child(even):hover {
+  /* .page.flipped:nth-child(even):hover {
     transform: rotateY(15deg);
-  }
+  } */
   
