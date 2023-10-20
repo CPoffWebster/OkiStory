@@ -17,9 +17,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default function GetBookData(props: { guid: string }) {
   const [book, setBook] = useState<BooksAttributes | null>(null);
-  const [pageIndex, setPageIndex] = useState<number>(0);
-  const [pages, setPages] = useState<PagesAttributes[]>([]);
-  const [pagesContent, setPagesContent] = useState<React.ReactNode[]>([]);
+  const [coverPage, setCoverPage] = useState<React.JSX.Element | null>(null); // pagesContent[0]
+  const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
 
   useEffect(() => {
     console.log("calling books");
@@ -32,7 +31,7 @@ export default function GetBookData(props: { guid: string }) {
       if (data) {
         // console.log(data);
         setBook(data);
-        setPagesContent([
+        const coverPage = (
           <div>
             <p>{data.Title}</p>
             <img
@@ -41,8 +40,10 @@ export default function GetBookData(props: { guid: string }) {
               alt="Books"
               className={`${styles.coverImage}`}
             />
-          </div>,
-        ]);
+          </div>
+        );
+        setPagesContent([coverPage]);
+        setCoverPage(coverPage);
         clearInterval(intervalId);
       }
     }, 1000);
@@ -53,47 +54,41 @@ export default function GetBookData(props: { guid: string }) {
   useEffect(() => {
     if (book === null) return; // Skip if book is null
 
-    console.log("calling pages");
     const intervalId = setInterval(async () => {
-      console.log("READ PAGES HERE");
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
         includePages: true,
       });
       const data = response.data.pages;
-      console.log("data", data);
       if (data) {
-        setPages(data);
-        if (pages[pageIndex] != null) {
-          data.push(data[pageIndex]);
-          setPageIndex(pageIndex + 1);
-          // setPages(pages);
+        const updatePagesContent: React.JSX.Element[] = [];
+        updatePagesContent.push(coverPage!);
+        for (let i = 0; i < data.length; i++) {
           const newImageContent = (
             <img
               key="page1_image"
-              src="/book_pile.png"
+              src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
               alt="Books"
               className={`${styles.image}`}
             />
           );
           const newTextContent = (
             <p key="page1_text" className={styles.text}>
-              More content... More content... More content... More content...
-              More content... More content...
+              {data[i].Text}
             </p>
           );
-          pagesContent.push(newImageContent);
-          pagesContent.push(newTextContent);
-          setPagesContent(pagesContent);
+          updatePagesContent.push(newImageContent);
+          updatePagesContent.push(newTextContent);
         }
-        console.log(
-          "LOOK HERE FOR PAGES",
-          data.length,
-          book!.PageCount,
-          data.length === book!.PageCount,
-          data
-        );
-        if (data.length === book!.PageCount) clearInterval(intervalId);
+        if (data.length === book!.PageCount) {
+          updatePagesContent.push(
+            <p key="page1_text" className={styles.text}>
+              The End
+            </p>
+          );
+          clearInterval(intervalId);
+        }
+        setPagesContent(updatePagesContent);
       }
     }, 1000);
 
