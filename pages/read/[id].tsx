@@ -81,11 +81,11 @@ export default function GetBookData(props: { guid: string }) {
           updatePagesContent.push(newTextContent);
         }
         if (data.length === book!.PageCount) {
-          updatePagesContent.push(
-            <p key="page1_text" className={styles.text}>
-              The End
-            </p>
-          );
+          // updatePagesContent.push(
+          //   <p key="page1_text" className={styles.text}>
+          //     The End
+          //   </p>
+          // );
           clearInterval(intervalId);
         }
         setPagesContent(updatePagesContent);
@@ -100,7 +100,11 @@ export default function GetBookData(props: { guid: string }) {
   return (
     <>
       {book ? (
-        <Book pagesContent={pagesContent} book={book} pages={pages} />
+        <Book
+          pagesContent={pagesContent}
+          pageCount={book.PageCount}
+          pagesFound={pages.length}
+        />
       ) : (
         <div>Loading...</div>
       )}

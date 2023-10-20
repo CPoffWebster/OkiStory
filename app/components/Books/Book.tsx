@@ -1,18 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Book.module.css";
 import { arrowLeftIcon, arrowRightIcon, homeIcon } from "@/data/icons";
 import { useRouter } from "next/router";
-import { BooksAttributes } from "@/services/database/models/Books";
-import { PagesAttributes } from "@/services/database/models/Pages";
 
 type PageProps = {
   content: React.ReactNode;
   index: number;
+  pageCount: number;
+  pagesFound: number;
+  onFlipLeft: (index: number) => void;
+  onFlipRight: (index: number) => void;
 };
 
-const Page: React.FC<PageProps> = ({ content, index }) => {
+const Page: React.FC<PageProps> = ({
+  content,
+  index,
+  pageCount,
+  pagesFound,
+  onFlipLeft,
+  onFlipRight,
+}) => {
   const router = useRouter();
   const pageRef = React.useRef<HTMLDivElement>(null);
+
+  const disableLeftArrow = index <= 1;
+  const disableRightArrow = index >= pageCount * 2;
+  const loadingRightArrow = pagesFound < pageCount && index >= pagesFound * 2;
 
   const returnHome = () => {
     router.push("/");
@@ -24,8 +37,14 @@ const Page: React.FC<PageProps> = ({ content, index }) => {
       {index % 2 !== 1 && (
         <div className={styles.navButtons}>
           <span
-            className={`${styles.button} ${["clickable-container-small"]}`}
-            // onClick={returnHome}
+            className={`${["clickable-container-small"]} ${
+              disableLeftArrow ? styles.disabled : ""
+            }`}
+            onClick={() => {
+              if (!disableLeftArrow) {
+                onFlipLeft(index);
+              }
+            }}
           >
             {arrowLeftIcon}
           </span>
@@ -36,8 +55,10 @@ const Page: React.FC<PageProps> = ({ content, index }) => {
             {homeIcon}
           </span>
           <span
-            className={`${styles.button} ${["clickable-container-small"]}`}
-            // onClick={returnHome}
+            className={`${["clickable-container-small"]} ${
+              disableRightArrow ? styles.disabled : ""
+            } ${loadingRightArrow ? styles.loading : ""}`}
+            onClick={() => !disableRightArrow && onFlipRight(index)}
           >
             {arrowRightIcon}
           </span>
@@ -49,12 +70,16 @@ const Page: React.FC<PageProps> = ({ content, index }) => {
 
 interface BookReaderProps {
   pagesContent: React.JSX.Element[];
-  book: BooksAttributes;
-  pages: PagesAttributes[];
+  pageCount: number;
+  pagesFound: number;
 }
 
 // const Book: React.FC = () => {
-const Book: React.FC<BookReaderProps> = ({ pagesContent }) => {
+const Book: React.FC<BookReaderProps> = ({
+  pagesContent,
+  pageCount,
+  pagesFound,
+}) => {
   useEffect(() => {
     const pages = Array.from(
       document.getElementsByClassName(styles.page)
@@ -65,34 +90,53 @@ const Book: React.FC<BookReaderProps> = ({ pagesContent }) => {
         page.style.zIndex = `${pages.length - i}`;
       }
     });
-
-    pages.forEach((page, i) => {
-      // page.onclick = function () {
-      //   if ((i + 1) % 2 === 0) {
-      //     page.classList.remove(styles.flipped);
-      //     // Check if previousElementSibling exists
-      //     if (page.previousElementSibling) {
-      //       (page.previousElementSibling as HTMLElement).classList.remove(
-      //         styles.flipped
-      //       );
-      //     }
-      //   } else {
-      //     page.classList.add(styles.flipped);
-      //     // Check if nextElementSibling exists
-      //     if (page.nextElementSibling) {
-      //       (page.nextElementSibling as HTMLElement).classList.add(
-      //         styles.flipped
-      //       );
-      //     }
-      //   }
-      // };
-    });
   }, [pagesContent]);
+
+  const [flippedPages, setFlippedPages] = useState<Set<number>>(new Set());
+
+  const handleFlipLeft = (index: number) => {
+    setFlippedPages((prev) => {
+      const newSet = new Set(prev);
+      newSet.delete(index - 1);
+      newSet.delete(index - 2);
+      return newSet;
+    });
+  };
+
+  const handleFlipRight = (index: number) => {
+    setFlippedPages((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(index);
+      newSet.add(index + 1);
+      return newSet;
+    });
+  };
+
+  useEffect(() => {
+    const pages = Array.from(
+      document.getElementsByClassName(styles.page)
+    ) as HTMLElement[];
+    pages.forEach((page, i) => {
+      if (flippedPages.has(i)) {
+        page.classList.add(styles.flipped);
+      } else {
+        page.classList.remove(styles.flipped);
+      }
+    });
+  }, [flippedPages]);
 
   return (
     <div className={styles.book}>
       {pagesContent.map((content, index) => (
-        <Page key={index} content={content} index={index} />
+        <Page
+          key={index}
+          content={content}
+          index={index}
+          pageCount={pageCount}
+          pagesFound={pagesFound}
+          onFlipLeft={handleFlipLeft}
+          onFlipRight={handleFlipRight}
+        />
       ))}
     </div>
   );

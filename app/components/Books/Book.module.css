@@ -25,15 +25,23 @@
   padding: 0 1vw; /* Optional: padding on both sides to keep items away from the edges */
 }
 
-.button,
 .buttonHome {
   padding: .5vw .5vw;
   cursor: pointer;
 }
-
 .buttonHome {
   background-color: purple;
   color: white;
+}
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.loading {
+  cursor: wait;
+  opacity: 0.2;
+  pointer-events: none;
 }
 
 
