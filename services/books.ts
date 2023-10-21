@@ -32,8 +32,8 @@ export async function getBooks(userID: number, count: number, offset: number) {
     const booksWithPhotoLocation = await Promise.all(
         books.map(async (book) => {
             // const storage = getStorage();
-            const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID);
-            book.imageGCSLocation = `${imageGeneration?.GCSLocation}`;
+            const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID!);
+            book.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
             return book;
         })
     );
@@ -50,8 +50,8 @@ export async function getBookByGUID(guid: string): Promise<BooksAttributes | nul
     const book = await Books.getBook(guid);
     if (book === null) return null;
 
-    const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID);
-    book.imageGCSLocation = `${imageGeneration?.GCSLocation}`;
+    const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID!);
+    book.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
     return book;
 }
 
@@ -68,7 +68,7 @@ export async function getPagesByBookId(bookID: number): Promise<PagesAttributes[
         pages.map(async (page) => {
             // const storage = getStorage();
             const imageGeneration = await ImageGenerations.getGeneration(page.GeneratedImageID);
-            page.imageGCSLocation = `${imageGeneration?.GCSLocation}`;
+            page.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
             return page;
         })
     );

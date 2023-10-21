@@ -4,16 +4,16 @@ export interface BooksAttributes {
     id?: number;
     GUID: string;
     Title: string;
-    GeneratedImageID: number;
-    GeneratedTextID: number;
+    GeneratedImageID?: number;
+    GeneratedTextID?: number;
     LocationID: number;
     CharacterID: number;
     ThemeID: number;
     UserID: number;
-    PageCount: number;
+    PageCount?: number;
 
     // Not in database
-    imageGCSLocation?: any; // location of image from GeneratedImageID
+    imageGCSLocation?: string; // location of image from GeneratedImageID
 }
 
 export class Books extends Model<BooksAttributes> {

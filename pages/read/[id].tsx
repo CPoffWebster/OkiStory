@@ -22,13 +22,26 @@ export default function GetBookData(props: { guid: string }) {
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
 
   useEffect(() => {
-    console.log("calling books");
+    // console.log("calling books");
     const intervalId = setInterval(async () => {
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
       });
       const data = response.data.book;
-      if (data) {
+      // console.log(
+      //   "book data",
+      //   data,
+      //   data.PageCount,
+      //   data.imageGCSLocation,
+      //   data && data.PageCount !== null && data.imageGCSLocation !== undefined
+      // );
+      if (
+        data &&
+        data.PageCount !== null &&
+        data.imageGCSLocation !== undefined &&
+        data.Title !== ""
+      ) {
+        // console.log("SET BOOK DATA", data);
         setBook(data);
         const coverPage = (
           <div>
@@ -44,6 +57,7 @@ export default function GetBookData(props: { guid: string }) {
         setPagesContent([coverPage]);
         setCoverPage(coverPage);
         clearInterval(intervalId);
+        // console.log("clearing book interval");
       }
     }, 1000);
 
@@ -53,39 +67,48 @@ export default function GetBookData(props: { guid: string }) {
   useEffect(() => {
     if (book === null) return; // Skip if book is null
 
+    console.log("calling pages");
     const intervalId = setInterval(async () => {
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
         includePages: true,
       });
       const data = response.data.pages;
-      if (data) {
+      console.log("pages data", data);
+      if (data && data.length !== 0) {
         setPages(data);
         const updatePagesContent: React.JSX.Element[] = [];
         updatePagesContent.push(coverPage!);
+
+        let pagesConfigured = 0;
         for (let i = 0; i < data.length; i++) {
-          const newImageContent = (
-            <img
-              key="page1_image"
-              src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
-              alt="Books"
-              className={`${styles.image}`}
-            />
-          );
-          const newTextContent = (
-            <p key="page1_text" className={styles.text}>
-              {data[i].Text}
-            </p>
-          );
-          updatePagesContent.push(newImageContent);
-          updatePagesContent.push(newTextContent);
+          if (
+            data[i].imageGCSLocation &&
+            data[i].imageGCSLocation !== undefined
+          ) {
+            pagesConfigured++;
+            const newImageContent = (
+              <img
+                key="page1_image"
+                src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
+                alt="Books"
+                className={`${styles.image}`}
+              />
+            );
+            const newTextContent = (
+              <p key="page1_text" className={styles.text}>
+                {data[i].Text}
+              </p>
+            );
+            updatePagesContent.push(newImageContent);
+            updatePagesContent.push(newTextContent);
+          }
         }
-        if (data.length === book!.PageCount) {
-          // updatePagesContent.push(
-          //   <p key="page1_text" className={styles.text}>
-          //     The End
-          //   </p>
-          // );
+        if (
+          data.length === book!.PageCount &&
+          pagesConfigured === book!.PageCount
+        ) {
+          console.log("clearing pages interval", data.length, book!.PageCount);
           clearInterval(intervalId);
         }
         setPagesContent(updatePagesContent);
@@ -95,14 +118,12 @@ export default function GetBookData(props: { guid: string }) {
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, [book]);
 
-  // return <Book />;
-  // return {book && pages.length > 0 ? <BookReader book={book} pages={pages} /> : 'Loading...'}
   return (
     <>
       {book ? (
         <Book
           pagesContent={pagesContent}
-          pageCount={book.PageCount}
+          pageCount={book.PageCount!}
           pagesFound={pages.length}
         />
       ) : (

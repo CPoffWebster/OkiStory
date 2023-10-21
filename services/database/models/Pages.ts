@@ -8,7 +8,7 @@ export interface PagesAttributes {
     Text: string;
 
     // Not in database
-    imageGCSLocation?: any; // location of image from GeneratedImageID
+    imageGCSLocation?: string; // location of image from GeneratedImageID
 }
 
 export class Pages extends Model<PagesAttributes> {

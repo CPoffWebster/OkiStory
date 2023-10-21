@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { CharactersAttributes } from "@/services/database/models/Characters";
 import styles from "./story.module.css";
 import { setSessionStorage } from "@/services/session";
+import axios from "axios";
 
 export interface StoryElement extends CharactersAttributes {}
 
@@ -29,7 +30,7 @@ export default function Story(props: {
   const [elements, setElements] = useState<StoryElement[]>(props.themes);
   const [selectedTheme, setSelectedTheme] = useState<string>();
 
-  const handleSelectElement = (element: StoryElement): void => {
+  const handleSelectElement = async (element: StoryElement): Promise<void> => {
     if (selectionType === "Theme") {
       setSelectedTheme(element.GUID);
       setSelectionType("Hero");
@@ -37,7 +38,10 @@ export default function Story(props: {
     } else if (selectionType === "Hero") {
       setSessionStorage("hero", element.GUID);
       setSessionStorage("theme", selectedTheme!);
-      router.push("/creating/book");
+      // router.push("/creating/book");
+      // const exists = await axios.post("/api/generation/story", {
+      //   email: emailValue,
+      // });
       return;
     }
   };

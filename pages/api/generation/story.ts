@@ -5,8 +5,8 @@ import { withAuth } from "@/utils/withAuth";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log('api/generation/story API Route Triggered');
 
-    const { locationID, characterID, themeID, userID } = req.body;
-    const guid = initializeBookCreation(locationID, characterID, themeID, userID);
+    const { locationGUID, characterGUID, themeGUID, userEmail } = req.body;
+    const guid = await initializeBookCreation(locationGUID, characterGUID, themeGUID, userEmail);
 
     res.status(200).json({ bookGuid: guid });
 };

@@ -24,19 +24,19 @@ class generatedTextPage {
 const propertyParsingNames = ['title', 'titleImageDescription', 'character', 'setting', 'theme', 'pageCount', 'pages'];
 const propertyParsingListNames = ['pageNumber', 'text', 'imageDescription'];
 
-export function initializeBookCreation(locationID: number, characterID: number, themeID: number, userID: number) {
+export async function initializeBookCreation(locationGUID: string, characterGUID: string, themeGUID: string, userEmail: string) {
     connectToDb();
     const bookGUID = uuidv4();
     const newBook: BooksAttributes = {
         GUID: bookGUID,
         Title: '',
-        GeneratedTextID: 0,
-        GeneratedImageID: 0,
-        LocationID: locationID,
-        CharacterID: characterID,
-        ThemeID: themeID,
-        UserID: userID,
-        PageCount: 0
+        // GeneratedTextID: null,
+        // GeneratedImageID: null,
+        LocationID: 0, // locationGUID
+        CharacterID: 0, // characterGUID
+        ThemeID: 0, // themeGUID
+        UserID: 1, // userEmail
+        // PageCount: null
     };
     initiateBookCreation(newBook);
     return bookGUID;
