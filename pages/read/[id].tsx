@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import { PagesAttributes } from "@/services/database/models/Pages";
 import Book from "@/app/components/Books/Book";
 import axios from "axios";
-import styles from "./aa.module.css";
-// import styles from "./book.module.css";
+import styles from "./id.module.css";
 import "flipping-pages/dist/style.css";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -22,26 +21,17 @@ export default function GetBookData(props: { guid: string }) {
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
 
   useEffect(() => {
-    // console.log("calling books");
     const intervalId = setInterval(async () => {
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
       });
       const data = response.data.book;
-      // console.log(
-      //   "book data",
-      //   data,
-      //   data.PageCount,
-      //   data.imageGCSLocation,
-      //   data && data.PageCount !== null && data.imageGCSLocation !== undefined
-      // );
       if (
         data &&
         data.PageCount !== null &&
         data.imageGCSLocation !== undefined &&
         data.Title !== ""
       ) {
-        // console.log("SET BOOK DATA", data);
         setBook(data);
         const coverPage = (
           <div>
@@ -57,7 +47,6 @@ export default function GetBookData(props: { guid: string }) {
         setPagesContent([coverPage]);
         setCoverPage(coverPage);
         clearInterval(intervalId);
-        // console.log("clearing book interval");
       }
     }, 1000);
 
@@ -67,14 +56,14 @@ export default function GetBookData(props: { guid: string }) {
   useEffect(() => {
     if (book === null) return; // Skip if book is null
 
-    console.log("calling pages");
+    // console.log("calling pages");
     const intervalId = setInterval(async () => {
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
         includePages: true,
       });
       const data = response.data.pages;
-      console.log("pages data", data);
+      // console.log("pages data", data);
       if (data && data.length !== 0) {
         setPages(data);
         const updatePagesContent: React.JSX.Element[] = [];
@@ -108,7 +97,7 @@ export default function GetBookData(props: { guid: string }) {
           data.length === book!.PageCount &&
           pagesConfigured === book!.PageCount
         ) {
-          console.log("clearing pages interval", data.length, book!.PageCount);
+          // console.log("clearing pages interval", data.length, book!.PageCount);
           clearInterval(intervalId);
         }
         setPagesContent(updatePagesContent);
@@ -132,49 +121,3 @@ export default function GetBookData(props: { guid: string }) {
     </>
   );
 }
-
-// const pagesContent = [
-//   <div>
-//     <img
-//       key="page1_image"
-//       src="/book_pile.png"
-//       alt="Books"
-//       className={`${styles.coverImage}`}
-//     />
-//     <p>Test Title</p>
-//   </div>,
-//   <img
-//     key="page1_image"
-//     src="/book_pile.png"
-//     alt="Books"
-//     className={`${styles.image}`}
-//   />,
-//   <p key="page1_text" className={styles.text}>
-//     More content... More content... More content... More content... More
-//     content... More content...
-//   </p>,
-//   <img
-//     key="page2_image"
-//     src="/happy_book.png"
-//     alt="Books"
-//     className={`${styles.image}`}
-//   />,
-//   <p key="page2_text" className={styles.text}>
-//     More content... More content... More content... More content... More
-//     content... More content...
-//   </p>,
-//   <img
-//     key="page3_image"
-//     src="/book_pile.png"
-//     alt="Books"
-//     className={`${styles.image}`}
-//   />,
-//   <p key="page3_text" className={styles.text}>
-//     More content... More content... More content... More content... More
-//     content... More content...
-//   </p>,
-//   <p key="back_cover" className={styles.text}>
-//     More content... More content... More content... More content... More
-//     content... More content...
-//   </p>,
-// ];
