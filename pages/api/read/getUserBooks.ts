@@ -6,11 +6,11 @@ import { getBooks } from '@/services/books';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log('read/getBook API Route Triggered');
 
-    const { userID, count, offset } = req.body;
+    const { userEmail, count, offset } = req.body;
     connectToDb();
 
     try {
-        const books = await getBooks(userID, count, offset);
+        const books = await getBooks(userEmail, count, offset);
         res.status(200).json({ bookList: books });
     } catch (err) {
         res.status(500).json({ error: err });

@@ -1,6 +1,7 @@
+import { BooksAttributes } from "../database/models/Books";
 import { Characters } from "../database/models/Characters";
 
-export async function getStoryIDs(characterID: number, locationID: number, themeID: number, styleID: number = 0): Promise<string[]> {
+export async function getStoryIDs(book: BooksAttributes, styleID: number = 0): Promise<string[]> {
     const character = characters[0]; // await Characters.getCharacter(characterID);
     const location = settings[0]; // await Locations.getLocation(locationID);
     const themeName = themes[0].name;

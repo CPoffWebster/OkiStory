@@ -5,8 +5,26 @@ import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { BooksAttributes } from "@/services/database/models/Books";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
 
-export default function BookShelf() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/auth/identifier",
+        permanent: false,
+      },
+    };
+  }
+  const userEmail = session.user!.email;
+  return {
+    props: { userEmail },
+  };
+};
+
+export default function BookShelf(props: { userEmail: string }) {
   const router = useRouter();
   const [books, setBooks] = useState<BooksAttributes[] | null>(null); // State to hold books
 
@@ -18,7 +36,7 @@ export default function BookShelf() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.post("/api/read/getUserBooks", {
-        userID: 1,
+        userEmail: props.userEmail,
         count: 3,
         offset: 0,
       });

@@ -4,10 +4,10 @@ export interface LocationsAttributes {
     id: number;
     GUID: string;
     Name: string;
-    Image: string;
     Description: string;
     GenerationDescription: string;
-    IsDefault: boolean;
+    GCSLocation?: string;
+    IsDefault?: boolean;
     UserCreatedID?: number;
 }
 
@@ -18,10 +18,10 @@ export function initLocations(sequelize: Sequelize) {
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         GUID: { type: DataTypes.STRING(255) },
         Name: { type: DataTypes.STRING(128) },
-        Image: { type: DataTypes.STRING(255) },
         Description: { type: DataTypes.TEXT },
         GenerationDescription: { type: DataTypes.TEXT },
-        IsDefault: { type: DataTypes.BOOLEAN },
+        GCSLocation: { type: DataTypes.STRING(256), allowNull: true },
+        IsDefault: { type: DataTypes.BOOLEAN, allowNull: true },
         UserCreatedID: { type: DataTypes.INTEGER, allowNull: true },
     }, {
         sequelize, modelName: 'locations', tableName: `locations`,

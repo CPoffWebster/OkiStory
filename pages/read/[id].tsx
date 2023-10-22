@@ -5,7 +5,6 @@ import { PagesAttributes } from "@/services/database/models/Pages";
 import Book from "@/app/components/Books/Book";
 import axios from "axios";
 import styles from "./id.module.css";
-import "flipping-pages/dist/style.css";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const guid = context.query.id as unknown as string; // Access 'id' directly

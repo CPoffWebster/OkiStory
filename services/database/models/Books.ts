@@ -3,13 +3,14 @@ import { DataTypes, Model, Sequelize } from 'sequelize';
 export interface BooksAttributes {
     id?: number;
     GUID: string;
-    Title: string;
+    Title?: string;
     GeneratedImageID?: number;
     GeneratedTextID?: number;
-    LocationID: number;
-    CharacterID: number;
-    ThemeID: number;
-    UserID: number;
+    LocationGUID: string;
+    CharacterGUID: string;
+    ThemeGUID: string;
+    StyleGUID: string;
+    UserEmail: string;
     PageCount?: number;
 
     // Not in database
@@ -43,7 +44,7 @@ export class Books extends Model<BooksAttributes> {
         return book ? book.get({ plain: true }) : null;
     }
 
-    static async getUserBooks(userID: number, count: number, offset: number): Promise<BooksAttributes[] | null> {
+    static async getUserBooks(userEmail: string, count: number, offset: number): Promise<BooksAttributes[] | null> {
         const books = await Books.findAll({
             limit: count,
             offset: offset,
@@ -51,7 +52,7 @@ export class Books extends Model<BooksAttributes> {
                 ['createdAt', 'DESC']
             ],
             where: {
-                UserID: userID
+                UserEmail: userEmail
             }
         });
 
@@ -66,10 +67,11 @@ export function initBooks(sequelize: Sequelize) {
         Title: { type: DataTypes.STRING(255) },
         GeneratedTextID: { type: DataTypes.INTEGER },
         GeneratedImageID: { type: DataTypes.INTEGER },
-        LocationID: { type: DataTypes.INTEGER },
-        CharacterID: { type: DataTypes.INTEGER },
-        ThemeID: { type: DataTypes.INTEGER },
-        UserID: { type: DataTypes.INTEGER },
+        LocationGUID: { type: DataTypes.STRING(255) },
+        CharacterGUID: { type: DataTypes.STRING(255) },
+        ThemeGUID: { type: DataTypes.STRING(255) },
+        StyleGUID: { type: DataTypes.STRING(255) },
+        UserEmail: { type: DataTypes.STRING(255) },
         PageCount: { type: DataTypes.INTEGER },
     }, {
         sequelize, modelName: 'books', tableName: `books`,

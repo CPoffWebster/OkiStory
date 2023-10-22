@@ -20,13 +20,13 @@ export async function createNewBook(locationGUID: string, characterGUID: string)
 
 /**
  * Get the bookshelf list of books for a user
- * @param userID 
+ * @param userEmail 
  * @param count x number of books
  * @param offset x number of books to skip
  * @returns 
  */
-export async function getBooks(userID: number, count: number, offset: number) {
-    const books = await Books.getUserBooks(userID, count, offset);
+export async function getBooks(userEmail: string, count: number, offset: number) {
+    const books = await Books.getUserBooks(userEmail, count, offset);
     if (books === null) return null;
 
     const booksWithPhotoLocation = await Promise.all(

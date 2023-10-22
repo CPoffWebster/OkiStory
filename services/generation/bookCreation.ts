@@ -29,14 +29,11 @@ export async function initializeBookCreation(locationGUID: string, characterGUID
     const bookGUID = uuidv4();
     const newBook: BooksAttributes = {
         GUID: bookGUID,
-        Title: '',
-        // GeneratedTextID: null,
-        // GeneratedImageID: null,
-        LocationID: 0, // locationGUID
-        CharacterID: 0, // characterGUID
-        ThemeID: 0, // themeGUID
-        UserID: 1, // userEmail
-        // PageCount: null
+        LocationGUID: locationGUID,
+        CharacterGUID: characterGUID,
+        ThemeGUID: themeGUID,
+        StyleGUID: '0',
+        UserEmail: userEmail
     };
     initiateBookCreation(newBook);
     return bookGUID;
@@ -64,7 +61,7 @@ async function createInRealTime(newBook: BooksAttributes) {
 
     // Create the text generation record
     const model = process.env.TEXT_GENERATION_MODEL || 'test'
-    const [character, location, themeName, themeDesc, style] = await getStoryIDs(newBook.CharacterID, newBook.LocationID, newBook.ThemeID);
+    const [character, location, themeName, themeDesc, style] = await getStoryIDs(newBook);
     const prompt = await bookPrompt(character, location, themeName, themeDesc);
     const generation: TextGenerationsAttributes = {
         Company: 'OpenAI',

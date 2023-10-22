@@ -7,7 +7,6 @@ import { Selections } from "@/app/components/Selections/Selections";
 import styles from "./story.module.css";
 import axios from "axios";
 import { getSession } from "next-auth/react";
-import { Session } from "next-auth";
 
 export interface StoryElement extends CharactersAttributes {}
 
