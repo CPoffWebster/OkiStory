@@ -5,7 +5,7 @@ import { Locations } from "../database/models/Locations";
 
 export async function getStoryIDs(book: BooksAttributes, styleID: number = 0): Promise<string[]> {
     const db = connectToDb();
-    const tran = await db.transaction();
+    // const tran = await db.transaction();
 
     const dbChar = await Characters.getCharacter(book.CharacterGUID);
     const dbLoc = await Locations.getLocation(book.LocationGUID);
@@ -37,19 +37,11 @@ export function bookPrompt(character: string, location: string, theme: string): 
     These descriptions should be crafted to suit hand-drawn, simple designs appropriate for picture books.
     Consistency is key: ensure that the characters and settings maintain a uniform style throughout the story, both in textual description and in the envisioned artwork.
     
+    
     The output should strictly follow this structure:
-    {
-        "title": string,
-        "titleImageDescription": string,
-        "pageCount": number,
-        "pages": [
-            {
-                "pageNumber": number,
-                "text": string,
-                "imageDescription": string
-            }
-        ]
-    }
+    { "title": string, "titleImageDescription": string, "pageCount": number, "pages": [ { "pageNumber": number, "text": string, "imageDescription": string } ] }
+    
+    Important!: pageCount value should be between 5-10. There should be x pages in the pages list where x is equal to pageCount.
     
     Given the directions above, create a story with the following parameters:
     Character: ${character}

@@ -79,10 +79,10 @@ const defaultLocations: LocationsAttributes[] = [
     },
     {
         GUID: '7133c535-39bd-4a8d-aa4d-c4c5863418c1',
-        Name: 'Dessert',
-        Description: 'Dessert',
+        Name: 'Desert',
+        Description: 'Desert',
         GenerationDescription: 'The desert landscape showcases tall sand dunes. There\'s an oasis with palm trees and a pond, providing a hint of life in the vast expanse.',
-        GCSLocation: 'default/default_dessert.png',
+        GCSLocation: 'default/default_desert.png',
         IsDefault: true
     }
     // ...more locations

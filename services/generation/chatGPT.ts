@@ -49,6 +49,7 @@ export async function generateText(prompt: string, model: string, generation: Te
             }
 
             endTime = performance.now();
+            // return generatedText;
             await updateGeneratedTextRecord(prompt, generation, generatedText, endTime - startTime);
         } catch (error) {
             console.log('error:', error);
