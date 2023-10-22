@@ -1,15 +1,17 @@
 import { GetServerSideProps } from "next";
-import { getAllDefaultLocations } from "@/services/storyElements";
 import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
 import { CharactersAttributes } from "@/services/database/models/Characters";
 import styles from "./story.module.css";
 import { Selections } from "@/app/components/Selections/Selections";
+import { Locations } from "@/services/database/models/Locations";
+import { connectToDb } from "@/services/database/database";
 
 export interface StoryElement extends CharactersAttributes {}
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const themes = await getAllDefaultLocations();
+  connectToDb();
+  let themes = await Locations.getDefaultLocations();
   return {
     props: { themes },
   };

@@ -8,6 +8,7 @@ import { initCharacters } from './models/Characters';
 import { initLocations } from './models/Locations';
 import { initTextGenerations } from './models/TextGenerations';
 import { initImageGenerations } from './models/ImageGenerations';
+import { seedDefaultCharacters, seedDefaultLocations } from './seedInstaller';
 
 
 type ReadingAlphaTables = ReturnType<typeof initializeTables>;
@@ -76,6 +77,10 @@ export class ReadingAlphaDB {
     //     // await this.createTables();
     // }
 
+    /**
+     * Update the database schema to match the models.
+     * @param options if dev is false, the entire database will be dropped and recreated.  If dev is true, the database will be altered.
+     */
     public async createTables(options: { useDev?: boolean } = {}) {
         const syncOptions: SyncOptions = (options.useDev === true)
             ? ({ alter: true, force: true })  //  Force if dev
@@ -90,6 +95,24 @@ export class ReadingAlphaDB {
         await this.tables.Locations.sync(syncOptions)
         await this.tables.TextGenerations.sync(syncOptions)
         await this.tables.ImageGenerations.sync(syncOptions)
+    }
+
+    /**
+     * Seed the database with default data.
+     */
+    public async seedData() {
+        const transaction = await this.sequelize.transaction();
+
+        try {
+            await seedDefaultCharacters(transaction);
+            await seedDefaultLocations(transaction);
+            // Call other seeding functions like seedDefaultLocations(transaction);
+
+            await transaction.commit();
+        } catch (error) {
+            await transaction.rollback();
+            throw error;
+        }
     }
 }
 

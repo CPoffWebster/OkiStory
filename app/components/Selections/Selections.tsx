@@ -30,7 +30,7 @@ export const Selections: React.FC<SelectionsProps> = ({
             ]}`}
           >
             <img
-              src={`/api/images/getImage?filename=${element.Image}&imageType=${elementType}`}
+              src={`/api/images/getImage?filename=${element.GCSLocation}&imageType=${elementType}`}
               className={styles["selection-image"]}
               alt={element.Name}
             />

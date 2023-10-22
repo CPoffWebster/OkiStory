@@ -1,12 +1,15 @@
 import { GetServerSideProps } from "next";
-import { getAllDefaultCharacters } from "@/services/storyElements";
 import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
-import { CharactersAttributes } from "@/services/database/models/Characters";
+import {
+  Characters,
+  CharactersAttributes,
+} from "@/services/database/models/Characters";
 import { Selections } from "@/app/components/Selections/Selections";
 import styles from "./story.module.css";
 import axios from "axios";
 import { getSession } from "next-auth/react";
+import { connectToDb } from "@/services/database/database";
 
 export interface StoryElement extends CharactersAttributes {}
 
@@ -21,7 +24,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   const userEmail = session.user!.email;
-  const heroes = await getAllDefaultCharacters();
+
+  connectToDb();
+  let heroes = await Characters.getDefaultCharacters();
   return {
     props: { userEmail, heroes },
   };

@@ -1,7 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface CharactersAttributes {
-    id: number;
+    id?: number;
     GUID: string;
     Name: string;
     Description: string;
@@ -9,11 +9,30 @@ export interface CharactersAttributes {
     GCSLocation?: string;
     IsDefault?: boolean;
     UserCreatedID?: number;
+
+    // timestamps
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export class Characters extends Model<CharactersAttributes> {
     static async getCharacter(id: number) {
         return await Characters.findOne({ where: { id: id } });
+    }
+
+    static async getDefaultCharacters() {
+        const characters = await Characters.findAll({
+            where: {
+                IsDefault: true
+            }
+        });
+
+        return characters ? characters.map(character => {
+            const char = character.get({ plain: true })
+            char.createdAt = char.createdAt?.toString();
+            char.updatedAt = char.updatedAt?.toString();
+            return char;
+        }) : null;
     }
 }
 

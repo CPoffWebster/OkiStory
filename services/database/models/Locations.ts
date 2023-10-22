@@ -1,7 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export interface LocationsAttributes {
-    id: number;
+    id?: number;
     GUID: string;
     Name: string;
     Description: string;
@@ -9,9 +9,29 @@ export interface LocationsAttributes {
     GCSLocation?: string;
     IsDefault?: boolean;
     UserCreatedID?: number;
+
+    // timestamps
+    createdAt?: string;
+    updatedAt?: string;
 }
 
-export class Locations extends Model<LocationsAttributes> { }
+export class Locations extends Model<LocationsAttributes> {
+
+    static async getDefaultLocations() {
+        const locations = await Locations.findAll({
+            where: {
+                IsDefault: true
+            }
+        });
+
+        return locations ? locations.map(location => {
+            const loc = location.get({ plain: true })
+            loc.createdAt = loc.createdAt?.toString();
+            loc.updatedAt = loc.updatedAt?.toString();
+            return loc;
+        }) : null;
+    }
+}
 
 export function initLocations(sequelize: Sequelize) {
     Locations.init({
