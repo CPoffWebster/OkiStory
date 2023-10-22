@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
+import { serializeTableObject } from '../modelSerialize';
 
 export interface ImageGenerationsAttributes {
     id?: number;
@@ -15,7 +16,7 @@ export class ImageGenerations extends Model<ImageGenerationsAttributes> {
 
     static async createGeneration(imageGeneration: ImageGenerationsAttributes) {
         const imageGenerationInstance = await ImageGenerations.create(imageGeneration);
-        return imageGenerationInstance.get({ plain: true });
+        return serializeTableObject(imageGenerationInstance);
     }
 
     static async updateGeneration(imageGeneration: ImageGenerationsAttributes) {
@@ -31,7 +32,7 @@ export class ImageGenerations extends Model<ImageGenerationsAttributes> {
 
     static async getGeneration(id: number): Promise<ImageGenerationsAttributes | null> {
         const imageGeneration = await ImageGenerations.findByPk(id);
-        return imageGeneration ? imageGeneration.get({ plain: true }) : null;
+        return imageGeneration ? serializeTableObject(imageGeneration) : null;
     }
 }
 

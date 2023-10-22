@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
+import { serializeTableObject } from '../modelSerialize';
 
 export interface LocationsAttributes {
     id?: number;
@@ -17,6 +18,11 @@ export interface LocationsAttributes {
 
 export class Locations extends Model<LocationsAttributes> {
 
+    static async getLocation(guid: string) {
+        const location = await Locations.findOne({ where: { GUID: guid } });
+        return location ? serializeTableObject(location) : null;
+    }
+
     static async getDefaultLocations() {
         const locations = await Locations.findAll({
             where: {
@@ -24,12 +30,7 @@ export class Locations extends Model<LocationsAttributes> {
             }
         });
 
-        return locations ? locations.map(location => {
-            const loc = location.get({ plain: true })
-            loc.createdAt = loc.createdAt?.toString();
-            loc.updatedAt = loc.updatedAt?.toString();
-            return loc;
-        }) : null;
+        return locations ? locations.map(location => serializeTableObject(location)) : null;
     }
 }
 

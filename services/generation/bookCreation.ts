@@ -61,8 +61,8 @@ async function createInRealTime(newBook: BooksAttributes) {
 
     // Create the text generation record
     const model = process.env.TEXT_GENERATION_MODEL || 'test'
-    const [character, location, themeName, themeDesc, style] = await getStoryIDs(newBook);
-    const prompt = await bookPrompt(character, location, themeName, themeDesc);
+    const [character, location, theme, style] = await getStoryIDs(newBook);
+    const prompt = bookPrompt(character, location, theme);
     const generation: TextGenerationsAttributes = {
         Company: 'OpenAI',
         Model: model,

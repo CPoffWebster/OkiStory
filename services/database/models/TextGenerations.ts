@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
+import { serializeTableObject } from '../modelSerialize';
 
 export interface TextGenerationsAttributes {
     id?: number;
@@ -15,7 +16,7 @@ export class TextGenerations extends Model<TextGenerationsAttributes> {
 
     static async createGeneration(textGeneration: TextGenerationsAttributes) {
         const textGenerationInstance = await TextGenerations.create(textGeneration);
-        return textGenerationInstance.get({ plain: true });
+        return serializeTableObject(textGenerationInstance);
     }
 
     static async updateGeneration(textGeneration: TextGenerationsAttributes) {

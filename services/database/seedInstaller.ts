@@ -1,4 +1,4 @@
-import { Transaction, Sequelize } from 'sequelize';
+import { Transaction } from 'sequelize';
 import { Characters, CharactersAttributes } from "./models/Characters";
 import { Locations, LocationsAttributes } from "./models/Locations";
 
@@ -31,9 +31,6 @@ export const seedDefaultLocations = async (transaction: Transaction) => {
         }
     }
 };
-
-
-// Illustration of a [_____] for children\'s books. 
 
 const defaultCharacters: CharactersAttributes[] = [
     {

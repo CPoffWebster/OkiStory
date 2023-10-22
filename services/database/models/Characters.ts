@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
+import { serializeTableObject } from '../modelSerialize';
 
 export interface CharactersAttributes {
     id?: number;
@@ -16,8 +17,9 @@ export interface CharactersAttributes {
 }
 
 export class Characters extends Model<CharactersAttributes> {
-    static async getCharacter(id: number) {
-        return await Characters.findOne({ where: { id: id } });
+    static async getCharacter(guid: string) {
+        const character = await Characters.findOne({ where: { GUID: guid } });
+        return character ? serializeTableObject(character) : null;
     }
 
     static async getDefaultCharacters() {
@@ -27,12 +29,7 @@ export class Characters extends Model<CharactersAttributes> {
             }
         });
 
-        return characters ? characters.map(character => {
-            const char = character.get({ plain: true })
-            char.createdAt = char.createdAt?.toString();
-            char.updatedAt = char.updatedAt?.toString();
-            return char;
-        }) : null;
+        return characters ? characters.map(character => serializeTableObject(character)) : null;
     }
 }
 

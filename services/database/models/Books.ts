@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
+import { serializeTableObject } from '../modelSerialize';
 
 export interface BooksAttributes {
     id?: number;
@@ -21,7 +22,7 @@ export class Books extends Model<BooksAttributes> {
 
     static async createBook(book: BooksAttributes) {
         const newBook = await Books.create(book);
-        return newBook.get({ plain: true });
+        return serializeTableObject(newBook)
     }
 
     static async updateBook(book: BooksAttributes) {
@@ -41,7 +42,7 @@ export class Books extends Model<BooksAttributes> {
                 GUID: guid
             }
         });
-        return book ? book.get({ plain: true }) : null;
+        return book ? serializeTableObject(book) : null;
     }
 
     static async getUserBooks(userEmail: string, count: number, offset: number): Promise<BooksAttributes[] | null> {
@@ -56,7 +57,7 @@ export class Books extends Model<BooksAttributes> {
             }
         });
 
-        return books ? books.map(book => book.get({ plain: true })) : null;
+        return books ? books.map(book => serializeTableObject(book)) : null;
     }
 }
 

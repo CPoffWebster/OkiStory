@@ -1,24 +1,29 @@
+import { connectToDb } from "../database/database";
 import { BooksAttributes } from "../database/models/Books";
 import { Characters } from "../database/models/Characters";
+import { Locations } from "../database/models/Locations";
 
 export async function getStoryIDs(book: BooksAttributes, styleID: number = 0): Promise<string[]> {
-    const character = characters[0]; // await Characters.getCharacter(characterID);
-    const location = settings[0]; // await Locations.getLocation(locationID);
-    const themeName = themes[0].name;
-    const themeDesc = themes[0].desc;
-    const style = styles[0];
-    // styleID: number
-    return [character, location, themeName, themeDesc, style]
+    const db = connectToDb();
+    const tran = await db.transaction();
+
+    const dbChar = await Characters.getCharacter(book.CharacterGUID);
+    const dbLoc = await Locations.getLocation(book.LocationGUID);
+    const character = `${dbChar.Name} (Description: ${dbChar.GenerationDescription})`;
+    const location = `${dbLoc.Name} (Description: ${dbLoc.GenerationDescription})`;
+    const theme = `${themes[0].name} (Description: ${themes[0].desc})`;
+    const style = styles[styleID];
+    return [character, location, theme, style]
 }
 
 /**
  * Create a book prompt that is used to generate a book
- * @param characterID 
- * @param locationID 
- * @param themeID 
+ * @param character 
+ * @param location 
+ * @param theme 
  * @returns book prompt string
  */
-export async function bookPrompt(character: string, location: string, themeName: string, themeDesc: string): Promise<string> {
+export function bookPrompt(character: string, location: string, theme: string): string {
     return `You are a seasoned writer specializing in children's books that captivate young minds and hearts.
     Your stories are not only engaging but also memorable, staying with children for a lifetime.
     You have a unique talent for describing art in picture books in such a way that an AI could easily generate those images.
@@ -49,8 +54,7 @@ export async function bookPrompt(character: string, location: string, themeName:
     Given the directions above, create a story with the following parameters:
     Character: ${character}
     Setting: ${location}
-    ThemeName: ${themeName}}
-    themeDesc: ${themeDesc}
+    Theme: ${theme}
     `;
 }
 
@@ -69,7 +73,7 @@ export function imagePrompt(imageDescription: string, character: string, locatio
 const childrenAge = 5;
 
 const styles = [
-    'Childrens book drawing'
+    'Illustration for children\'s books.'
 ]
 
 const characters = [

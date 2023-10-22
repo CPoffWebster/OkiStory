@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
+import { serializeTableObject } from '../modelSerialize';
 
 export interface PagesAttributes {
     id?: number;
@@ -30,7 +31,7 @@ export class Pages extends Model<PagesAttributes> {
             }
         });
 
-        return pages ? pages.map(page => page.get({ plain: true })) : null;
+        return pages ? pages.map(page => serializeTableObject(page)) : null;
     }
 }
 
