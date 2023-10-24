@@ -21,7 +21,7 @@ class generatedTextPage {
     imageDescription!: string;
 }
 
-const propertyParsingNames = ['title', 'titleImageDescription', 'character', 'setting', 'theme', 'pageCount', 'pages'];
+const propertyParsingNames = ['title', 'titleImageDescription', 'pageCount'];
 const propertyParsingListNames = ['pageNumber', 'text', 'imageDescription'];
 
 export async function initializeBookCreation(locationGUID: string, characterGUID: string, themeGUID: string, userEmail: string) {
@@ -76,8 +76,9 @@ async function createInRealTime(newBook: BooksAttributes) {
     const handleTextGenerated = (newText: string) => {
         generatedText = newText.replace(/\n/g, '').replace(/\\/g, '').replace(/\\\\/g, '').substring(textIndex);
 
-        if (generatedText === ']') {
-            textGenerationEmitter.off('textGenerated', handleTextGenerated); // Stop listening
+        // Stop listening
+        if (generatedText.includes(']')) {
+            textGenerationEmitter.off('textGenerated', handleTextGenerated);
             return;
         }
 
@@ -151,6 +152,7 @@ function createBookInRealTime(generatedText: string, keyValueMap: Map<string, st
 function createPagesInRealTime(generatedText: string, pageList: generatedTextPage[], textIndex: number, currentPageIndex: number
 ): [generatedTextPage[], number, number] {
 
+    // ', { "pageNumber": 5, "text": "Even though it was fun, the pig promised himself he would return for another adventure and explore more about the vast desert.", "imageDescription": "The pig wistfully looking back at the oasis as he walks away. His new friends wave goodbye to him from the pond." },'
     // Get the keys and values for each page
     if (generatedText.includes(`}`)) {
         for (const key of propertyParsingListNames) {
@@ -174,27 +176,40 @@ function createPagesInRealTime(generatedText: string, pageList: generatedTextPag
  * @param generatedText 
  * @returns value of the key
  */
+// function parseJsonKey(key: string, generatedText: string): [string | number, number] | null {
+//     const pattern = `"${key}":`;
+//     const startIdx = generatedText.indexOf(pattern);
+
+//     if (startIdx === -1) return null;
+
+//     let endIdx, value;
+//     const valueStartIdx = startIdx + pattern.length;
+
+//     if (generatedText.charAt(valueStartIdx) === '"') {
+//         // String value
+//         endIdx = generatedText.indexOf('"', valueStartIdx + 1);
+//         value = generatedText.substring(valueStartIdx + 1, endIdx);
+//     } else {
+//         // Numeric or otherwise
+//         endIdx = generatedText.indexOf(',', valueStartIdx);
+//         value = generatedText.substring(valueStartIdx, endIdx);
+//     }
+
+//     return [value, endIdx];
+// }
 function parseJsonKey(key: string, generatedText: string): [string | number, number] | null {
-    const pattern = `"${key}":`;
-    const startIdx = generatedText.indexOf(pattern);
+    const regexPattern = new RegExp(`"${key}":\\s*("[^"]*"|\\d+)`);
+    const match = generatedText.match(regexPattern);
 
-    if (startIdx === -1) return null;
+    if (!match) return null;
 
-    let endIdx, value;
-    const valueStartIdx = startIdx + pattern.length;
+    const value = match[1];
+    const endIdx = match.index! + match[0].length;
 
-    if (generatedText.charAt(valueStartIdx) === '"') {
-        // String value
-        endIdx = generatedText.indexOf('"', valueStartIdx + 1);
-        value = generatedText.substring(valueStartIdx + 1, endIdx);
-    } else {
-        // Numeric or otherwise
-        endIdx = generatedText.indexOf(',', valueStartIdx);
-        value = generatedText.substring(valueStartIdx, endIdx);
-    }
-
-    return [value, endIdx];
+    // Remove quotes if it's a string
+    return [value.startsWith('"') ? value.slice(1, -1) : Number(value), endIdx];
 }
+
 
 
 /**
