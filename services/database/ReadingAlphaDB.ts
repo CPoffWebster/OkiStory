@@ -95,6 +95,8 @@ export class ReadingAlphaDB {
         await this.tables.Locations.sync(syncOptions)
         await this.tables.TextGenerations.sync(syncOptions)
         await this.tables.ImageGenerations.sync(syncOptions)
+
+        await this.seedData();
     }
 
     /**
