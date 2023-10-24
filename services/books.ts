@@ -1,22 +1,6 @@
-import { exampleBook, examplePages } from "@/static-examples/exampleBook";
 import { Books, BooksAttributes } from "./database/models/Books";
 import { ImageGenerations } from "./database/models/ImageGenerations";
-import { booksBucket, getStorage } from "./storage";
 import { Pages, PagesAttributes } from "./database/models/Pages";
-
-/**
- * Create a new book using data from the BookCreation workflow
- * @param dataForBookCreation data from the BookCreation workflow
- * @returns created book data
- */
-export async function createNewBook(locationGUID: string, characterGUID: string): Promise<BooksAttributes> {
-    // console.log(`createNewBook: locationGUID: ${locationGUID}, characterGUID: ${characterGUID}`)
-
-    // Mimic delay
-    await new Promise((res) => setTimeout(res, 3000));
-
-    return exampleBook;
-};
 
 /**
  * Get the bookshelf list of books for a user
