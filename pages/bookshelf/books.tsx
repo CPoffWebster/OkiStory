@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import styles from "./books.module.css";
 import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
@@ -7,6 +6,7 @@ import axios from "axios";
 import { BooksAttributes } from "@/services/database/models/Books";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
+import Image from "next/image";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -71,11 +71,15 @@ export default function BookShelf(props: { userEmail: string }) {
                   "clickable-container-large",
                 ]}`}
               >
-                <img
-                  src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
-                  alt="Book cover"
-                  loading="lazy"
-                />
+                <div className={styles["cover-image"]}>
+                  <Image
+                    src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
+                    layout="fill"
+                    objectFit="contain"
+                    priority={true}
+                    alt={"Book cover"}
+                  />
+                </div>
               </div>
               <span className={styles["section-name"]}>
                 {book.Title} {book.id}

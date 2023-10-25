@@ -1,8 +1,9 @@
 import { GetServerSideProps } from "next";
 import { settingsIcon } from "@/data/icons";
+import { getSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./homepage.module.css";
-import { getSession } from "next-auth/react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -33,7 +34,15 @@ export default function HomePage() {
       <div className={styles["main-content"]}>
         {/* Left Section */}
         <div className={styles.section}>
-          <img src="/book_pile.png" alt="Books" />
+          <div className={styles.sectionImage}>
+            <Image
+              src="/book_pile.png"
+              layout="fill"
+              objectFit="contain"
+              priority={true}
+              alt={"Bookshelf"}
+            ></Image>
+          </div>
           <Link href="/bookshelf/books">
             <button
               className={`${styles.button} ${styles["button-left"]} ${[
@@ -47,7 +56,15 @@ export default function HomePage() {
 
         {/* Right Section */}
         <div className={styles.section}>
-          <img src="/happy_book.png" alt="Open Book" />
+          <div className={styles.sectionImage}>
+            <Image
+              src="/happy_book.png"
+              layout="fill"
+              objectFit="contain"
+              priority={true}
+              alt={"Create"}
+            ></Image>
+          </div>
           <Link href="/create/theme">
             <button
               className={`${styles.button} ${styles["button-right"]} ${[

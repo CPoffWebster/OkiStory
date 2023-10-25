@@ -23,6 +23,7 @@
   .selection-image {
     width: 20vw;
     height: 20vw;
+    position: relative;
   }
 
   .section-name {

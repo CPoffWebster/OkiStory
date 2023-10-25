@@ -43,3 +43,9 @@
     border: 1px solid #ccc;
   }
   
+  .cover-image {
+    width: 20vw;
+    height: 20vw;
+    position: relative;
+  }
+  

@@ -1,11 +1,25 @@
-.coverImage {
-    width: 50%;
-    height: 50%;
-    object-fit: cover;
+
+.title {
+  font-size: 2vw;
+  font-weight: bold;
+  text-align: center;
+  margin-top: -5vw;
 }
 
-.image {
-  width: 90%;
-  height: 90%;
-  object-fit: cover;
+.coverImage {
+  width: 32vw;
+  height: 32vw;
+  position: relative;
+}
+
+.pageText {
+  font-size: 2vw;
+  margin-left: 3vw;
+  margin-right: 3vw;
+}
+
+.pageImage {
+  width: 42vw;
+  height: 42vw;
+  position: relative;
 }

@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import { PagesAttributes } from "@/services/database/models/Pages";
 import Book from "@/app/components/Books/Book";
+import Image from "next/image";
 import axios from "axios";
 import styles from "./id.module.css";
 
@@ -34,13 +35,16 @@ export default function GetBookData(props: { guid: string }) {
         setBook(data);
         const coverPage = (
           <div>
-            <p>{data.Title}</p>
-            <img
-              key="page1_image"
-              src={`/api/images/getImage?filename=${data.imageGCSLocation}&imageType=book`}
-              alt="Books"
-              className={`${styles.coverImage}`}
-            />
+            <h1 className={styles.title}>{data.Title}</h1>
+            <div className={styles["coverImage"]}>
+              <Image
+                src={`/api/images/getImage?filename=${data.imageGCSLocation}&imageType=book`}
+                layout="fill"
+                objectFit="contain"
+                priority={true}
+                alt={"Cover"}
+              />
+            </div>
           </div>
         );
         setPagesContent([coverPage]);
@@ -76,17 +80,20 @@ export default function GetBookData(props: { guid: string }) {
           ) {
             pagesConfigured++;
             const newImageContent = (
-              <img
-                key="page1_image"
-                src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
-                alt="Books"
-                className={`${styles.image}`}
-              />
+              <div className={styles["pageImage"]}>
+                <Image
+                  src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
+                  layout="fill"
+                  objectFit="contain"
+                  priority={true}
+                  alt={"PageImage"}
+                />
+              </div>
             );
             const newTextContent = (
-              <p key="page1_text" className={styles.text}>
-                {data[i].Text}
-              </p>
+              <div className={styles.pageText}>
+                <p key="PageText">{data[i].Text}</p>
+              </div>
             );
             updatePagesContent.push(newImageContent);
             updatePagesContent.push(newTextContent);

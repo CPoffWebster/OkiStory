@@ -1,6 +1,7 @@
 import { CharactersAttributes } from "@/services/database/models/Characters";
-import styles from "./Selections.module.css";
 import { setSessionStorage } from "@/services/session";
+import Image from "next/image";
+import styles from "./Selections.module.css";
 
 export interface StoryElement extends CharactersAttributes {}
 
@@ -29,11 +30,15 @@ export const Selections: React.FC<SelectionsProps> = ({
               "clickable-container-large",
             ]}`}
           >
-            <img
-              src={`/api/images/getImage?filename=${element.GCSLocation}&imageType=${elementType}`}
-              className={styles["selection-image"]}
-              alt={element.Name}
-            />
+            <div className={styles["selection-image"]}>
+              <Image
+                src={`/api/images/getImage?filename=${element.GCSLocation}&imageType=${elementType}`}
+                layout="fill"
+                objectFit="contain"
+                priority={true}
+                alt={"selection-image"}
+              />
+            </div>
           </div>
           <span className={styles["section-name"]}>{element.Name}</span>
         </span>
