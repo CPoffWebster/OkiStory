@@ -7,10 +7,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         res.status(401).json({ message: 'Invalid key' });
         return;
     }
+    const useDev = req.body.useDev || false;
     console.log('Initializing tables starting...');
     try {
         const db = connectToDb();
-        db.createTables({ useDev: false });
+        db.createTables({ useDev: useDev });
         res.status(200).json({ message: 'Initialize tables success' });
     } catch (error) {
         console.error('Unable to initialize tables:', error);
