@@ -1,16 +1,20 @@
-// utils/withAuth.ts
-
 import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import authOptions from "../pages/api/auth/[...nextauth]";
 
-export const withAuth =
-    (handler: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
-        // console.log('THIS IS A MUST TODO - withAuth.ts 1');
-        // const session = await getSession({ req });
-        // console.log('THIS IS A MUST TODO - withAuth.ts 2');
-        // if (!session) {
-        //     res.status(401).json({ error: "Unauthorized" });
-        //     return;
-        // }
+export const withAuth = (handler: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+        const session = await getServerSession(req, res, authOptions);
+        console.log('Session:', session);
+
+        if (!session) {
+            res.status(401).json({ error: "Unauthorized" });
+            return;
+        }
+
         return handler(req, res);
-    };
+    } catch (error) {
+        console.error('Authentication error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};

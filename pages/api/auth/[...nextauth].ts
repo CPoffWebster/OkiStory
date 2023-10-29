@@ -7,27 +7,38 @@ import { verifyUserLogin, verifyUserProvider } from "@/services/users";
 const authOptions: AuthOptions = {
   secret: process.env.NEXT_AUTH_SECRET!,
   providers: [
-    CredentialsProvider({
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
-      },
-      async authorize(credentials: Record<"email" | "password", string> | undefined) {
-        const result = await verifyUserLogin(credentials!.email, credentials!.password);
+    // CredentialsProvider({
+    //   credentials: {
+    //     email: { label: "Email", type: "text" },
+    //     password: { label: "Password", type: "password" }
+    //   },
+    //   async authorize(credentials: Record<"email" | "password", string> | undefined) {
+    //     const result = await verifyUserLogin(credentials!.email, credentials!.password);
 
-        if (!result) {
-          return null;
-        }
+    //     if (!result) {
+    //       return null;
+    //     }
 
-        return {
-          id: credentials!.email
-        };
-      }
-    }),
+    //     return {
+    //       id: credentials!.email
+    //     };
+    //   }
+    // }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID!,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    // }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
+    })
     // FacebookProvider({
     //   clientId: process.env.FACEBOOK_CLIENT_ID!,
     //   clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
@@ -39,11 +50,11 @@ const authOptions: AuthOptions = {
     error: '/auth/identifier',
   },
   callbacks: {
-    async signIn({ profile, credentials }) {
+    async signIn({ account, profile, credentials }) {
       try {
-        if (!profile && credentials) {
-          return await verifyUserLogin(credentials.email.toString(), credentials.password.toString());
-        }
+        // if (!profile && credentials) {
+        //   return await verifyUserLogin(credentials.email.toString(), credentials.password.toString());
+        // }
         await verifyUserProvider(profile);
         return true;
       } catch (error) {

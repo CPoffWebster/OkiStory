@@ -1,26 +1,12 @@
-import { GetServerSideProps } from "next";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { settingsIcon } from "@/data/icons";
-import { getSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./homepage.module.css";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/auth/identifier",
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: { session },
-  };
-};
-
 export default function HomePage() {
+  const { data: session } = useSession();
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -28,7 +14,19 @@ export default function HomePage() {
           {settingsIcon}
         </span>
         <h1 className={styles.title}>Oki Story</h1>
-        <div></div> {/* Empty div for layout balance */}
+        {/* <div></div> Empty div for layout balance */}
+        {!session && (
+          <>
+            Not signed in <br />
+            <button onClick={() => signIn()}>Sign in</button>
+          </>
+        )}
+        {session && (
+          <>
+            Signed in as {session.user!.email} <br />
+            <button onClick={() => signOut()}>Sign out</button>
+          </>
+        )}
       </div>
 
       <div className={styles["main-content"]}>
