@@ -85,7 +85,7 @@ export async function verifyUserProvider(profile: Profile | any) {
         if (user.Password === null && user.Provider === iss) {
             console.log(`Email: "${email}" found under provider: "${iss}".`);
             await db.tables.Users.update({ LastLogin: new Date() }, { where: { Email: email } });
-            return true;
+            return user;
         } else {
             throw new Error(`Email: "${email}" found under provider: "${iss}".`);
         }
@@ -101,6 +101,6 @@ export async function verifyUserProvider(profile: Profile | any) {
             VerifiedEmail: email_verified,
             Language: locale,
         });
-        return true;
+        return user;
     }
 }

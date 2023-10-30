@@ -3,9 +3,12 @@ import { settingsIcon } from "@/data/icons";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./homepage.module.css";
+import { Button } from "@/app/Button";
+import "../styles/globals.css";
 
 export default function HomePage() {
-  const { data: session } = useSession();
+  const session = useSession();
+  const isLoggedIn = !!session.data;
 
   return (
     <div className={styles.container}>
@@ -15,18 +18,57 @@ export default function HomePage() {
         </span>
         <h1 className={styles.title}>Oki Story</h1>
         {/* <div></div> Empty div for layout balance */}
-        {!session && (
+        {/* {isLoggedIn && (
           <>
             Not signed in <br />
             <button onClick={() => signIn()}>Sign in</button>
           </>
         )}
-        {session && (
+        {!isLoggedIn && (
           <>
             Signed in as {session.user!.email} <br />
             <button onClick={() => signOut()}>Sign out</button>
           </>
-        )}
+        )} */}
+        <ul className="flex gap-4">
+          {isLoggedIn && (
+            <>
+              {/* <div className="flex items-center">
+                Credits remaining {credits.data}
+              </div>
+              <li>
+                <Button
+                onClick={() => {
+                  buyCredits().catch(console.error);
+                }}
+                >
+                  Buy Credits
+                </Button>
+              </li> */}
+              <li>
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    signOut().catch(console.error);
+                  }}
+                >
+                  Logout
+                </Button>
+              </li>
+            </>
+          )}
+          {!isLoggedIn && (
+            <li>
+              <Button
+                onClick={() => {
+                  signIn().catch(console.error);
+                }}
+              >
+                Login
+              </Button>
+            </li>
+          )}
+        </ul>
       </div>
 
       <div className={styles["main-content"]}>
