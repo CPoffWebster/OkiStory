@@ -1,3 +1,4 @@
+import { connectToDb } from "./database/database";
 import { Books, BooksAttributes } from "./database/models/Books";
 import { ImageGenerations } from "./database/models/ImageGenerations";
 import { Pages, PagesAttributes } from "./database/models/Pages";
@@ -10,6 +11,7 @@ import { Pages, PagesAttributes } from "./database/models/Pages";
  * @returns 
  */
 export async function getBooks(userEmail: string, count: number, offset: number) {
+    connectToDb();
     const books = await Books.getUserBooks(userEmail, count, offset);
     if (books === null) return null;
 
