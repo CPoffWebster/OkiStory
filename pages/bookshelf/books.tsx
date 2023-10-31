@@ -4,67 +4,33 @@ import { arrowLeftIcon, arrowRightIcon } from "@/data/icons";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { BooksAttributes } from "@/services/database/models/Books";
-import { GetServerSideProps } from "next";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { getBooks } from "@/services/books";
-import { headers } from "next/headers";
 
 const numberOfBooks = 3;
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const session = await getSession(context);
-//   const userEmail =
-//     session && session.user ? (session.user.email as string) : "";
-
-//   // const booksBatch = await getBooks(userEmail, numberOfBooks, 0);
-//   const booksBatch = await axios
-//     .post("/api/read/getUserBooks", {
-//       count: numberOfBooks,
-//       offset: 0,
-//     })
-//     .then((res) => res.data.bookList);
-//   // console.log("LOOK HERE FOR BOOKS", booksBatch);
-//   return {
-//     props: { userEmail, booksBatch },
-//   };
-// };
 
 export default function BookShelf() {
   const router = useRouter();
   const session = useSession();
-  console.log("Frontend session:", session);
   const [skipBooks, setSkipBooks] = useState<number>(0); // [0, 3, 6, 9, 12, 15, 18, 21, 24, 27
   const [books, setBooks] = useState<BooksAttributes[] | null>(null);
+  const [totalUserBooks, setTotalUserBooks] = useState<number>(0);
 
-  // const handleBack = (): void => {
-  //   router.push("/");
-  //   return;
-  // };
-
-  // const handleSelectElement = (book: BooksAttributes): void => {
-  //   router.push(`/read/${book.GUID}`);
-  // };
+  // Get books from database
+  const getBooks = async (offset: number) => {
+    const booksBatch = await axios.post("/api/read/getUserBooks", {
+      userEmail: session.data?.user!.email,
+      count: numberOfBooks,
+      offset: offset,
+    });
+    setBooks(booksBatch.data.bookList);
+    setTotalUserBooks(booksBatch.data.totalBooks);
+  };
 
   // Initial load of books
   useEffect(() => {
     if (!session.data?.user) return;
-
-    const getBooks = async () => {
-      const booksBatch = await axios.post("/api/read/getUserBooks", {
-        userEmail: session.data?.user!.email,
-        count: numberOfBooks,
-        offset: 0,
-      });
-      // const booksBatch = await fetch("http://localhost:3000/api/projects", {
-      //   method: "GET",
-      //   headers: headers(),
-      // });
-      console.log("get books", booksBatch);
-      // console.log("get books", booksBatch.data.bookList);
-      // setBooks(booksBatch.data.bookList);
-    };
-    getBooks();
+    getBooks(0);
   }, [session]);
 
   // Load next batch of books
@@ -73,13 +39,7 @@ export default function BookShelf() {
     if (direction === "back") newSkipBooks = skipBooks - numberOfBooks;
     if (direction === "forward") newSkipBooks = skipBooks + numberOfBooks;
     setSkipBooks(newSkipBooks);
-
-    const booksBatch = await axios.post("/api/read/getUserBooks", {
-      userEmail: session.data?.user!.email,
-      count: numberOfBooks,
-      offset: newSkipBooks,
-    });
-    setBooks(booksBatch.data.bookList);
+    getBooks(newSkipBooks);
   };
 
   return (
@@ -96,8 +56,10 @@ export default function BookShelf() {
       </div>
       <div className={styles["selection-container"]}>
         <span
+          className={`${["clickable-container-small"]} ${
+            skipBooks === 0 ? styles.disabled : ""
+          }`}
           onClick={() => handleNextBooks("back")}
-          className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowLeftIcon}
         </span>
@@ -125,8 +87,10 @@ export default function BookShelf() {
             </span>
           ))}
         <span
+          className={`${["clickable-container-small"]} ${
+            skipBooks + 3 >= totalUserBooks ? styles.disabled : ""
+          }`}
           onClick={() => handleNextBooks("forward")}
-          className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowRightIcon}
         </span>

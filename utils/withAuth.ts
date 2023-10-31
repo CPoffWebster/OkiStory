@@ -1,11 +1,9 @@
 import { getServerAuthSession } from "@/pages/api/auth/[...nextauth]";
 import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
-import { getServerSession } from "next-auth/next";
 
 export const withAuth = (handler: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const session = await getServerAuthSession(req, res);
-        console.log('Session:', session);
 
         if (!session) {
             res.status(401).json({ error: "Unauthorized" });

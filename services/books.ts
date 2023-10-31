@@ -26,6 +26,11 @@ export async function getBooks(userEmail: string, count: number, offset: number)
     return booksWithPhotoLocation;
 }
 
+export async function totalUserBooks(userEmail: string) {
+    const totalBooks = await Books.totalUserBooks(userEmail);
+    return totalBooks;
+}
+
 /**
  * Get a book by its GUID
  * @param guid 

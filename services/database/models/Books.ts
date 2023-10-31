@@ -59,6 +59,15 @@ export class Books extends Model<BooksAttributes> {
 
         return books ? books.map(book => serializeTableObject(book)) : null;
     }
+
+    static async totalUserBooks(userEmail: string) {
+        const totalBooks = await Books.count({
+            where: {
+                UserEmail: userEmail
+            }
+        });
+        return totalBooks;
+    }
 }
 
 export function initBooks(sequelize: Sequelize) {
