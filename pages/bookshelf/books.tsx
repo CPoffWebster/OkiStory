@@ -32,6 +32,7 @@ const numberOfBooks = 3;
 export default function BookShelf() {
   const router = useRouter();
   const session = useSession();
+  console.log("Frontend session:", session);
   const [skipBooks, setSkipBooks] = useState<number>(0); // [0, 3, 6, 9, 12, 15, 18, 21, 24, 27
   const [books, setBooks] = useState<BooksAttributes[] | null>(null);
 
@@ -46,6 +47,8 @@ export default function BookShelf() {
 
   // Initial load of books
   useEffect(() => {
+    if (!session.data?.user) return;
+
     const getBooks = async () => {
       const booksBatch = await axios.post("/api/read/getUserBooks", {
         userEmail: session.data?.user!.email,
@@ -56,7 +59,7 @@ export default function BookShelf() {
       setBooks(booksBatch.data.bookList);
     };
     getBooks();
-  }, []);
+  }, [session]);
 
   // Load next batch of books
   const handleNextBooks = async (direction: string) => {

@@ -1,9 +1,7 @@
 import { connectToDb } from "@/services/database/database";
 import { UsersAttributes } from "@/services/database/models/Users";
 import { verifyUserProvider } from "@/services/users";
-import { type GetServerSidePropsContext } from "next";
 import {
-  getServerSession,
   type NextAuthOptions,
   type DefaultSession,
 } from "next-auth";
@@ -55,16 +53,4 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     })
   ],
-};
-
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
-export const getServerAuthSession = (ctx: {
-  req: GetServerSidePropsContext["req"];
-  res: GetServerSidePropsContext["res"];
-}) => {
-  return getServerSession(ctx.req, ctx.res, authOptions);
 };

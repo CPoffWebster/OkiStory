@@ -11,7 +11,6 @@ import { Pages, PagesAttributes } from "./database/models/Pages";
  * @returns 
  */
 export async function getBooks(userEmail: string, count: number, offset: number) {
-    connectToDb();
     const books = await Books.getUserBooks(userEmail, count, offset);
     if (books === null) return null;
 
