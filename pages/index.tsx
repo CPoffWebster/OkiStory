@@ -48,7 +48,7 @@ export default function HomePage() {
             <li>
               <Button
                 onClick={() => {
-                  signIn().catch(console.error);
+                  signIn("google").catch(console.error);
                 }}
               >
                 Login
