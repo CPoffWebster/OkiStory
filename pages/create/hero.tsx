@@ -1,55 +1,34 @@
-import { GetServerSideProps } from "next";
 import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
-import {
-  Characters,
-  CharactersAttributes,
-} from "@/services/database/models/Characters";
+import { CharactersAttributes } from "@/services/database/models/Characters";
 import { Selections } from "@/app/components/Selections/Selections";
 import styles from "./story.module.css";
 import axios from "axios";
-import { getSession } from "next-auth/react";
-import { connectToDb } from "@/services/database/database";
+import { useEffect, useState } from "react";
 
 export interface StoryElement extends CharactersAttributes {}
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/auth/identifier",
-        permanent: false,
-      },
-    };
-  }
-  const userEmail = session.user!.email;
-
-  connectToDb();
-  let heroes = await Characters.getDefaultCharacters();
-  return {
-    props: { userEmail, heroes },
-  };
-};
-
-export default function Story(props: {
-  userEmail: string;
-  heroes: StoryElement[];
-}) {
+export default function Story() {
   const router = useRouter();
   const selectionType = "Hero";
+  const [heroes, setHeroes] = useState<StoryElement[] | null>(null);
 
-  const handleBack = (): void => {
-    router.push("/create/theme");
-    return;
+  // Get heroes from database
+  const getHeroes = async () => {
+    const charactersList = await axios.post("/api/create/getHeroes");
+    setHeroes(charactersList.data.heroes);
   };
+
+  // Initial load of heroes
+  useEffect(() => {
+    getHeroes();
+  }, []);
 
   const handleSelectElement = async (): Promise<void> => {
     const response = await axios.post("/api/generation/story", {
       locationGUID: sessionStorage.getItem("Theme"),
       characterGUID: sessionStorage.getItem("Hero"),
       themeGUID: 0,
-      userEmail: props.userEmail,
     });
     sessionStorage.clear();
     router.push(`/read/${response.data.bookGuid}`);
@@ -59,7 +38,7 @@ export default function Story(props: {
     <div className={styles.container}>
       <div className={styles.header}>
         <span
-          onClick={handleBack}
+          onClick={() => router.push("/create/theme")}
           className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowLeftIcon}
@@ -69,11 +48,13 @@ export default function Story(props: {
         </h2>
         <div></div>
       </div>
-      <Selections
-        elementType={selectionType}
-        elements={props.heroes}
-        onSelectElement={handleSelectElement}
-      ></Selections>
+      {heroes && (
+        <Selections
+          elementType={selectionType}
+          elements={heroes}
+          onSelectElement={handleSelectElement}
+        ></Selections>
+      )}
     </div>
   );
 }

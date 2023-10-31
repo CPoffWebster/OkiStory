@@ -1,40 +1,34 @@
-import { GetServerSideProps } from "next";
 import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
 import { CharactersAttributes } from "@/services/database/models/Characters";
-import styles from "./story.module.css";
 import { Selections } from "@/app/components/Selections/Selections";
-import { Locations } from "@/services/database/models/Locations";
-import { connectToDb } from "@/services/database/database";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import styles from "./story.module.css";
 
 export interface StoryElement extends CharactersAttributes {}
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  connectToDb();
-  let themes = await Locations.getDefaultLocations();
-  return {
-    props: { themes },
-  };
-};
-
-export default function Story(props: { themes: StoryElement[] }) {
+export default function Story() {
   const router = useRouter();
   const selectionType = "Theme";
+  const [themes, setThemes] = useState<StoryElement[] | null>(null);
 
-  const handleBack = (): void => {
-    router.push("/");
-    return;
+  // Get themes from database
+  const getThemes = async () => {
+    const themesList = await axios.post("/api/create/getThemes");
+    setThemes(themesList.data.themes);
   };
 
-  const handleSelectElement = (): void => {
-    router.push("/create/hero");
-  };
+  // Initial load of themes
+  useEffect(() => {
+    getThemes();
+  }, []);
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <span
-          onClick={handleBack}
+          onClick={() => router.push("/")}
           className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowLeftIcon}
@@ -44,11 +38,13 @@ export default function Story(props: { themes: StoryElement[] }) {
         </h2>
         <div></div>
       </div>
-      <Selections
-        elementType={selectionType}
-        elements={props.themes}
-        onSelectElement={handleSelectElement}
-      ></Selections>
+      {themes && (
+        <Selections
+          elementType={selectionType}
+          elements={themes}
+          onSelectElement={() => router.push("/create/hero")}
+        ></Selections>
+      )}
     </div>
   );
 }

@@ -8,26 +8,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     console.log(`getImage API Route Triggered: ${filename}, ${imageType}`)
 
-    let bucket = '';
-    switch (imageType) {
-        case 'character':
-            bucket = charactersBucket;
-            break;
-        case 'Hero':
-            bucket = charactersBucket;
-            break;
-        case 'location':
-            bucket = locationsBucket;
-            break;
-        case 'Theme':
-            bucket = locationsBucket;
-            break;
-        case 'book':
-            bucket = booksBucket;
-            break;
-        default:
-            res.status(404).end();
-            return;
+    const bucketMap: Record<string, string> = {
+        'character': charactersBucket,
+        'Hero': charactersBucket,
+        'location': locationsBucket,
+        'Theme': locationsBucket,
+        'book': booksBucket
+    };
+    const bucket = bucketMap[imageType];
+
+    if (!bucket) {
+        res.status(404).end();
+        return;
     }
 
     const storage = getStorage();
@@ -38,6 +30,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     res.setHeader('Content-Type', 'image/jpeg')
+    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
     stream.pipe(res);
 }
 
