@@ -1,7 +1,6 @@
 Features:
 Image Loading Speed!!
 Analytics
-Login/Logout only with google
 Login/Logout settings
 Loading / generation screen - show pictures of hero/setting to the left
 
