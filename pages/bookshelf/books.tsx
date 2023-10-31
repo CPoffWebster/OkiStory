@@ -5,59 +5,79 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { BooksAttributes } from "@/services/database/models/Books";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
 import { getBooks } from "@/services/books";
 
 const numberOfBooks = 3;
-const numberOfBooksToSkip = 0;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
-  const userEmail =
-    session && session.user ? (session.user.email as string) : "";
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const session = await getSession(context);
+//   const userEmail =
+//     session && session.user ? (session.user.email as string) : "";
 
-  const booksBatch = await getBooks(userEmail, numberOfBooks, 0);
-  return {
-    props: { userEmail, booksBatch },
-  };
-};
+//   // const booksBatch = await getBooks(userEmail, numberOfBooks, 0);
+//   const booksBatch = await axios
+//     .post("/api/read/getUserBooks", {
+//       count: numberOfBooks,
+//       offset: 0,
+//     })
+//     .then((res) => res.data.bookList);
+//   // console.log("LOOK HERE FOR BOOKS", booksBatch);
+//   return {
+//     props: { userEmail, booksBatch },
+//   };
+// };
 
-export default function BookShelf(props: {
-  userEmail: string;
-  booksBatch: BooksAttributes[];
-}) {
+export default function BookShelf() {
   const router = useRouter();
+  const session = useSession();
   const [skipBooks, setSkipBooks] = useState<number>(0); // [0, 3, 6, 9, 12, 15, 18, 21, 24, 27
-  const [books, setBooks] = useState<BooksAttributes[] | null>(
-    props.booksBatch
-  );
+  const [books, setBooks] = useState<BooksAttributes[] | null>(null);
 
-  const handleBack = (): void => {
-    router.push("/");
-    return;
-  };
+  // const handleBack = (): void => {
+  //   router.push("/");
+  //   return;
+  // };
 
-  const handleSelectElement = (book: BooksAttributes): void => {
-    const serializedData = encodeURIComponent(JSON.stringify(book));
-    router.push(`/read/${book.GUID}`);
-  };
+  // const handleSelectElement = (book: BooksAttributes): void => {
+  //   router.push(`/read/${book.GUID}`);
+  // };
 
-  const handleNextBooks = async (): Promise<void> => {
-    // setSkipBooks(skipBooks + numberOfBooks);
-    // const booksBatch = await getBooks(
-    //   props.userEmail,
-    //   numberOfBooks,
-    //   skipBooks + numberOfBooks
-    // );
-    // setBooks(booksBatch);
+  // Initial load of books
+  useEffect(() => {
+    const getBooks = async () => {
+      const booksBatch = await axios.post("/api/read/getUserBooks", {
+        userEmail: session.data?.user!.email,
+        count: numberOfBooks,
+        offset: 0,
+      });
+      console.log("get books", booksBatch.data.bookList);
+      setBooks(booksBatch.data.bookList);
+    };
+    getBooks();
+  }, []);
+
+  // Load next batch of books
+  const handleNextBooks = async (direction: string) => {
+    let newSkipBooks = 0;
+    if (direction === "back") newSkipBooks = skipBooks - numberOfBooks;
+    if (direction === "forward") newSkipBooks = skipBooks + numberOfBooks;
+    setSkipBooks(newSkipBooks);
+
+    const booksBatch = await axios.post("/api/read/getUserBooks", {
+      userEmail: session.data?.user!.email,
+      count: numberOfBooks,
+      offset: newSkipBooks,
+    });
+    setBooks(booksBatch.data.bookList);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <span
-          onClick={handleBack}
+          onClick={() => router.push("/")}
           className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowLeftIcon}
@@ -67,14 +87,14 @@ export default function BookShelf(props: {
       </div>
       <div className={styles["selection-container"]}>
         <span
-          onClick={handleNextBooks}
+          onClick={() => handleNextBooks("back")}
           className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowLeftIcon}
         </span>
         {books &&
           books.map((book, index) => (
-            <span onClick={() => handleSelectElement(book)} key={index}>
+            <span onClick={() => router.push(`/read/${book.GUID}`)} key={index}>
               <div
                 className={`${styles["selection"]} ${[
                   "clickable-container-large",
@@ -96,7 +116,7 @@ export default function BookShelf(props: {
             </span>
           ))}
         <span
-          onClick={handleNextBooks}
+          onClick={() => handleNextBooks("forward")}
           className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowRightIcon}

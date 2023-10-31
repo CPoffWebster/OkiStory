@@ -7,9 +7,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log('read/getBook API Route Triggered');
 
     const { userEmail, count, offset } = req.body;
-    connectToDb();
 
     try {
+        connectToDb();
         const books = await getBooks(userEmail, count, offset);
         res.status(200).json({ bookList: books });
     } catch (err) {

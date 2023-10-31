@@ -1,11 +1,13 @@
-import { getServerAuthSession } from "@/server/auth";
 import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
-import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
-// import authOptions from "../pages/api/auth/[...nextauth]";
 
 export const withAuth = (handler: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
     try {
+        const token = req.cookies['next-auth.session-token'];
+        if (token) {
+            const decoded = decode(token, { complete: true });
+            console.log('Decoded JWT:', decoded);
+        }
         const session = await getSession({ req });
 
         if (!session) {
