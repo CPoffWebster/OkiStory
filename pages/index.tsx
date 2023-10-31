@@ -17,19 +17,6 @@ export default function HomePage() {
           {settingsIcon}
         </span>
         <h1 className={styles.title}>Oki Story</h1>
-        {/* <div></div> Empty div for layout balance */}
-        {/* {isLoggedIn && (
-          <>
-            Not signed in <br />
-            <button onClick={() => signIn()}>Sign in</button>
-          </>
-        )}
-        {!isLoggedIn && (
-          <>
-            Signed in as {session.user!.email} <br />
-            <button onClick={() => signOut()}>Sign out</button>
-          </>
-        )} */}
         <ul className="flex gap-4">
           {isLoggedIn && (
             <>
@@ -75,13 +62,7 @@ export default function HomePage() {
         {/* Left Section */}
         <div className={styles.section}>
           <div className={styles.sectionImage}>
-            <Image
-              src="/book_pile.png"
-              layout="fill"
-              objectFit="contain"
-              priority={true}
-              alt={"Bookshelf"}
-            ></Image>
+            <img src="/book_pile.png" alt={"Bookshelf"}></img>
           </div>
           <Link href="/bookshelf/books">
             <button
@@ -97,13 +78,7 @@ export default function HomePage() {
         {/* Right Section */}
         <div className={styles.section}>
           <div className={styles.sectionImage}>
-            <Image
-              src="/happy_book.png"
-              layout="fill"
-              objectFit="contain"
-              priority={true}
-              alt={"Create"}
-            ></Image>
+            <img src="/happy_book.png" alt={"Create"}></img>
           </div>
           <Link href="/create/theme">
             <button
