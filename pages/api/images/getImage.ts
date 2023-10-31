@@ -1,7 +1,8 @@
 import { booksBucket, charactersBucket, getStorage, locationsBucket } from "@/services/storage";
+import { withAuth } from "@/utils/withAuth";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const filename = req.query.filename as string;
     const imageType = req.query.imageType as string;
 
@@ -39,3 +40,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader('Content-Type', 'image/jpeg')
     stream.pipe(res);
 }
+
+export default withAuth(handler);

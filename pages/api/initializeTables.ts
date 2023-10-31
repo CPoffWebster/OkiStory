@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDb } from '../../services/database/database';
+import { withAuthAdmin } from '@/utils/withAuthAdmin';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // get API key first
     if (req.body.apiKey !== 'oahnsdpfoiuhjnpaowieuhr9283yr98h') {
         res.status(401).json({ message: 'Invalid key' });
@@ -18,3 +19,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         res.status(500).json({ message: 'Unable to initialize tables' });
     }
 }
+
+export default withAuthAdmin(handler);
