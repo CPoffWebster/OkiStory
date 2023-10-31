@@ -8,6 +8,7 @@ import { GetServerSideProps } from "next";
 import { getSession, useSession } from "next-auth/react";
 import Image from "next/image";
 import { getBooks } from "@/services/books";
+import { headers } from "next/headers";
 
 const numberOfBooks = 3;
 
@@ -55,8 +56,13 @@ export default function BookShelf() {
         count: numberOfBooks,
         offset: 0,
       });
-      console.log("get books", booksBatch.data.bookList);
-      setBooks(booksBatch.data.bookList);
+      // const booksBatch = await fetch("http://localhost:3000/api/projects", {
+      //   method: "GET",
+      //   headers: headers(),
+      // });
+      console.log("get books", booksBatch);
+      // console.log("get books", booksBatch.data.bookList);
+      // setBooks(booksBatch.data.bookList);
     };
     getBooks();
   }, [session]);
