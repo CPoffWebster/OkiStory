@@ -35,6 +35,7 @@
     "react-tooltip": "^5.21.4",
     "redux": "^4.2.1",
     "sequelize": "^6.33.0",
+    "sharp": "^0.32.6",
     "typescript": "5.2.2",
     "uuid": "^9.0.1",
     "validator": "^13.11.0"

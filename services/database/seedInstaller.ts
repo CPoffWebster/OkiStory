@@ -32,7 +32,7 @@ export const seedDefaultLocations = async (transaction: Transaction) => {
     }
 };
 
-const defaultCharacters: CharactersAttributes[] = [
+export const defaultCharacters: CharactersAttributes[] = [
     {
         GUID: 'bcf97e61-589f-45b0-8a4b-560fdbbdebc0',
         Name: 'Teddy Bear',
@@ -60,7 +60,7 @@ const defaultCharacters: CharactersAttributes[] = [
     // ...more characters
 ];
 
-const defaultLocations: LocationsAttributes[] = [
+export const defaultLocations: LocationsAttributes[] = [
     {
         GUID: 'e80f34d5-5271-463f-9d41-7aa41d206175',
         Name: 'Grassland',

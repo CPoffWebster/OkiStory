@@ -1,13 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { connectToDb } from '../../services/database/database';
+import { connectToDb } from '../../../services/database/database';
 import { withAuthAdmin } from '@/utils/withAuthAdmin';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    // get API key first
-    if (req.body.apiKey !== 'oahnsdpfoiuhjnpaowieuhr9283yr98h') {
-        res.status(401).json({ message: 'Invalid key' });
-        return;
-    }
     console.log('Seeding Database Started...');
     try {
         const db = connectToDb();
