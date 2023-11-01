@@ -5,6 +5,7 @@ import { Readable } from 'stream';
 import axios from 'axios';
 import { ImageGenerations, ImageGenerationsAttributes } from '../database/models/ImageGenerations';
 import { generatedImage } from '@/static-examples/exampleBook';
+import { compressImage } from '../imageCompression';
 
 
 const openai = new OpenAI({
@@ -64,13 +65,16 @@ async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGen
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
     const imageStream = Readable.from(Buffer.from(response.data, 'binary'));
 
+    // Compress the image using sharp
+    const compressedImage = await compressImage(imageStream);
+
     const guid = uuidv4();
     const currentDate = new Date();
     const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()}`;
-
     generation.GCSLocation = `${formattedDate}/${guid}.png`;
+
     console.log('Uploading', generation.GCSLocation, 'to', booksBucket);
-    await imageBucket.upload(generation.GCSLocation, imageStream);
+    await imageBucket.upload(generation.GCSLocation, compressedImage);
 
     let price = 0;
     switch (generation.Model) {
