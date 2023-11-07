@@ -16,7 +16,6 @@ export default function Story() {
   // Get locations from database
   const getLocations = async () => {
     const locationsList = await axios.post("/api/create/getLocations");
-    console.log("LOOK HERE FOR LOCATION", locationsList.data.locations);
     setLocations(locationsList.data.locations);
   };
 
@@ -25,15 +24,23 @@ export default function Story() {
     getLocations();
   }, []);
 
+  const handleSubmit = (): void => {
+    if (sessionStorage.getItem("Route")) {
+      router.push("/create/verify");
+    } else {
+      router.push("/create/character");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <span
+        {/* <span
           onClick={() => router.push("/")}
           className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowLeftIcon}
-        </span>
+        </span> */}
         <h2 className={styles.title}>
           Choose your <u className={styles.titleFiller}>{selectionType}</u>!{" "}
         </h2>
@@ -43,7 +50,7 @@ export default function Story() {
         <Selections
           elementType={selectionType}
           elements={locations}
-          onSelectElement={() => router.push("/create/character")}
+          onSelectElement={() => handleSubmit()}
         ></Selections>
       )}
     </div>

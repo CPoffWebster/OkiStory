@@ -1,32 +1,9 @@
 
 /* Container to hold all the elements */
 .selection-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-top: 3vw;
-  }
-  
-  /* Individual selection button styling */
-  .selection {
-    width: 25vw;
-    height: 25vw;
-    margin: 0 2vw 1vw 2vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  /* Image styling */
-  .selection-image {
-    width: 20vw;
-    height: 20vw;
-    position: relative;
-  }
-
-  .section-name {
-    font-size: 2vw;
-    font-weight: bold;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 3vw;
+}

@@ -1,0 +1,43 @@
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Title styling */
+.title {
+    text-align: center;
+    margin-top: 1vh;
+    font-size: 2vw;
+    font-weight: bold;
+}
+
+.titleFiller {
+    color: purple;
+}
+
+.selection-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 1vw;
+    text-align: center;
+}
+
+.section-name {
+    font-size: 2vw;
+    font-weight: bold;
+}
+
+.button {
+    width: 35vw;
+    height: 8vw;
+    margin-top: 1vw;
+    font-size: calc(3vw + 2vh + 0.2vmin);
+    background: purple;
+    color: white;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}

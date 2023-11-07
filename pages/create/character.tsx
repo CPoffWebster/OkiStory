@@ -24,15 +24,20 @@ export default function Story() {
     getCharacters();
   }, []);
 
-  const handleSelectElement = async (): Promise<void> => {
-    const response = await axios.post("/api/generation/story", {
-      locationGUID: sessionStorage.getItem("Location"),
-      characterGUID: sessionStorage.getItem("Character"),
-      themeGUID: 0,
-    });
-    sessionStorage.clear();
-    router.push(`/read/${response.data.bookGuid}`);
+  const handleSubmit = (): void => {
+    router.push("/create/verify");
   };
+
+  // const handleSelectElement = async (): Promise<void> => {
+  //   // const response = await axios.post("/api/generation/story", {
+  //   //   locationGUID: sessionStorage.getItem("Location"),
+  //   //   characterGUID: sessionStorage.getItem("Character"),
+  //   //   themeGUID: 0,
+  //   // });
+  //   // sessionStorage.clear();
+  //   // router.push(`/read/${response.data.bookGuid}`);
+  //   router.push("/create/verify");
+  // };
 
   return (
     <div className={styles.container}>
@@ -52,7 +57,7 @@ export default function Story() {
         <Selections
           elementType={selectionType}
           elements={characters}
-          onSelectElement={handleSelectElement}
+          onSelectElement={() => handleSubmit()}
         ></Selections>
       )}
     </div>

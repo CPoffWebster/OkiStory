@@ -13,7 +13,7 @@ export function setSessionStorage(key: string, value: string) {
  * @returns 
  */
 export function getSessionStorage(key: string): string {
-    const value = sessionStorage.getItem(key);
-    sessionStorage.removeItem(key);
-    return value || '';
+    // const value = sessionStorage.getItem(key);
+    // sessionStorage.removeItem(key);
+    return sessionStorage.getItem(key) || '';
 }

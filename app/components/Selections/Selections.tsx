@@ -1,7 +1,6 @@
 import { CharactersAttributes } from "@/services/database/models/Characters";
-import { setSessionStorage } from "@/services/session";
-import Image from "next/image";
 import styles from "./Selections.module.css";
+import { Selection } from "./Selection";
 
 export interface StoryElement extends CharactersAttributes {}
 
@@ -16,32 +15,14 @@ export const Selections: React.FC<SelectionsProps> = ({
   elements,
   onSelectElement,
 }) => {
-  const handleSelectElement = async (element: StoryElement): Promise<void> => {
-    setSessionStorage(elementType, element.GUID);
-    onSelectElement();
-  };
-
   return (
     <div className={styles["selection-container"]}>
-      {elements.map((element, index) => (
-        <span onClick={() => handleSelectElement(element)} key={index}>
-          <div
-            className={`${styles["selection"]} ${[
-              "clickable-container-large",
-            ]}`}
-          >
-            <div className={styles["selection-image"]}>
-              <Image
-                src={`/api/images/getImage?filename=${element.GCSLocation}&imageType=${elementType}`}
-                layout="fill"
-                objectFit="contain"
-                priority={true}
-                alt={"selection-image"}
-              />
-            </div>
-          </div>
-          <span className={styles["section-name"]}>{element.Name}</span>
-        </span>
+      {elements.map((element) => (
+        <Selection
+          elementType={elementType}
+          element={element}
+          onSelectElement={onSelectElement}
+        />
       ))}
     </div>
   );
