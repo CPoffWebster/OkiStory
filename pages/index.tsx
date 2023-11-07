@@ -1,61 +1,60 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import { settingsIcon } from "@/data/icons";
-import Image from "next/image";
 import Link from "next/link";
 import styles from "./homepage.module.css";
 import { Button } from "@/app/Button";
 import "../styles/globals.css";
+import { useState } from "react";
 
 export default function HomePage() {
   const session = useSession();
   const isLoggedIn = !!session.data;
 
+  const [showSessionDetails, setShowSessionDetails] = useState(false);
+  const toggleSessionDetails = () => {
+    setShowSessionDetails(!showSessionDetails);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <span className={`${styles.settings} ${["clickable-container-small"]}`}>
-          {settingsIcon}
-        </span>
         <h1 className={styles.title}>Oki Story</h1>
-        <ul className="flex gap-4">
+        <span>
           {isLoggedIn && (
-            <>
-              {/* <div className="flex items-center">
-                Credits remaining {credits.data}
+            <div
+              onClick={toggleSessionDetails}
+              className={styles.loggedInButton}
+            >
+              {session.data?.user.email?.charAt(0).toUpperCase()}
+            </div>
+          )}
+          {showSessionDetails && (
+            <div className={styles.signOutOptions}>
+              <div className={styles.signOutDetails}>
+                {session.data?.user.name}
+                <br />
+                <strong>{session.data?.user.email}</strong>
               </div>
-              <li>
-                <Button
+              <div className={styles.signOutSeparator}></div>
+              <button
                 onClick={() => {
-                  buyCredits().catch(console.error);
+                  signOut().catch(console.error);
                 }}
-                >
-                  Buy Credits
-                </Button>
-              </li> */}
-              <li>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    signOut().catch(console.error);
-                  }}
-                >
-                  Logout
-                </Button>
-              </li>
-            </>
+                className={styles.signOutButton}
+              >
+                Sign Out
+              </button>
+            </div>
           )}
           {!isLoggedIn && (
-            <li>
-              <Button
-                onClick={() => {
-                  signIn("google").catch(console.error);
-                }}
-              >
-                Login
-              </Button>
-            </li>
+            <Button
+              onClick={() => {
+                signIn("google").catch(console.error);
+              }}
+            >
+              Login
+            </Button>
           )}
-        </ul>
+        </span>
       </div>
 
       <div className={styles["main-content"]}>

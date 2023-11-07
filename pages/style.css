@@ -44,30 +44,3 @@ input::-ms-reveal,
     0 -.8vw 0 0 #000000 inset, 
     0 0 0 .4vw #000000 inset;
 }
-
-
-/* **********   GRAY OPTION    *********** */
-
-/* .clickable-container-small {
-  outline: 0;
-  cursor: pointer;
-  font-weight: 700;
-  
-  padding: 0.3vw .8vw;
-  border: 0;
-  border: .3vw solid #000;;
-  border-radius: 1vw;
-  box-shadow: .2vw .2vw 0 0 #484848;
-}
-
-.clickable-container-large {
-  outline: 0;
-  cursor: pointer;
-  background: #FFF;
-  font-weight: 700;
-  
-  padding: 0.5vw 1vw;
-  border: .4vw solid #000;
-  border-radius: 2vw;
-  box-shadow: .3vw .3vw 0 0 #484848;
-} */
