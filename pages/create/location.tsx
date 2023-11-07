@@ -10,18 +10,19 @@ export interface StoryElement extends CharactersAttributes {}
 
 export default function Story() {
   const router = useRouter();
-  const selectionType = "Theme";
-  const [themes, setThemes] = useState<StoryElement[] | null>(null);
+  const selectionType = "Location";
+  const [locations, setLocations] = useState<StoryElement[] | null>(null);
 
-  // Get themes from database
-  const getThemes = async () => {
-    const themesList = await axios.post("/api/create/getThemes");
-    setThemes(themesList.data.themes);
+  // Get locations from database
+  const getLocations = async () => {
+    const locationsList = await axios.post("/api/create/getLocations");
+    console.log("LOOK HERE FOR LOCATION", locationsList.data.locations);
+    setLocations(locationsList.data.locations);
   };
 
-  // Initial load of themes
+  // Initial load of locations
   useEffect(() => {
-    getThemes();
+    getLocations();
   }, []);
 
   return (
@@ -38,11 +39,11 @@ export default function Story() {
         </h2>
         <div></div>
       </div>
-      {themes && (
+      {locations && (
         <Selections
           elementType={selectionType}
-          elements={themes}
-          onSelectElement={() => router.push("/create/hero")}
+          elements={locations}
+          onSelectElement={() => router.push("/create/character")}
         ></Selections>
       )}
     </div>

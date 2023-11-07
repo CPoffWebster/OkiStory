@@ -10,9 +10,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const bucketMap: Record<string, string> = {
         'character': charactersBucket,
-        'Hero': charactersBucket,
+        'Character': charactersBucket,
         'location': locationsBucket,
-        'Theme': locationsBucket,
+        'Location': locationsBucket,
         'book': booksBucket
     };
     const bucket = bucketMap[imageType];

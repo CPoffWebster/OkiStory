@@ -4,7 +4,6 @@ book by user ID not email
 
 Features:
 Analytics
-Login/Logout settings
 Loading / generation screen - show pictures of hero/setting to the left
 
 Other:

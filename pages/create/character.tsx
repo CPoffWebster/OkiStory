@@ -10,24 +10,24 @@ export interface StoryElement extends CharactersAttributes {}
 
 export default function Story() {
   const router = useRouter();
-  const selectionType = "Hero";
-  const [heroes, setHeroes] = useState<StoryElement[] | null>(null);
+  const selectionType = "Character";
+  const [characters, setCharacters] = useState<StoryElement[] | null>(null);
 
-  // Get heroes from database
-  const getHeroes = async () => {
-    const charactersList = await axios.post("/api/create/getHeroes");
-    setHeroes(charactersList.data.heroes);
+  // Get characters from database
+  const getCharacters = async () => {
+    const charactersList = await axios.post("/api/create/getCharacters");
+    setCharacters(charactersList.data.characters);
   };
 
-  // Initial load of heroes
+  // Initial load of characters
   useEffect(() => {
-    getHeroes();
+    getCharacters();
   }, []);
 
   const handleSelectElement = async (): Promise<void> => {
     const response = await axios.post("/api/generation/story", {
-      locationGUID: sessionStorage.getItem("Theme"),
-      characterGUID: sessionStorage.getItem("Hero"),
+      locationGUID: sessionStorage.getItem("Location"),
+      characterGUID: sessionStorage.getItem("Character"),
       themeGUID: 0,
     });
     sessionStorage.clear();
@@ -38,7 +38,7 @@ export default function Story() {
     <div className={styles.container}>
       <div className={styles.header}>
         <span
-          onClick={() => router.push("/create/theme")}
+          onClick={() => router.push("/create/location")}
           className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowLeftIcon}
@@ -48,10 +48,10 @@ export default function Story() {
         </h2>
         <div></div>
       </div>
-      {heroes && (
+      {characters && (
         <Selections
           elementType={selectionType}
-          elements={heroes}
+          elements={characters}
           onSelectElement={handleSelectElement}
         ></Selections>
       )}

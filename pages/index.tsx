@@ -79,7 +79,7 @@ export default function HomePage() {
           <div className={styles.sectionImage}>
             <img src="/happy_book.png" alt={"Create"}></img>
           </div>
-          <Link href="/create/theme">
+          <Link href="/create/location">
             <button
               className={`${styles.button} ${styles["button-right"]} ${[
                 "clickable-container-large",
