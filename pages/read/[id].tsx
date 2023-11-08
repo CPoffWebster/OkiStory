@@ -15,7 +15,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function GetBookData(props: { guid: string }) {
-  const [book, setBook] = useState<BooksAttributes | null>(null);
+  const [book, setBook] = useState<BooksAttributes>({
+    GUID: "",
+    LocationGUID: "",
+    CharacterGUID: "",
+    ThemeGUID: "",
+    StyleGUID: "",
+    UserEmail: "",
+  });
   const [pages, setPages] = useState<PagesAttributes[]>([]);
   const [coverPage, setCoverPage] = useState<React.JSX.Element | null>(null); // pagesContent[0]
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
@@ -115,15 +122,15 @@ export default function GetBookData(props: { guid: string }) {
 
   return (
     <>
-      {book ? (
-        <Book
-          pagesContent={pagesContent}
-          pageCount={book.PageCount!}
-          pagesFound={pages.length}
-        />
+      <Book
+        pagesContent={pagesContent}
+        pageCount={book.PageCount!}
+        pagesFound={pages.length}
+      />
+      {/* {book ? (
       ) : (
         <div>Loading...</div>
-      )}
+      )} */}
     </>
   );
 }

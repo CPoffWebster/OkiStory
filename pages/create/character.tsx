@@ -28,26 +28,15 @@ export default function Story() {
     router.push("/create/verify");
   };
 
-  // const handleSelectElement = async (): Promise<void> => {
-  //   // const response = await axios.post("/api/generation/story", {
-  //   //   locationGUID: sessionStorage.getItem("Location"),
-  //   //   characterGUID: sessionStorage.getItem("Character"),
-  //   //   themeGUID: 0,
-  //   // });
-  //   // sessionStorage.clear();
-  //   // router.push(`/read/${response.data.bookGuid}`);
-  //   router.push("/create/verify");
-  // };
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <span
+        {/* <span
           onClick={() => router.push("/create/location")}
           className={`${styles.leftClick} ${["clickable-container-small"]}`}
         >
           {arrowLeftIcon}
-        </span>
+        </span> */}
         <h2 className={styles.title}>
           Choose your <u className={styles.titleFiller}>{selectionType}</u>!{" "}
         </h2>

@@ -19,6 +19,7 @@ export const Selections: React.FC<SelectionsProps> = ({
     <div className={styles["selection-container"]}>
       {elements.map((element) => (
         <Selection
+          key={element.GUID}
           elementType={elementType}
           element={element}
           onSelectElement={onSelectElement}

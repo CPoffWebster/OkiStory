@@ -1,33 +1,10 @@
 import { useRouter } from "next/router";
-import {
-  Characters,
-  CharactersAttributes,
-} from "@/services/database/models/Characters";
+import { CharactersAttributes } from "@/services/database/models/Characters";
+import { Selection } from "@/app/components/Selections/Selection";
+import { LocationsAttributes } from "@/services/database/models/Locations";
+import { useEffect, useState } from "react";
 import styles from "./verify.module.css";
 import axios from "axios";
-import { Selection } from "@/app/components/Selections/Selection";
-import { GetServerSidePropsContext } from "next";
-import { connectToDb } from "@/services/database/database";
-import {
-  Locations,
-  LocationsAttributes,
-} from "@/services/database/models/Locations";
-import { useEffect, useState } from "react";
-
-// export async function getServerSideProps(context: GetServerSidePropsContext) {
-//   //   connectToDb();
-//   //   let location = await Locations.getLocation(
-//   //     getSessionStorage("Location") || ""
-//   //   );
-//   //   let character = await Characters.getCharacter(
-//   //     getSessionStorage("Character") || ""
-//   //   );
-//   const location = getSessionStorage("Location");
-//   const character = getSessionStorage("Character");
-//   return {
-//     props: { location, character },
-//   };
-// }
 
 export default function Story() {
   const router = useRouter();
