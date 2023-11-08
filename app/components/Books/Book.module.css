@@ -1,36 +1,32 @@
-.book {
-  transition: opacity 0.4s 0.2s;
-  /* perspective: 250vw; */
-}
 
 .pages {
-  width: 100%;
-  height: 45vw;
+  background-color: saddlebrown;
+  width: calc(100% - 2vw);
+  height: calc(50vw - 2vw);
   position: relative;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  border-radius: 4px;
-  padding-bottom: 3rem; /* Account for nav button space */
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .page {
-  width: 50%;
-  height: 45vw;
+  width: calc(50% - 1vw);
+  height: 95%;
   position: absolute;
-  top: 0;
+  top: 2.5%;
   transform-origin: 0 0;
   transition: transform 1.4s;
   backface-visibility: hidden;
-  transform-style: preserve-3d;
-  user-select: none;
   background-color: #f0f0f0;
-}
-
-.centerContent {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.coverPage {
+  background-color: brown;
 }
 
 .image {
@@ -49,12 +45,11 @@
   margin: 0;
 }
 
-
 .page:nth-child(even) {
   /* pointer-events: none; */
   transform: rotateY(180deg);
   transform-origin: 100% 0;
-  left: 0;
+  left: 1vw;
   border-radius: 4px 0 0 4px;
   background-image: linear-gradient(to left, rgba(0, 0, 0, .12) 0%, rgba(0, 0, 0, 0) 10%);
 }
@@ -62,7 +57,7 @@
 .page:nth-child(odd) {
   /* pointer-events: all; */
   transform: rotateY(0deg);
-  right: 0;
+  right: 1vw;
   border-radius: 0 4px 4px 0;
   background-image: linear-gradient(to right, rgba(0, 0, 0, .15) 0%, rgba(0, 0, 0, 0) 10%);
 }

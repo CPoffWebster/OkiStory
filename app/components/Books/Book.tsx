@@ -56,11 +56,19 @@ const Book: React.FC<BookReaderProps> = ({
   };
 
   return (
-    <div className={styles.book}>
-      {pagesContent.map((content, index) => (
-        <Page key={index} content={content} index={index} />
-      ))}
-      {/* {renderNavigationButtons()} */}
+    <div>
+      <div className={styles.pages}>
+        {pagesContent.map((content, index) => (
+          <div
+            key={index}
+            className={`${styles.page} ${
+              currentIndex === 0 ? styles.coverPage : ""
+            }`}
+          >
+            {content}
+          </div>
+        ))}
+      </div>
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
         disableRightArrow={currentIndex >= pageCount * 2}
@@ -72,17 +80,6 @@ const Book: React.FC<BookReaderProps> = ({
         onReturnHome={() => router.push("/")}
       />
     </div>
-  );
-};
-
-type PageProps = {
-  content: React.ReactNode;
-  index: number;
-};
-
-const Page: React.FC<PageProps> = ({ content, index }) => {
-  return (
-    <div className={`${styles.page} ${styles.centerContent}`}>{content}</div>
   );
 };
 
