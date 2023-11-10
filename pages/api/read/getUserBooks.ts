@@ -2,16 +2,12 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { connectToDb } from '@/services/database/database';
 import { getDefaultBooks, getUserBooks, totalUserBooks } from '@/services/books';
 import { Users } from '@/services/database/models/Users';
+import { withBaseURL } from '@/utils/withBaseURL';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    console.log('read/getBook API Route Triggered');
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+    console.log('read/getUserBooks API Route Triggered');
 
-    const { apiKey, count, offset } = req.body;
-
-    if (apiKey !== process.env.NEXT_PUBLIC_API_KEY) {
-        res.status(401).json({ error: 'Unauthorized' });
-        return;
-    }
+    const { count, offset } = req.body;
 
     try {
         connectToDb();
@@ -31,3 +27,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
 };
+
+export default withBaseURL(handler);
