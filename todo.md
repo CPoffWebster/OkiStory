@@ -1,6 +1,5 @@
 Bugs:
 Viewing multiple books - error + not showing if <=3
-book by user ID not email
 images
 
 Features:

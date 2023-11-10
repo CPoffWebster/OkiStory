@@ -3,6 +3,9 @@ import { BooksAttributes } from "../database/models/Books";
 import { Characters } from "../database/models/Characters";
 import { Locations } from "../database/models/Locations";
 
+const numberOfPages = "1-3";
+// const numberOfPages = "6-8";
+
 export async function getStoryIDs(book: BooksAttributes, styleID: number = 0): Promise<string[]> {
     const db = connectToDb();
     // const tran = await db.transaction();
@@ -41,7 +44,7 @@ export function bookPrompt(character: string, location: string, theme: string): 
     The output should strictly follow this structure:
     { "title": string, "titleImageDescription": string, "pageCount": number, "pages": [ { "pageNumber": number, "text": string, "imageDescription": string } ] }
     
-    Important!: pageCount value should be between 6-8. There should be x pages in the pages list where x is equal to pageCount.
+    Important!: pageCount value should be between ${numberOfPages}. There should be x pages in the pages list where x is equal to pageCount.
     
     Given the directions above, create a story with the following parameters:
     Character: ${character}

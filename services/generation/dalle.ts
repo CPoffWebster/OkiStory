@@ -16,11 +16,13 @@ const openai = new OpenAI({
  * Generate an image using the OpenAI API
  * If the model is 'test', it will use the example image after a delay
  * @param prompt generate image from this prompt
- * @param model model to use
  * @param generation generated image record
+ * @param model model to use
+ * @param size size of the image
  * @returns 
  */
-export async function generateImage(prompt: string, model: "256x256" | "512x512" | "1024x1024" | 'test', generation: ImageGenerationsAttributes) {
+export async function generateImage(prompt: string, generation: ImageGenerationsAttributes, model: string, size: string) {
+
     console.log('STARTED: generateImage:', model)
 
     let endTime = 0;
@@ -33,11 +35,10 @@ export async function generateImage(prompt: string, model: "256x256" | "512x512"
         await updateGeneratedImageRecord(image.data[0].url!, generation, endTime - startTime);
     } else {
         try {
-            const size: "256x256" | "512x512" | "1024x1024" = model; // 256x256, 512x512, or 1024x1024 
-
             const image = await openai.images.generate({
+                model: model,
                 prompt,
-                size,
+                size: size as "1024x1024" | "256x256" | "512x512" | "1792x1024" | "1024x1792" | null | undefined,
                 n: 1
             });
             endTime = performance.now();
@@ -79,10 +80,7 @@ async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGen
     let price = 0;
     switch (generation.Model) {
         case ('1024x1024'):
-            price = .02;
-            break;
-        case ('512x512'):
-            price = .018;
+            price = .04;
             break;
         case ('256x256'):
             price = .016;

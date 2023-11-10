@@ -29,7 +29,7 @@
     "next-auth": "^4.24.4",
     "next-connect": "^1.0.0",
     "node-fetch": "^3.3.2",
-    "openai": "^4.11.0",
+    "openai": "^4.17.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-tooltip": "^5.21.4",

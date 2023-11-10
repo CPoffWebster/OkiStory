@@ -224,11 +224,14 @@ function parseJsonKey(key: string, generatedText: string): [string | number, num
 async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, string | number>, character: string, location: string, style: string) {
 
     // Create the image generation record
-    const model = process.env.IMAGE_GENERATION_MODEL as "256x256" | "512x512" | "1024x1024" | "test" || 'test'
+    const model = process.env.IMAGE_GENERATION_MODEL || "test";
+    const size = process.env.IMAGE_GENERATION_SIZE || "test";
+
     const prompt = imagePrompt(keyValueMap.get('titleImageDescription')!.toString(), character, location, style);
     const generation: ImageGenerationsAttributes = {
         Company: 'OpenAI',
         Model: model,
+        Size: size,
         Type: 'create',
         Input: prompt,
     };
@@ -240,7 +243,7 @@ async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, strin
     await Books.updateBook(newBook);
 
     // Start the image generation
-    await generateImage(prompt, model, imageGenerationWithID);
+    await generateImage(prompt, imageGenerationWithID, model, size);
 }
 
 /**
@@ -256,11 +259,13 @@ async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, strin
 async function savePage(newBook: BooksAttributes, pageList: generatedTextPage[], currentPageIndex: number, character: string, location: string, style: string) {
 
     // Create the image generation record
-    const model = process.env.IMAGE_GENERATION_MODEL as "256x256" | "512x512" | "1024x1024" | "test" || 'test'
+    const model = process.env.IMAGE_GENERATION_MODEL || "test";
+    const size = process.env.IMAGE_GENERATION_SIZE || "test";
     const prompt = imagePrompt(pageList[currentPageIndex].imageDescription, character, location, style);
     const generation: ImageGenerationsAttributes = {
         Company: 'OpenAI',
         Model: model,
+        Size: size,
         Type: 'create',
         Input: prompt,
     };
@@ -274,5 +279,5 @@ async function savePage(newBook: BooksAttributes, pageList: generatedTextPage[],
     });
 
     // Start the image generation
-    await generateImage(prompt, model, imageGenerationWithID);
+    await generateImage(prompt, imageGenerationWithID, model, size);
 }

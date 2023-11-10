@@ -5,6 +5,7 @@ export interface ImageGenerationsAttributes {
     id?: number;
     Company: string;
     Model: string;
+    Size: string;
     Type: string;
     Input: string;
     APICallMilliSeconds?: number;
@@ -41,6 +42,7 @@ export function initImageGenerations(sequelize: Sequelize) {
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         Company: { type: DataTypes.STRING(128), allowNull: false },
         Model: { type: DataTypes.STRING(128), allowNull: false },
+        Size: { type: DataTypes.STRING(128), allowNull: false },
         Type: { type: DataTypes.STRING(128), allowNull: false },
         Input: { type: DataTypes.TEXT, allowNull: false },
         APICallMilliSeconds: { type: DataTypes.INTEGER, allowNull: true },
