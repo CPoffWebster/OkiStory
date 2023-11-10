@@ -22,7 +22,6 @@ export default function BookShelf() {
       count: numberOfBooks,
       offset: offset,
     });
-    console.log(booksBatch);
     setBooks(booksBatch.data.bookList);
     setTotalUserBooks(booksBatch.data.totalBooks);
   };
