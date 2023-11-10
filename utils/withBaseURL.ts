@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 
 // Define the allowed base URL
-const allowedBaseURL = process.env.ALLOWED_BASE_URL;
+const allowedBaseURL = process.env.HOST_NAME;
 
 export const withBaseURL = (handler: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
     try {
