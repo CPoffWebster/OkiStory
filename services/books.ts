@@ -4,15 +4,25 @@ import { ImageGenerations } from "./database/models/ImageGenerations";
 import { Pages, PagesAttributes } from "./database/models/Pages";
 
 /**
+ * Get the total count of books for a user
+ * @param userID 
+ * @returns count of books
+ */
+export async function totalUserBooks(userID: number) {
+    const totalBooks = await Books.totalUserBooks(userID);
+    return totalBooks;
+}
+
+/**
  * Get the bookshelf list of books for a user
  * @param userID 
  * @param count x number of books
  * @param offset x number of books to skip
  * @returns 
  */
-export async function getBooks(userID: number, count: number, offset: number) {
+export async function getUserBooks(userID: number, count: number, offset: number) {
     const books = await Books.getUserBooks(userID, count, offset);
-    if (books === null) return null;
+    if (books === null) return [];
 
     const booksWithPhotoLocation = await Promise.all(
         books.map(async (book) => {
@@ -26,9 +36,14 @@ export async function getBooks(userID: number, count: number, offset: number) {
     return booksWithPhotoLocation;
 }
 
-export async function totalUserBooks(userID: number) {
-    const totalBooks = await Books.totalUserBooks(userID);
-    return totalBooks;
+export async function getDefaultBooks() {
+    const book = await Books.getDefaultBook();
+    if (book === null) return [];
+
+    const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID!);
+    book.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
+    return book;
+
 }
 
 /**

@@ -9,6 +9,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { locationGUID, characterGUID, themeGUID } = req.body;
 
     const user = await Users.getUserBySession(req, res);
+    if (!user) {
+        res.status(401).json({ error: 'Unauthorized' });
+        return;
+    }
     const guid = await initializeBookCreation(locationGUID, characterGUID, themeGUID, user.id!);
 
     res.status(200).json({ bookGuid: guid });

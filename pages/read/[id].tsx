@@ -30,6 +30,7 @@ export default function GetBookData(props: { guid: string }) {
   useEffect(() => {
     const intervalId = setInterval(async () => {
       const response = await axios.post("/api/read/getBook", {
+        apiKey: process.env.NEXT_PUBLIC_API_KEY,
         guid: props.guid,
       });
       const data = response.data.book;
@@ -69,6 +70,7 @@ export default function GetBookData(props: { guid: string }) {
     // console.log("calling pages");
     const intervalId = setInterval(async () => {
       const response = await axios.post("/api/read/getBook", {
+        apiKey: process.env.NEXT_PUBLIC_API_KEY,
         guid: props.guid,
         includePages: true,
       });

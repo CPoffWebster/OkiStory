@@ -3,9 +3,6 @@ import { BooksAttributes } from "../database/models/Books";
 import { Characters } from "../database/models/Characters";
 import { Locations } from "../database/models/Locations";
 
-const numberOfPages = "1-3";
-// const numberOfPages = "6-8";
-
 export async function getStoryIDs(book: BooksAttributes, styleID: number = 0): Promise<string[]> {
     const db = connectToDb();
     // const tran = await db.transaction();
@@ -27,6 +24,7 @@ export async function getStoryIDs(book: BooksAttributes, styleID: number = 0): P
  * @returns book prompt string
  */
 export function bookPrompt(character: string, location: string, theme: string): string {
+    const numberOfPages = process.env.NUMBER_OF_PAGES_PER_BOOK;
     return `You are a seasoned writer specializing in children's books that captivate young minds and hearts.
     Your stories are not only engaging but also memorable, staying with children for a lifetime.
     You have a unique talent for describing art in picture books in such a way that an AI could easily generate those images.

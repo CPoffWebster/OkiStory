@@ -22,13 +22,14 @@ export interface UsersAttributes {
 export class Users extends Model<UsersAttributes> {
     static async getUserBySession(req: NextApiRequest, res: NextApiResponse) {
         const session = await getServerAuthSession(req, res);
+        if (!session) return null;
         const user = await Users.findOne({
             where: {
                 Email: session!.user.email!
             }
         });
         const userData: UsersAttributes = user ? serializeTableObject(user) : null;
-        if (userData) userData.session = session!
+        userData.session = session!
         return userData;
     }
 }

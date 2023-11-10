@@ -45,6 +45,15 @@ export class Books extends Model<BooksAttributes> {
         return book ? serializeTableObject(book) : null;
     }
 
+    static async totalUserBooks(userID: number) {
+        const totalBooks = await Books.count({
+            where: {
+                UserID: userID
+            }
+        });
+        return totalBooks;
+    }
+
     static async getUserBooks(userID: number, count: number, offset: number): Promise<BooksAttributes[] | null> {
         const books = await Books.findAll({
             limit: count,
@@ -60,13 +69,13 @@ export class Books extends Model<BooksAttributes> {
         return books ? books.map(book => serializeTableObject(book)) : null;
     }
 
-    static async totalUserBooks(userID: number) {
-        const totalBooks = await Books.count({
+    static async getDefaultBook() {
+        const book = await Books.findOne({
             where: {
-                UserID: userID
+                id: process.env.DEFAULT_BOOK_ID
             }
         });
-        return totalBooks;
+        return book ? serializeTableObject(book) : null;
     }
 }
 
