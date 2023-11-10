@@ -17,7 +17,31 @@ const Book: React.FC<BookReaderProps> = ({
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
   const { flippedPages, flipPage } = useFlippedPages();
+  const [renderedPages, setRenderedPages] = useState<React.JSX.Element[]>([]);
 
+  // Pre-render pages
+  useEffect(() => {
+    const pageRendering = pagesContent.map((content, index) => {
+      // Determine if the page should have left/right offset
+      let style = {};
+      if (currentIndex !== 0) {
+        if (index % 2 !== 0) style = { left: "1vw" };
+        else style = { right: "1vw" };
+      }
+      return (
+        <div
+          key={index}
+          className={`${styles.page} ${index === 0 ? styles.coverPage : ""}`}
+          style={style} // Apply the dynamic style here
+        >
+          {content}
+        </div>
+      );
+    });
+    setRenderedPages(pageRendering);
+  }, [pagesContent, currentIndex]); // Include currentIndex in dependency array
+
+  // Set the z-index of the pages so that the odd pages are on top of the even pages
   useEffect(() => {
     const pages = Array.from(
       document.getElementsByClassName(styles.page)
@@ -30,6 +54,7 @@ const Book: React.FC<BookReaderProps> = ({
     });
   }, [pagesContent]);
 
+  // Update the page flip state
   useEffect(() => {
     const pages = Array.from(
       document.getElementsByClassName(styles.page)
@@ -46,28 +71,29 @@ const Book: React.FC<BookReaderProps> = ({
   const handleFlipLeft = () => {
     if (currentIndex <= 1) return;
     flipPage(currentIndex, false);
-    setCurrentIndex((prevIndex) => prevIndex - 2);
+    // Wait for the animation to complete before updating currentIndex
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => prevIndex - 2);
+    }, 400);
   };
 
   const handleFlipRight = () => {
     if (currentIndex >= pageCount * 2) return;
     flipPage(currentIndex, true);
-    setCurrentIndex((prevIndex) => prevIndex + 2);
+    // Wait for the animation to complete before updating currentIndex
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => prevIndex + 2);
+    }, 400);
   };
 
   return (
     <div>
-      <div className={styles.pages}>
-        {pagesContent.map((content, index) => (
-          <div
-            key={index}
-            className={`${styles.page} ${
-              currentIndex === 0 ? styles.coverPage : ""
-            }`}
-          >
-            {content}
-          </div>
-        ))}
+      <div
+        className={`${
+          currentIndex === 0 ? styles.coverContainer : styles.pageContainer
+        }`}
+      >
+        {renderedPages}
       </div>
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
