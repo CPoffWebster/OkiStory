@@ -19,10 +19,10 @@ export default function BookShelf() {
   // Get books from database
   const getBooks = async (offset: number) => {
     const booksBatch = await axios.post("/api/read/getUserBooks", {
-      userEmail: session.data?.user!.email,
       count: numberOfBooks,
       offset: offset,
     });
+    console.log(booksBatch);
     setBooks(booksBatch.data.bookList);
     setTotalUserBooks(booksBatch.data.totalBooks);
   };

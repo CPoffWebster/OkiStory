@@ -32,8 +32,8 @@ export default function Story() {
 
   const handleSubmit = async (): Promise<void> => {
     const response = await axios.post("/api/generation/story", {
-      locationGUID: character!.GUID,
-      characterGUID: location!.GUID,
+      locationGUID: location!.GUID,
+      characterGUID: character!.GUID,
       themeGUID: 0,
     });
     sessionStorage.clear();

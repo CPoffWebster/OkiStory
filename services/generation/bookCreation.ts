@@ -24,7 +24,7 @@ class generatedTextPage {
 const propertyParsingNames = ['title', 'titleImageDescription', 'pageCount'];
 const propertyParsingListNames = ['pageNumber', 'text', 'imageDescription'];
 
-export async function initializeBookCreation(locationGUID: string, characterGUID: string, themeGUID: string, userEmail: string) {
+export async function initializeBookCreation(locationGUID: string, characterGUID: string, themeGUID: string, userID: number) {
     connectToDb();
     const bookGUID = uuidv4();
     const newBook: BooksAttributes = {
@@ -33,7 +33,7 @@ export async function initializeBookCreation(locationGUID: string, characterGUID
         CharacterGUID: characterGUID,
         ThemeGUID: themeGUID,
         StyleGUID: '0',
-        UserEmail: userEmail
+        UserID: userID
     };
     initiateBookCreation(newBook);
     return bookGUID;
@@ -224,6 +224,7 @@ function parseJsonKey(key: string, generatedText: string): [string | number, num
 async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, string | number>, character: string, location: string, style: string) {
 
     // Create the image generation record
+    console.log('saveBook', newBook, keyValueMap, character, location, style)
     const model = process.env.IMAGE_GENERATION_MODEL as "256x256" | "512x512" | "1024x1024" | "test" || 'test'
     const prompt = imagePrompt(keyValueMap.get('titleImageDescription')!.toString(), character, location, style);
     const generation: ImageGenerationsAttributes = {
@@ -254,6 +255,8 @@ async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, strin
  * @param style 
  */
 async function savePage(newBook: BooksAttributes, pageList: generatedTextPage[], currentPageIndex: number, character: string, location: string, style: string) {
+
+    console.log('savePage', newBook, pageList, currentPageIndex, character, location, style)
     // Create the image generation record
     const model = process.env.IMAGE_GENERATION_MODEL as "256x256" | "512x512" | "1024x1024" | "test" || 'test'
     const prompt = imagePrompt(pageList[currentPageIndex].imageDescription, character, location, style);

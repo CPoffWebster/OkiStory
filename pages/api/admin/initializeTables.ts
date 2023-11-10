@@ -4,7 +4,7 @@ import { withAuthAdmin } from '@/utils/withAuthAdmin';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const useDev: boolean = process.env.USE_DEV === 'reset';
-    console.log('Initializing tables starting...');
+    console.log('initializeTables starting...');
     try {
         const db = connectToDb();
         db.createTables({ useDev });

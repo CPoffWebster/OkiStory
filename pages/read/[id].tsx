@@ -21,7 +21,7 @@ export default function GetBookData(props: { guid: string }) {
     CharacterGUID: "",
     ThemeGUID: "",
     StyleGUID: "",
-    UserEmail: "",
+    UserID: 0,
   });
   const [pages, setPages] = useState<PagesAttributes[]>([]);
   const [coverPage, setCoverPage] = useState<React.JSX.Element | null>(null); // pagesContent[0]

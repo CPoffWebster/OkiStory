@@ -5,13 +5,13 @@ import { Pages, PagesAttributes } from "./database/models/Pages";
 
 /**
  * Get the bookshelf list of books for a user
- * @param userEmail 
+ * @param userID 
  * @param count x number of books
  * @param offset x number of books to skip
  * @returns 
  */
-export async function getBooks(userEmail: string, count: number, offset: number) {
-    const books = await Books.getUserBooks(userEmail, count, offset);
+export async function getBooks(userID: number, count: number, offset: number) {
+    const books = await Books.getUserBooks(userID, count, offset);
     if (books === null) return null;
 
     const booksWithPhotoLocation = await Promise.all(
@@ -26,8 +26,8 @@ export async function getBooks(userEmail: string, count: number, offset: number)
     return booksWithPhotoLocation;
 }
 
-export async function totalUserBooks(userEmail: string) {
-    const totalBooks = await Books.totalUserBooks(userEmail);
+export async function totalUserBooks(userID: number) {
+    const totalBooks = await Books.totalUserBooks(userID);
     return totalBooks;
 }
 
