@@ -224,7 +224,6 @@ function parseJsonKey(key: string, generatedText: string): [string | number, num
 async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, string | number>, character: string, location: string, style: string) {
 
     // Create the image generation record
-    console.log('saveBook', newBook, keyValueMap, character, location, style)
     const model = process.env.IMAGE_GENERATION_MODEL as "256x256" | "512x512" | "1024x1024" | "test" || 'test'
     const prompt = imagePrompt(keyValueMap.get('titleImageDescription')!.toString(), character, location, style);
     const generation: ImageGenerationsAttributes = {
@@ -256,7 +255,6 @@ async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, strin
  */
 async function savePage(newBook: BooksAttributes, pageList: generatedTextPage[], currentPageIndex: number, character: string, location: string, style: string) {
 
-    console.log('savePage', newBook, pageList, currentPageIndex, character, location, style)
     // Create the image generation record
     const model = process.env.IMAGE_GENERATION_MODEL as "256x256" | "512x512" | "1024x1024" | "test" || 'test'
     const prompt = imagePrompt(pageList[currentPageIndex].imageDescription, character, location, style);
