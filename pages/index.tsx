@@ -1,9 +1,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import styles from "./homepage.module.css";
-import { Button } from "@/app/Button";
-import "../styles/globals.css";
 import { useState } from "react";
+import "../styles/globals.css";
 
 export default function HomePage() {
   const session = useSession();
@@ -46,13 +45,23 @@ export default function HomePage() {
             </div>
           )}
           {!isLoggedIn && (
-            <Button
+            <button
+              className={`${styles.loginButton} ${[
+                "clickable-container-small",
+              ]}`}
               onClick={() => {
                 signIn("google").catch(console.error);
               }}
             >
               Login
-            </Button>
+            </button>
+            // <Button
+            //   onClick={() => {
+            //     signIn("google").catch(console.error);
+            //   }}
+            // >
+            //   Login
+            // </Button>
           )}
         </span>
       </div>

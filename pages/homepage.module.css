@@ -37,6 +37,15 @@
   align-items: center;
 }
 
+.loginButton {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: purple;
+  color: white;
+  font-size: 2vw;
+}
+
 .loggedInButton {
   position: absolute;
   left: 0;
