@@ -1,5 +1,5 @@
 import { booksBucket, charactersBucket, getStorage, locationsBucket } from "@/services/storage";
-import { withAuth } from "@/utils/withAuth";
+import { withBaseURL } from "@/utils/withBaseURL";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -34,4 +34,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     stream.pipe(res);
 }
 
-export default withAuth(handler);
+export default withBaseURL(handler);
