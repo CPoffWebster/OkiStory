@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import { arrowLeftIcon, arrowRightIcon, homeIcon } from "@/data/icons";
 import styles from "./NavButtons.module.css";
+import Button from "../Button/Button";
+import { HomeIcon } from "../Icons/HomeIcon";
+import { ArrowLeftIcon } from "../Icons/ArrowLeftIcon";
+import { ArrowRightIcon } from "../Icons/ArrowRightIcon";
 
 export function useFlippedPages() {
   const [flippedPages, setFlippedPages] = useState<Set<number>>(new Set());
@@ -25,7 +28,7 @@ export function useFlippedPages() {
 type NavigationButtonsProps = {
   disableLeftArrow: boolean;
   disableRightArrow: boolean;
-  loadingRightArrow: boolean;
+  loadingRightArrow?: boolean;
   onFlipLeft: () => void;
   onFlipRight: () => void;
   onReturnHome: () => void;
@@ -40,28 +43,27 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   onReturnHome,
 }) => (
   <div className={styles.navButtons}>
-    <span
-      className={`${["clickable-container-small"]} ${
-        disableLeftArrow ? styles.disabled : ""
-      }`}
+    <Button
+      className={`${["clickable-container-small"]}`}
+      markedAsImportant={false}
+      icon={<ArrowLeftIcon />}
       onClick={onFlipLeft}
-    >
-      {arrowLeftIcon}
-    </span>
-    <span
-      className={`${styles.buttonHome} ${["clickable-container-small"]}`}
+      disabled={disableLeftArrow}
+    ></Button>
+    <Button
+      text="Home"
+      className={`${["clickable-container-small"]}`}
+      markedAsImportant={true}
+      icon={<HomeIcon />}
       onClick={onReturnHome}
-    >
-      <span>Home</span> {homeIcon}
-    </span>
-    <span
-      className={`${["clickable-container-small"]} ${
-        disableRightArrow ? styles.disabled : ""
-      } ${loadingRightArrow ? styles.loading : ""}`}
+    ></Button>
+    <Button
+      className={`${["clickable-container-small"]}`}
+      markedAsImportant={false}
+      icon={<ArrowRightIcon />}
       onClick={onFlipRight}
-    >
-      {arrowRightIcon}
-    </span>
+      disabled={disableRightArrow || loadingRightArrow}
+    ></Button>
   </div>
 );
 

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styles from "./books.module.css";
-import { arrowLeftIcon, arrowRightIcon } from "@/data/icons";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { BooksAttributes } from "@/services/database/models/Books";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import NavigationButtons from "@/app/components/Books/NavButtons";
+import { arrowRightIcon } from "@/data/icons";
+import { Selections } from "@/app/components/Selections/Selections";
 
 const numberOfBooks = 3;
 
@@ -44,24 +46,9 @@ export default function BookShelf() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <span
-          onClick={() => router.push("/")}
-          className={`${styles.leftClick} ${["clickable-container-small"]}`}
-        >
-          {arrowLeftIcon}
-        </span>
         <h2 className={styles.title}>My Book Shelf</h2>
-        <div></div>
       </div>
       <div className={styles["selection-container"]}>
-        <span
-          className={`${["clickable-container-small"]} ${
-            skipBooks === 0 ? styles.disabled : ""
-          }`}
-          onClick={() => handleNextBooks("back")}
-        >
-          {arrowLeftIcon}
-        </span>
         {books &&
           books.map((book, index) => (
             <span onClick={() => router.push(`/read/${book.GUID}`)} key={index}>
@@ -85,15 +72,14 @@ export default function BookShelf() {
               </span>
             </span>
           ))}
-        <span
-          className={`${["clickable-container-small"]} ${
-            skipBooks + 3 >= totalUserBooks ? styles.disabled : ""
-          }`}
-          onClick={() => handleNextBooks("forward")}
-        >
-          {arrowRightIcon}
-        </span>
       </div>
+      <NavigationButtons
+        disableLeftArrow={skipBooks === 0}
+        disableRightArrow={skipBooks + 3 >= totalUserBooks}
+        onFlipLeft={() => handleNextBooks("back")}
+        onFlipRight={() => handleNextBooks("forward")}
+        onReturnHome={() => router.push("/")}
+      />
     </div>
   );
 }
