@@ -1,14 +1,25 @@
 
-.title {
-  font-size: 2vw;
-  font-weight: bold;
+.coverContainer {
   text-align: center;
-  margin-top: -5vw;
+  margin-top: -2vw;
+}
+
+.title {
+  color: white;
+  font-size: 2.5vw;
+  font-weight: bold;
 }
 
 .coverImage {
-  width: 32vw;
-  height: 32vw;
+  width: 30vw;
+  height: 30vw;
+  position: relative;
+}
+
+
+.pageImage {
+  width: 35vw;
+  height: 35vw;
   position: relative;
 }
 
@@ -16,10 +27,4 @@
   font-size: 2vw;
   margin-left: 3vw;
   margin-right: 3vw;
-}
-
-.pageImage {
-  width: 42vw;
-  height: 42vw;
-  position: relative;
 }

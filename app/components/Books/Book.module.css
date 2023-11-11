@@ -1,7 +1,7 @@
 .pageContainer {
   background-color: saddlebrown;
   width: calc(100% - 2vw);
-  height: calc(45vw - 2vw);
+  height: calc(40vw - 2vw);
   position: relative;
   margin: auto;
   display: flex;
@@ -28,7 +28,7 @@
 .coverContainer {
   background: linear-gradient(to right, white 50%, saddlebrown 50%);
   width: calc(100% - 2vw);
-  height: calc(45vw - 2vw);
+  height: calc(40vw - 2vw);
   position: relative;
   margin: auto;
   display: flex;

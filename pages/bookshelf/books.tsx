@@ -6,8 +6,6 @@ import { BooksAttributes } from "@/services/database/models/Books";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import NavigationButtons from "@/app/components/Books/NavButtons";
-import { arrowRightIcon } from "@/data/icons";
-import { Selections } from "@/app/components/Selections/Selections";
 
 const numberOfBooks = 3;
 

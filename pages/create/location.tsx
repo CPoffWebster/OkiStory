@@ -1,10 +1,11 @@
-import { arrowLeftIcon } from "@/data/icons";
 import { useRouter } from "next/router";
 import { CharactersAttributes } from "@/services/database/models/Characters";
 import { Selections } from "@/app/components/Selections/Selections";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./story.module.css";
+import { HomeIcon } from "@/app/components/Icons/HomeIcon";
+import Button from "@/app/components/Button/Button";
 
 export interface StoryElement extends CharactersAttributes {}
 
@@ -35,12 +36,6 @@ export default function Story() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        {/* <span
-          onClick={() => router.push("/")}
-          className={`${styles.leftClick} ${["clickable-container-small"]}`}
-        >
-          {arrowLeftIcon}
-        </span> */}
         <h2 className={styles.title}>
           Choose your <u className={styles.titleFiller}>{selectionType}</u>!{" "}
         </h2>
@@ -53,6 +48,19 @@ export default function Story() {
           onSelectElement={() => handleSubmit()}
         ></Selections>
       )}
+      <div
+        style={{
+          marginTop: "2vw",
+        }}
+      >
+        <Button
+          text="Home"
+          className={`${["clickable-container-small"]}`}
+          markedAsImportant={false}
+          icon={<HomeIcon />}
+          onClick={() => router.push("/")}
+        ></Button>
+      </div>
     </div>
   );
 }

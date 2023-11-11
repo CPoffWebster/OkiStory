@@ -41,17 +41,13 @@ export default function GetBookData(props: { guid: string }) {
       ) {
         setBook(data);
         const coverPage = (
-          <div>
+          <div className={styles.coverContainer}>
             <h1 className={styles.title}>{data.Title}</h1>
-            <div className={styles["coverImage"]}>
-              <Image
-                src={`/api/images/getImage?filename=${data.imageGCSLocation}&imageType=book`}
-                layout="fill"
-                objectFit="contain"
-                priority={true}
-                alt={"Cover"}
-              />
-            </div>
+            <img
+              className={styles.coverImage}
+              src={`/api/images/getImage?filename=${data.imageGCSLocation}&imageType=book`}
+              alt={"selection-image"}
+            />
           </div>
         );
         setPagesContent([coverPage]);
@@ -87,15 +83,13 @@ export default function GetBookData(props: { guid: string }) {
           ) {
             pagesConfigured++;
             const newImageContent = (
-              <div className={styles["pageImage"]}>
-                <Image
-                  src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
-                  layout="fill"
-                  objectFit="contain"
-                  priority={true}
-                  alt={"PageImage"}
-                />
-              </div>
+              <img
+                className={styles.pageImage}
+                src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
+                alt={"selection-image"}
+              />
+              // <div className={styles["pageImage"]}>
+              // </div>
             );
             const newTextContent = (
               <div className={styles.pageText}>
@@ -127,10 +121,6 @@ export default function GetBookData(props: { guid: string }) {
         pageCount={book.PageCount!}
         pagesFound={pages.length}
       />
-      {/* {book ? (
-      ) : (
-        <div>Loading...</div>
-      )} */}
     </>
   );
 }
