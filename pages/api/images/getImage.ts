@@ -2,8 +2,8 @@ import { booksBucket, charactersBucket, getStorage, locationsBucket } from "@/se
 import { withBaseURL } from "@/utils/withBaseURL";
 import { NextApiRequest, NextApiResponse } from "next";
 
-// const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+// export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const filename = req.query.filename as string;
     const imageType = req.query.imageType as string;
 
@@ -35,4 +35,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     stream.pipe(res);
 }
 
-// export default withBaseURL(handler);
+export default withBaseURL(handler);
