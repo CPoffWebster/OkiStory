@@ -1,7 +1,7 @@
 import { CharactersAttributes } from "@/services/database/models/Characters";
 import { setSessionStorage } from "@/services/session";
-import Image from "next/image";
 import styles from "./Selection.module.css";
+import React, { useState } from "react";
 
 export interface StoryElement extends CharactersAttributes {}
 
@@ -16,6 +16,7 @@ export const Selection: React.FC<SelectionProps> = ({
   element,
   onSelectElement,
 }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
   const handleSelectElement = async (element: StoryElement): Promise<void> => {
     setSessionStorage(elementType, element.GUID);
     onSelectElement();
@@ -27,12 +28,12 @@ export const Selection: React.FC<SelectionProps> = ({
         className={`${styles["selection"]} ${["clickable-container-large"]}`}
       >
         <div className={styles["selection-image"]}>
-          <Image
+          {!imageLoaded && <div className={styles["image-placeholder"]}></div>}
+          <img
             src={`/api/images/getImage?filename=${element.GCSLocation}&imageType=${elementType}`}
-            layout="fill"
-            objectFit="contain"
-            priority={true}
+            onLoad={() => setImageLoaded(true)}
             alt={"selection-image"}
+            style={{ display: imageLoaded ? "block" : "none" }}
           />
         </div>
       </div>

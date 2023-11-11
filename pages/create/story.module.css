@@ -8,20 +8,20 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .leftClick {
   background-color: white;
 }
 
-  /* Title styling */
-  .title {
-    text-align: center;
-    margin-bottom: 1em;
-    font-size: 3vw;
-    font-weight: bold;
-  }
-  
-  .titleFiller {
-    color: purple;
-  }
+/* Title styling */
+.title {
+  margin-bottom: 1em;
+  font-size: 3vw;
+  font-weight: bold;
+}
+
+.titleFiller {
+  color: purple;
+}
