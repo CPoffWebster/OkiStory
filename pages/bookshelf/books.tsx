@@ -6,6 +6,7 @@ import { BooksAttributes } from "@/services/database/models/Books";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import NavigationButtons from "@/app/components/Books/NavButtons";
+import XDBook from "@/app/components/XDBook/XDBook";
 
 const numberOfBooks = 3;
 
@@ -49,26 +50,29 @@ export default function BookShelf() {
       <div className={styles["selection-container"]}>
         {books &&
           books.map((book, index) => (
-            <span onClick={() => router.push(`/read/${book.GUID}`)} key={index}>
-              <div
-                className={`${styles["selection"]} ${[
-                  "clickable-container-large",
-                ]}`}
-              >
-                <div className={styles["cover-image"]}>
-                  <Image
-                    src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
-                    layout="fill"
-                    objectFit="contain"
-                    priority={true}
-                    alt={"Book cover"}
-                  />
-                </div>
-              </div>
-              <span className={styles["section-name"]}>
-                {book.Title} {book.id}
-              </span>
-            </span>
+            <div key={index} onClick={() => router.push(`/read/${book.GUID}`)}>
+              <XDBook book={book} />
+            </div>
+            // <span onClick={() => router.push(`/read/${book.GUID}`)} key={index}>
+            //   <div
+            //     className={`${styles["selection"]} ${[
+            //       "clickable-container-large",
+            //     ]}`}
+            //   >
+            //     <div className={styles["cover-image"]}>
+            //       <Image
+            //         src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
+            //         layout="fill"
+            //         objectFit="contain"
+            //         priority={true}
+            //         alt={"Book cover"}
+            //       />
+            //     </div>
+            //   </div>
+            //   <span className={styles["section-name"]}>
+            //     {book.Title} {book.id}
+            //   </span>
+            // </span>
           ))}
       </div>
       <NavigationButtons

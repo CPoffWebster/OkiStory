@@ -1,3 +1,23 @@
+Overall
+background color
+height scaling vs width scaling
+
+Home
+number of books you can create
+default images
+
+
+Bookshelf
+background image
+selection as books not boxes
+
+Reading
+left side representation
+loading from generation in general has some bugs
+
+
+
+
 Bugs:
 Viewing multiple books - error + not showing if <=3
 images

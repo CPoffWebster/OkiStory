@@ -9,7 +9,6 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 3vw;
 }
   
   /* Header styling */
@@ -23,7 +22,6 @@
   /* Title styling */
   .title {
     text-align: center;
-    margin-bottom: 1em;
     font-size: 3vw;
     font-weight: bold;
   }
