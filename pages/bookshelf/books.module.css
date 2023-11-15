@@ -7,6 +7,9 @@
 /* Bookshelf and book container styling */
 .bookshelfContainer {
   position: relative;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 .bookshelfFrame {
