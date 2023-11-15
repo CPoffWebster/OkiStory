@@ -3,7 +3,6 @@ import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import { PagesAttributes } from "@/services/database/models/Pages";
 import Book from "@/app/components/Books/Book";
-import Image from "next/image";
 import axios from "axios";
 import styles from "./id.module.css";
 

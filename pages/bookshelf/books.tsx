@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { BooksAttributes } from "@/services/database/models/Books";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import NavigationButtons from "@/app/components/Books/NavButtons";
 import XDBook from "@/app/components/XDBook/XDBook";
 
@@ -44,36 +43,23 @@ export default function BookShelf() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h2 className={styles.title}>My Book Shelf</h2>
-      </div>
-      <div className={styles["selection-container"]}>
-        {books &&
-          books.map((book, index) => (
-            <div key={index} onClick={() => router.push(`/read/${book.GUID}`)}>
-              <XDBook book={book} />
-            </div>
-            // <span onClick={() => router.push(`/read/${book.GUID}`)} key={index}>
-            //   <div
-            //     className={`${styles["selection"]} ${[
-            //       "clickable-container-large",
-            //     ]}`}
-            //   >
-            //     <div className={styles["cover-image"]}>
-            //       <Image
-            //         src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
-            //         layout="fill"
-            //         objectFit="contain"
-            //         priority={true}
-            //         alt={"Book cover"}
-            //       />
-            //     </div>
-            //   </div>
-            //   <span className={styles["section-name"]}>
-            //     {book.Title} {book.id}
-            //   </span>
-            // </span>
-          ))}
+      <div className={styles.bookshelfContainer}>
+        <img
+          src="/bookshelf_frame.png"
+          alt="Bookshelf"
+          className={styles.bookshelfFrame}
+        />
+        <div className={styles.booksOnShelf}>
+          {books &&
+            books.map((book, index) => (
+              <div
+                key={index}
+                onClick={() => router.push(`/read/${book.GUID}`)}
+              >
+                <XDBook book={book} />
+              </div>
+            ))}
+        </div>
       </div>
       <NavigationButtons
         disableLeftArrow={skipBooks === 0}

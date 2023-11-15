@@ -1,55 +1,51 @@
 /* Container styling */
 .container {
-    text-align: center;
-  }
+  text-align: center;
+  position: relative;
+}
 
-/* Container to hold all the elements */
-.selection-container {
+/* Bookshelf and book container styling */
+.bookshelfContainer {
+  position: relative;
+}
+
+.bookshelfFrame {
+  /* width: 80%;
+  height: 50%; */
+  width: 90vw;
+  height: 40vw;
+}
+
+.booksOnShelf {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  pointer-events: none;
+}
+
+/* Individual book styling */
+.booksOnShelf > div {
+  pointer-events: auto;
+  margin: 10px;
+  margin-top:20px;
 }
   
-  /* Header styling */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    justify-content: center;
-  }
+/* Header styling */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  justify-content: center;
+}
 
-  /* Title styling */
-  .title {
-    text-align: center;
-    font-size: 3vw;
-    font-weight: bold;
-  }
-
-  .leftClick {
-    background-color: white;
-  }
-  
-  /* Book list styling */
-  .book-list {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .book-list-item {
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-  }
-  
-  .cover-image {
-    width: 20vw;
-    height: 20vw;
-    position: relative;
-  }
-  
-  .disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    pointer-events: none;
-  }
+/* Title styling */
+.title {
+  text-align: center;
+  font-size: 3vw;
+  font-weight: bold;
+}
