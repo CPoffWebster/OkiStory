@@ -2,28 +2,32 @@ import Link from "next/link";
 import LoginButton from "@/app/components/LoginButton/LoginButton";
 import styles from "./homepage.module.css";
 import "../styles/globals.css";
+import Button from "@/app/components/Button/Button";
+import { useRouter } from "next/router";
 
 export default function HomePage() {
+  const router = useRouter();
+
   return (
-    <div className={styles.container}>
+    <div>
       <div className={styles.header}>
         <h1 className={styles.title}>Oki Story</h1>
         {<LoginButton />}
       </div>
-
-      <div className={styles["main-content"]}>
+      <div className={styles.actionSelections}>
         {/* Left Section */}
         <div className={styles.section}>
           <div className={styles.sectionImage}>
             <img src="/book_pile.png" alt={"Bookshelf"}></img>
           </div>
-          <Link href="/bookshelf/books">
-            <button
-              className={`${styles.button} ${styles["button-left"]} containerBoxLarge`}
-            >
-              Book Shelf
-            </button>
-          </Link>
+          <Button
+            text="Book Shelf"
+            size="large"
+            className="containerBoxLarge"
+            onClick={() => {
+              router.push("/bookshelf/books");
+            }}
+          ></Button>
         </div>
 
         {/* Right Section */}
@@ -31,13 +35,15 @@ export default function HomePage() {
           <div className={styles.sectionImage}>
             <img src="/happy_book.png" alt={"Create"}></img>
           </div>
-          <Link href="/create/location">
-            <button
-              className={`${styles.button} ${styles["button-right"]} containerBoxLarge`}
-            >
-              New Story
-            </button>
-          </Link>
+          <Button
+            text="Create Story"
+            size="large"
+            markedAsImportant={true}
+            className="containerBoxLarge"
+            onClick={() => {
+              router.push("/create/location");
+            }}
+          ></Button>
         </div>
       </div>
     </div>

@@ -22,14 +22,14 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
 }) => (
   <button
-    className={`${
+    className={` ${styles.button} ${
       markedAsImportant ? "markedAsImportant" : "notMarkedAsImportant"
     } 
     ${disabled ? styles.disabled : ""}
     ${className}`}
     onClick={onClick}
   >
-    <div className={`${styles.button} ${styles[size]} `}>
+    <div className={`${styles.buttonContents} ${styles[size]} `}>
       {text && <div>{text}</div>}
       {icon && (
         <div className={styles[iconSize]}>

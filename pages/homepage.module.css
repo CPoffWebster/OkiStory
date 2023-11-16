@@ -1,8 +1,3 @@
-/* General layout */
-.container {
-  text-align: center;
-}
-
 /* Header layout */
 .header {
   position: relative;
@@ -21,8 +16,7 @@
   transform: translateX(-50%);
 }
 
-/* Main content layout */
-.main-content {
+.actionSelections {
   display: flex;
   justify-content: space-between;
   margin-top: 4vw;
@@ -50,21 +44,4 @@
   height: 8vw;
   margin-top: 1vw;
   font-size: calc(3vw + 2vh + 0.2vmin);
-}
-
-/* Left Button Specific Styling */
-.button-left {
-  background: transparent;
-  color: #000000;
-}
-
-/* Right Button Specific Styling */
-.button-right {
-  background: purple;
-  color: white;
-}
-
-
-.button:hover {
-  transform: translateY(-2px);
 }

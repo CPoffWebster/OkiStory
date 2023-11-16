@@ -1,4 +1,8 @@
-.button {
+.button:hover {
+    transform: translateY(-2px);
+}
+
+.buttonContents {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,7 +35,9 @@
 }
 
 .large {
-
+    width: 35vw;
+    height: 8vw;
+    font-size: calc(3vw + 2vh + 0.2vmin);
 }
 
 .none {
