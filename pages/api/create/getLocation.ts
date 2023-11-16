@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { withAuth } from "@/utils/withAuth";
 import { connectToDb } from '@/services/database/database';
 import { Locations } from '@/services/database/models/Locations';
+import { withBaseURL } from '@/utils/withBaseURL';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log('api/create/getLocation API Route Triggered');
@@ -14,4 +14,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json({ location });
 };
 
-export default withAuth(handler);
+export default withBaseURL(handler);

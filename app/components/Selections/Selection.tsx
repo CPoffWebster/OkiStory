@@ -29,6 +29,10 @@ export const Selection: React.FC<SelectionProps> = ({
     size === "large" ? "containerBoxLarge" : "containerBoxSmall";
   const selectionSize =
     size === "large" ? styles.selectionLarge : styles.selectionSmall;
+  const imagePlaceholder =
+    size === "large"
+      ? styles.imagePlaceholderLarge
+      : styles.imagePlaceholderSmall;
 
   // Apply the grey style when onSelectElement is null
   const greyedOutClass = onSelectElement ? "" : styles.greyedOut;
@@ -39,7 +43,7 @@ export const Selection: React.FC<SelectionProps> = ({
         className={`${containerBoxSize} ${selectionSize} ${greyedOutClass} ${styles.selection}`}
       >
         <div className={styles.selectionImage}>
-          {!imageLoaded && <div className={styles.imagePlaceholder}></div>}
+          {!imageLoaded && <div className={imagePlaceholder}></div>}
           <img
             src={`/api/images/getImage?filename=${element.GCSLocation}&imageType=${elementType}`}
             onLoad={() => setImageLoaded(true)}

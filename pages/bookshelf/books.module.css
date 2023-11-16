@@ -1,7 +1,6 @@
 /* Container styling */
 .container {
   text-align: center;
-  position: relative;
 }
 
 /* Bookshelf and book container styling */
@@ -13,10 +12,8 @@
 }
 
 .bookshelfFrame {
-  /* width: 80%;
-  height: 50%; */
   width: 90vw;
-  height: 40vw;
+  height: 38vw;
 }
 
 .booksOnShelf {
@@ -34,8 +31,6 @@
 /* Individual book styling */
 .booksOnShelf > div {
   pointer-events: auto;
-  margin: 10px;
-  margin-top:20px;
 }
   
 /* Header styling */
