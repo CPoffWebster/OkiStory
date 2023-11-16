@@ -19,7 +19,7 @@ input::-ms-reveal,
     padding: 2em;
   }
 
-.clickable-container-small {
+.containerBoxSmall {
   outline: 0;
   border: 0;
   cursor: pointer;
@@ -32,7 +32,7 @@ input::-ms-reveal,
     0 0 0 .15vw #000000 inset;
 }
 
-.clickable-container-large {
+.containerBoxLarge {
   outline: 0;
   border: 0;
   cursor: pointer;

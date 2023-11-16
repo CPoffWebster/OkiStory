@@ -44,7 +44,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
 }) => (
   <div className={styles.navButtons}>
     <Button
-      className={`${["clickable-container-small"]}`}
+      className="containerBoxSmall"
       markedAsImportant={false}
       icon={<ArrowLeftIcon />}
       onClick={onFlipLeft}
@@ -52,13 +52,13 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
     ></Button>
     <Button
       text="Home"
-      className={`${["clickable-container-small"]}`}
+      className="containerBoxSmall"
       markedAsImportant={true}
       icon={<HomeIcon />}
       onClick={onReturnHome}
     ></Button>
     <Button
-      className={`${["clickable-container-small"]}`}
+      className="containerBoxSmall"
       markedAsImportant={false}
       icon={<ArrowRightIcon />}
       onClick={onFlipRight}

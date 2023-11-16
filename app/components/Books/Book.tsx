@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Book.module.css";
 import { useRouter } from "next/router";
-import NavigationButtons, { useFlippedPages } from "./NavButtons";
-import Button from "../Button/Button";
+import NavigationButtons, { useFlippedPages } from "../NavButtons/NavButtons";
 
 interface BookReaderProps {
   pagesContent: React.JSX.Element[];

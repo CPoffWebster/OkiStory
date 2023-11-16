@@ -81,7 +81,7 @@ export default function Story() {
         )}
       </div>
       <button
-        className={`${styles.button} ${["clickable-container-large"]}`}
+        className={`${styles.button} containerBoxLarge`}
         onClick={handleSubmit}
       >
         Create Story!

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { BooksAttributes } from "@/services/database/models/Books";
 import { useSession } from "next-auth/react";
-import NavigationButtons from "@/app/components/Books/NavButtons";
+import NavigationButtons from "@/app/components/NavButtons/NavButtons";
 import XDBook from "@/app/components/XDBook/XDBook";
 
 const numberOfBooks = 3;

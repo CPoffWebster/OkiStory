@@ -55,7 +55,7 @@ export default function Story() {
       >
         <Button
           text="Home"
-          className={`${["clickable-container-small"]}`}
+          className="containerBoxSmall"
           markedAsImportant={false}
           icon={<HomeIcon />}
           onClick={() => router.push("/")}

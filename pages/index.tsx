@@ -46,9 +46,7 @@ export default function HomePage() {
           )}
           {!isLoggedIn && (
             <button
-              className={`${styles.loginButton} ${[
-                "clickable-container-small",
-              ]}`}
+              className={`${styles.loginButton} containerBoxSmall`}
               onClick={() => {
                 signIn("google").catch(console.error);
               }}
@@ -74,9 +72,7 @@ export default function HomePage() {
           </div>
           <Link href="/bookshelf/books">
             <button
-              className={`${styles.button} ${styles["button-left"]} ${[
-                "clickable-container-large",
-              ]}`}
+              className={`${styles.button} ${styles["button-left"]} containerBoxLarge`}
             >
               Book Shelf
             </button>
@@ -90,9 +86,7 @@ export default function HomePage() {
           </div>
           <Link href="/create/location">
             <button
-              className={`${styles.button} ${styles["button-right"]} ${[
-                "clickable-container-large",
-              ]}`}
+              className={`${styles.button} ${styles["button-right"]} containerBoxLarge`}
             >
               New Story
             </button>
