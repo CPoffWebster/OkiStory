@@ -31,13 +31,17 @@
     font-weight: bold;
 }
 
-.button {
-    width: 35vw;
+.buttonContainer {
+    width: 50%;
     height: 8vw;
-    margin-top: 1vw;
-    font-size: calc(3vw + 2vh + 0.2vmin);
-    background: purple;
-    color: white;
-    margin-left: 50%;
+    position: absolute;
+    left: 50%;
     transform: translateX(-50%);
+    max-width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 2vw;
+    border: 1px solid #000;
+    border-radius: 1vw;
 }

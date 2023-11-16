@@ -99,6 +99,8 @@ const Book: React.FC<BookReaderProps> = ({
         loadingRightArrow={
           pagesFound < pageCount && currentIndex >= pagesFound * 2
         }
+        rightImportant={currentIndex < pageCount * 2}
+        homeImportant={currentIndex >= pageCount * 2}
         onFlipLeft={handleFlipLeft}
         onFlipRight={handleFlipRight}
         onReturnHome={() => router.push("/")}

@@ -37,11 +37,3 @@
   height: 28vw;
   position: relative;
 }
-
-/* Button styling */
-.button {
-  width: 35vw;
-  height: 8vw;
-  margin-top: 1vw;
-  font-size: calc(3vw + 2vh + 0.2vmin);
-}

@@ -40,6 +40,10 @@
     font-size: calc(3vw + 2vh + 0.2vmin);
 }
 
+.largeIcon {
+    transform: translateY(-.2vw);
+}
+
 .none {
 
 }

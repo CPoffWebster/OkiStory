@@ -29,6 +29,9 @@ type NavigationButtonsProps = {
   disableLeftArrow: boolean;
   disableRightArrow: boolean;
   loadingRightArrow?: boolean;
+  leftImportant?: boolean;
+  rightImportant?: boolean;
+  homeImportant?: boolean;
   onFlipLeft: () => void;
   onFlipRight: () => void;
   onReturnHome: () => void;
@@ -38,6 +41,9 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   disableLeftArrow,
   disableRightArrow,
   loadingRightArrow,
+  leftImportant = false,
+  rightImportant = false,
+  homeImportant = false,
   onFlipLeft,
   onFlipRight,
   onReturnHome,
@@ -45,7 +51,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   <div className={styles.navButtons}>
     <Button
       className="containerBoxSmall"
-      markedAsImportant={false}
+      markedAsImportant={leftImportant}
       icon={<ArrowLeftIcon />}
       onClick={onFlipLeft}
       disabled={disableLeftArrow}
@@ -53,13 +59,13 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
     <Button
       text="Home"
       className="containerBoxSmall"
-      markedAsImportant={true}
+      markedAsImportant={homeImportant}
       icon={<HomeIcon />}
       onClick={onReturnHome}
     ></Button>
     <Button
       className="containerBoxSmall"
-      markedAsImportant={false}
+      markedAsImportant={rightImportant}
       icon={<ArrowRightIcon />}
       onClick={onFlipRight}
       disabled={disableRightArrow || loadingRightArrow}

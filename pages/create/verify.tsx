@@ -3,8 +3,10 @@ import { CharactersAttributes } from "@/services/database/models/Characters";
 import { Selection } from "@/app/components/Selections/Selection";
 import { LocationsAttributes } from "@/services/database/models/Locations";
 import { useEffect, useState } from "react";
+import Button from "@/app/components/Button/Button";
 import styles from "./verify.module.css";
 import axios from "axios";
+import { HomeIcon } from "@/app/components/Icons/HomeIcon";
 
 export default function Story() {
   const router = useRouter();
@@ -80,12 +82,25 @@ export default function Story() {
           </div>
         )}
       </div>
-      <button
-        className={`${styles.button} containerBoxLarge`}
-        onClick={handleSubmit}
-      >
-        Create Story!
-      </button>
+      <div className={styles.buttonContainer}>
+        <Button
+          text="Home"
+          size="medium"
+          className="containerBoxSmall"
+          markedAsImportant={false}
+          icon={<HomeIcon />}
+          onClick={() => {
+            router.push("/");
+          }}
+        ></Button>
+        <Button
+          text="Create Story!"
+          size="medium"
+          markedAsImportant={true}
+          className="containerBoxSmall"
+          onClick={handleSubmit}
+        ></Button>
+      </div>
     </div>
   );
 }
