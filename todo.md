@@ -2,12 +2,11 @@ Overall
 - [] background color
 - [] height scaling vs width scaling
 - [] analytics
-- [] On/Off buttons
+- [x] On/Off buttons
 
 Home
 - [] number of books you can create
-- [] default images
-
+- [x] default images
 
 Bookshelf
 - [x] background image
@@ -15,7 +14,11 @@ Bookshelf
 
 Reading
 - [x] left side representation
-- [] loading from generation in general has some bugs
+- [] loading from generation in general has some bugs + more testing
+
+AI Generations
+ - [] Text generation
+ - [] Image generation
 
 
 

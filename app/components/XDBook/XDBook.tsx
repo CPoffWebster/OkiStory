@@ -17,7 +17,7 @@ const XDBook: React.FC<XDBookProps> = ({ book }) => {
       <div className={styles.perspective}>
         <div className={`${styles.bookWrap} ${isRotated ? styles.rotate : ""}`}>
           <div
-            className={styles.book}
+            className={`${styles.book} ${styles.bookStyle}`}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
