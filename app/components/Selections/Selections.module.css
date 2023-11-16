@@ -1,6 +1,6 @@
 
 /* Container to hold all the elements */
-.selection-container {
+.selectionsContainer {
   display: flex;
   justify-content: center;
   align-items: center;

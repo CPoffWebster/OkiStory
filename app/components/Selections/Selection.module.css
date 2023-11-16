@@ -1,38 +1,51 @@
 
-/* Individual selection button styling */
 .selection {
-    width: 25vw;
-    height: 25vw;
-    margin: 0 2vw 1vw 2vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
+.selectionSmall {
+    width: 15vw;
+    height: 15vw;
+    margin: 0 1vw 1vw 1vw;
+}
+
+.selectionLarge {
+    width: 25vw;
+    height: 25vw;
+    margin: 0 2vw 1vw 2vw;
+}
+
 /* Image styling */
-.selection-image {
+.selectionImage {
     width: 20vw;
     height: 20vw;
     position: relative;
 }
 
-.section-name {
+.sectionName {
     font-size: 2vw;
     font-weight: bold;
 }
 
-.image-placeholder {
+.imagePlaceholder {
     width: 100%;
     height: 100%;
     background-color: #ccc; /* Placeholder color, adjust as needed */
 }
 
-.selection-image img {
+.selectionImage img {
     width: 100%;
     height: 100%;
     object-fit: contain;
     position: absolute;
     top: 0;
     left: 0;
+}
+
+.greyedOut {
+    opacity: 0.5; /* Or use a filter: grayscale(100%); */
+    pointer-events: none; /* Prevents clicking on the element */
 }

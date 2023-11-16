@@ -144,27 +144,21 @@ export default function GetBookData(props: { guid: string }) {
   return (
     <>
       <span className={styles.storyOutline}>
-        <h1>Story Outline</h1>
+        <h1 className={styles.storyOutlineTitle}>Story Outline</h1>
         {location && character && (
-          <div>
-            <div>
-              <h2>Location: {location.Name}</h2>
-              <Selection
-                key={location.GUID}
-                elementType={"Location"}
-                element={location}
-                onSelectElement={() => {}}
-              />
-            </div>
-            <div>
-              <h2>Character {character.Name}</h2>
-              <Selection
-                key={character.GUID}
-                elementType={"character"}
-                element={character}
-                onSelectElement={() => {}}
-              />
-            </div>
+          <div className={styles.selectionContainer}>
+            <Selection
+              key={location.GUID}
+              elementType={"Location"}
+              element={location}
+              size="small"
+            />
+            <Selection
+              key={character.GUID}
+              elementType={"character"}
+              element={character}
+              size="small"
+            />
           </div>
         )}
       </span>

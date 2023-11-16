@@ -29,7 +29,6 @@
   margin-right: 3vw;
 }
 
-
 .storyOutline {
   width: 50%;
   height: 100%;
@@ -38,7 +37,21 @@
   left: 0;
   padding: 2vw;
   display: flex;
-  align-items: center;
   flex-direction: column;
-  /* z-index: 1; */
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 3vw;
+  text-align: center;
+}
+
+.storyOutlineTitle {
+  font-size: 3vw;
+  font-weight: bold;
+  margin-bottom: 2vw;
+}
+
+.selectionContainer {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 }

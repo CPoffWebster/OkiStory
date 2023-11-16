@@ -7,6 +7,7 @@ export interface StoryElement extends CharactersAttributes {}
 type SelectionsProps = {
   elementType: string;
   elements: StoryElement[];
+  size?: string;
   onSelectElement: () => void;
 };
 
@@ -16,7 +17,7 @@ export const Selections: React.FC<SelectionsProps> = ({
   onSelectElement,
 }) => {
   return (
-    <div className={styles["selection-container"]}>
+    <div className={styles.selectionsContainer}>
       {elements.map((element) => (
         <Selection
           key={element.GUID}
