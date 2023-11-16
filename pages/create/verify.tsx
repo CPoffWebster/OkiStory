@@ -36,7 +36,7 @@ export default function Story() {
       characterGUID: character!.GUID,
       themeGUID: 0,
     });
-    sessionStorage.clear();
+    // sessionStorage.clear();
     router.push(`/read/${response.data.bookGuid}`);
   };
 
@@ -84,7 +84,7 @@ export default function Story() {
         className={`${styles.button} ${["clickable-container-large"]}`}
         onClick={handleSubmit}
       >
-        Start Reading!
+        Create Story!
       </button>
     </div>
   );

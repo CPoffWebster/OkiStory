@@ -1,19 +1,21 @@
 Overall
-background color
-height scaling vs width scaling
+- [] background color
+- [] height scaling vs width scaling
+- [] analytics
+- [] On/Off buttons
 
 Home
-number of books you can create
-default images
+- [] number of books you can create
+- [] default images
 
 
 Bookshelf
-background image
-selection as books not boxes
+- [x] background image
+- [x] selection as books not boxes
 
 Reading
-left side representation
-loading from generation in general has some bugs
+- [] left side representation
+- [] loading from generation in general has some bugs
 
 
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./Book.module.css";
 import { useRouter } from "next/router";
 import NavigationButtons, { useFlippedPages } from "./NavButtons";
+import Button from "../Button/Button";
 
 interface BookReaderProps {
   pagesContent: React.JSX.Element[];
@@ -88,13 +89,11 @@ const Book: React.FC<BookReaderProps> = ({
 
   return (
     <div>
-      <div
-        className={`${
-          currentIndex === 0 ? styles.coverContainer : styles.pageContainer
-        }`}
-      >
-        {renderedPages}
-      </div>
+      {currentIndex === 0 ? (
+        <div className={styles.coverContainer}>{renderedPages}</div>
+      ) : (
+        <div className={styles.pageContainer}>{renderedPages}</div>
+      )}
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
         disableRightArrow={currentIndex >= pageCount * 2}
