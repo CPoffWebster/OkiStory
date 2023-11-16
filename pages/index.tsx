@@ -1,67 +1,14 @@
-import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import LoginButton from "@/app/components/LoginButton/LoginButton";
 import styles from "./homepage.module.css";
-import { useState } from "react";
 import "../styles/globals.css";
 
 export default function HomePage() {
-  const session = useSession();
-  const isLoggedIn = !!session.data;
-
-  const [showSessionDetails, setShowSessionDetails] = useState(false);
-  const toggleSessionDetails = () => {
-    setShowSessionDetails(!showSessionDetails);
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>Oki Story</h1>
-        <span>
-          {isLoggedIn && (
-            <div
-              onClick={toggleSessionDetails}
-              className={styles.loggedInButton}
-            >
-              {session.data?.user.email?.charAt(0).toUpperCase()}
-            </div>
-          )}
-          {showSessionDetails && (
-            <div className={styles.signOutOptions}>
-              <div className={styles.signOutDetails}>
-                {session.data?.user.name}
-                <br />
-                <strong>{session.data?.user.email}</strong>
-              </div>
-              <div className={styles.signOutSeparator}></div>
-              <button
-                onClick={() => {
-                  signOut().catch(console.error);
-                }}
-                className={styles.signOutButton}
-              >
-                Sign Out
-              </button>
-            </div>
-          )}
-          {!isLoggedIn && (
-            <button
-              className={`${styles.loginButton} containerBoxSmall`}
-              onClick={() => {
-                signIn("google").catch(console.error);
-              }}
-            >
-              Login
-            </button>
-            // <Button
-            //   onClick={() => {
-            //     signIn("google").catch(console.error);
-            //   }}
-            // >
-            //   Login
-            // </Button>
-          )}
-        </span>
+        {<LoginButton />}
       </div>
 
       <div className={styles["main-content"]}>

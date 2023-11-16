@@ -14,7 +14,7 @@ Bookshelf
 - [x] selection as books not boxes
 
 Reading
-- [] left side representation
+- [x] left side representation
 - [] loading from generation in general has some bugs
 
 
