@@ -17,6 +17,17 @@ export class PaidAccounts extends Model<PaidAccountsAttributes> {
         return paidAccount;
     }
 
+    static async updatedAmountOfGenerations(userID: number) {
+        await PaidAccounts.update(
+            { AmountOfGenerations: Sequelize.literal('AmountOfGenerations - 1') },
+            {
+                where: {
+                    UserID: userID
+                }
+            }
+        );
+    }
+
     static async updatePaidAccount(paidAccount: PaidAccountsAttributes) {
         await PaidAccounts.update(
             paidAccount,
@@ -44,7 +55,7 @@ export function initPaidAccounts(sequelize: Sequelize) {
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         UserID: { type: DataTypes.INTEGER, unique: true, allowNull: false },
         SubscriptionType: { type: DataTypes.STRING(128), defaultValue: 'Free' },
-        AmountOfGenerations: { type: DataTypes.INTEGER, allowNull: true },
+        AmountOfGenerations: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: true },
         SubscriptionStartDate: { type: DataTypes.DATE, allowNull: true },
         ExpiryDate: { type: DataTypes.DATE, allowNull: true }
     }, {

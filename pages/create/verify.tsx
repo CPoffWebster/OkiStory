@@ -7,30 +7,42 @@ import Button from "@/app/components/Button/Button";
 import styles from "./verify.module.css";
 import axios from "axios";
 import { HomeIcon } from "@/app/components/Icons/HomeIcon";
+import { useSession } from "next-auth/react";
 
 export default function Story() {
   const router = useRouter();
+  const session = useSession();
   const [character, setCharacter] = useState<CharactersAttributes | null>(null);
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
-
-  const getCharacter = async () => {
-    const character = await axios.post("/api/create/getCharacter", {
-      guid: sessionStorage.getItem("Character"),
-    });
-    setCharacter(character.data.character);
-  };
-  const getLocation = async () => {
-    const location = await axios.post("/api/create/getLocation", {
-      guid: sessionStorage.getItem("Location"),
-    });
-    setLocation(location.data.location);
-  };
 
   // Initial load of characters
   useEffect(() => {
     getCharacter();
     getLocation();
   }, []);
+
+  const getCharacter = async () => {
+    const character = await axios.post("/api/create/getCharacter", {
+      guid: sessionStorage.getItem("Character"),
+    });
+    if (character.data.character === null) {
+      alert("Error fetching character, please try again.");
+      router.push("/");
+      return;
+    }
+    setCharacter(character.data.character);
+  };
+  const getLocation = async () => {
+    const location = await axios.post("/api/create/getLocation", {
+      guid: sessionStorage.getItem("Location"),
+    });
+    if (location.data.location === null) {
+      alert("Error fetching location, please try again.");
+      router.push("/");
+      return;
+    }
+    setLocation(location.data.location);
+  };
 
   const handleSubmit = async (): Promise<void> => {
     const response = await axios.post("/api/generation/story", {
@@ -98,6 +110,8 @@ export default function Story() {
           size="medium"
           markedAsImportant={true}
           className="containerBoxSmall"
+          disabled={session.data?.user.paidAccount.AmountOfGenerations === 0}
+          disabledMessage="Please contact us to add more book credits to your account."
           onClick={handleSubmit}
         ></Button>
       </div>

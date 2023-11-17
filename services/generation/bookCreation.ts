@@ -7,6 +7,7 @@ import { generateText, textGenerationEmitter } from "./chatGPT";
 import { v4 as uuidv4 } from 'uuid';
 import { generateImage } from "./dalle";
 import { Pages } from "../database/models/Pages";
+import { PaidAccounts } from "../database/models/PaidAccounts";
 
 class generatedTextOutput {
     title!: string;
@@ -41,6 +42,7 @@ export async function initializeBookCreation(locationGUID: string, characterGUID
 
 // Used as a buffer so no await is needed
 async function initiateBookCreation(newBook: BooksAttributes) {
+    PaidAccounts.updatedAmountOfGenerations(newBook.UserID!);
     createInRealTime(newBook);
 }
 

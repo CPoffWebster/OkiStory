@@ -1,10 +1,13 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { SessionContextValue, signIn, signOut } from "next-auth/react";
 import styles from "./LoginButton.module.css";
 import { useState } from "react";
 import Button from "../Button/Button";
 
-const LoginButton: React.FC = () => {
-  const session = useSession();
+type LoginButtonProps = {
+  session: SessionContextValue;
+};
+
+const LoginButton: React.FC<LoginButtonProps> = ({ session }) => {
   const isLoggedIn = !!session.data;
 
   const [showSessionDetails, setShowSessionDetails] = useState(false);
@@ -19,20 +22,20 @@ const LoginButton: React.FC = () => {
           <div onClick={toggleSessionDetails} className={styles.loggedInButton}>
             {session.data?.user.email?.charAt(0).toUpperCase()}
           </div>
-          <Button
+          {/* <Button
             text="Buy Credits"
             size="xsmall"
             className="containerBoxSmall"
             markedAsImportant={false}
             onClick={function (): void {}}
-          ></Button>
+          ></Button> */}
           <p
             style={{
               fontSize: "1vw",
             }}
           >
-            {session.data?.user.paidAccount.AmountOfGenerations || 0} credits
-            left
+            {session.data?.user.paidAccount.AmountOfGenerations || 0} book
+            credits left
           </p>
         </div>
       )}

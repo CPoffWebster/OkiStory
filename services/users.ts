@@ -79,7 +79,7 @@ export async function verifyUserProvider(profile: Profile | any) {
             Language: locale,
         }
         const createdUser = await Users.createUser(newUser);
-        await PaidAccounts.createPaidAccount({ UserID: createdUser.id!, SubscriptionType: 'Free' });
+        await PaidAccounts.createPaidAccount({ UserID: createdUser.id!, SubscriptionType: 'EarlyUser', AmountOfGenerations: 3 });
         return newUser;
     }
 }

@@ -1,8 +1,16 @@
+
 Overall
-- [] background color
-- [] height scaling vs width scaling
-- [] analytics
+- [x] background color
 - [x] On/Off buttons
+- [] height scaling vs width scaling - min and max size
+- [] analytics
+- [] Black background color on home page...
+- [] Squarespace login w/ okistory.com
+
+Credits
+- [] loggedin vs loggedout experience - logged in still has all "example" books, when out of credits can't click "Create Story", remove "buy credits" for now
+- [x] loggedIn header consistency - keep only on first page
+- [x] Credits, purchasing, and/or user setup during MVP testing - 3 starter for now
 
 Home
 - [] number of books you can create

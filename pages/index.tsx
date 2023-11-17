@@ -1,19 +1,21 @@
-import Link from "next/link";
 import LoginButton from "@/app/components/LoginButton/LoginButton";
 import styles from "./homepage.module.css";
-import "../styles/globals.css";
 import Button from "@/app/components/Button/Button";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import "../styles/globals.css"; // ToDo
 
 export default function HomePage() {
   const router = useRouter();
+  const session = useSession();
 
   return (
     <div>
       <div className={styles.header}>
         <h1 className={styles.title}>Oki Story</h1>
-        {<LoginButton />}
+        <LoginButton session={session} />
       </div>
+
       <div className={styles.actionSelections}>
         {/* Left Section */}
         <div className={styles.section}>
@@ -40,6 +42,12 @@ export default function HomePage() {
             size="large"
             markedAsImportant={true}
             className="containerBoxLarge"
+            disabled={
+              session === null ||
+              session === undefined ||
+              session.data?.user.paidAccount.AmountOfGenerations === 0
+            }
+            disabledMessage="Please contact us to add more book credits to your account."
             onClick={() => {
               router.push("/create/location");
             }}

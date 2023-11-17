@@ -7,6 +7,7 @@ type ButtonProps = {
   iconSize?: "small" | "medium" | "large" | "none";
   className: string;
   disabled?: boolean;
+  disabledMessage?: string;
   markedAsImportant?: boolean;
   onClick(): void;
 };
@@ -18,32 +19,39 @@ const Button: React.FC<ButtonProps> = ({
   iconSize = "mediumIcon",
   className = "",
   disabled = false,
+  disabledMessage,
   markedAsImportant = false,
   onClick,
 }) => (
-  <button
-    className={` ${styles.button} ${
-      markedAsImportant ? "markedAsImportant" : "notMarkedAsImportant"
-    } 
+  <div className={`${disabled ? styles.disabledWrapper : ""}`}>
+    <button
+      className={` ${styles.button} ${
+        markedAsImportant ? "markedAsImportant" : "notMarkedAsImportant"
+      } 
     ${disabled ? styles.disabled : ""}
     ${className}`}
-    onClick={onClick}
-  >
-    <div className={`${styles.buttonContents} ${styles[size]} `}>
-      {text && <div>{text}</div>}
-      {icon && (
-        <div className={styles[iconSize]}>
-          <div
-            className={
-              markedAsImportant ? "markedAsImportant" : "notMarkedAsImportant"
-            }
-          >
-            {icon}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <div className={`${styles.buttonContents} ${styles[size]} `}>
+        {text && <div>{text}</div>}
+        {icon && (
+          <div className={styles[iconSize]}>
+            <div
+              className={
+                markedAsImportant ? "markedAsImportant" : "notMarkedAsImportant"
+              }
+            >
+              {icon}
+            </div>
           </div>
-        </div>
+        )}
+      </div>
+      {disabled && disabledMessage && (
+        <div className={styles.tooltip}>{disabledMessage}</div>
       )}
-    </div>
-  </button>
+    </button>
+  </div>
 );
 
 export default Button;
