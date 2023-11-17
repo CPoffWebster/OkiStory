@@ -6,7 +6,7 @@ import {
     type NextAuthOptions,
     type DefaultSession,
 } from "next-auth";
-import { UsersAttributes } from "@/services/database/models/Users";
+import { Users, UsersAttributes } from "@/services/database/models/Users";
 import { verifyUserProvider } from "@/services/users";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -49,10 +49,10 @@ export const authOptions: NextAuthOptions = {
         },
         async session({ session }) {
             if (session.user?.email) {
-                const db = connectToDb();
-                const internalUser = await db.tables.Users.findOne({ where: { Email: session.user.email } }) as unknown as UsersAttributes;
-                session.user.id = internalUser.id!.toString();
-                session.user.internalUser = internalUser;
+                connectToDb();
+                const user = await Users.getUserByEmail(session.user.email);
+                session.user.id = user.id!.toString();
+                session.user.internalUser = user;
             }
             return session;
         },

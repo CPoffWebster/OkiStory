@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Session } from 'next-auth';
 import { DataTypes, Model, Sequelize } from 'sequelize';
 import { serializeTableObject } from '../modelSerialize';
+import { PaidAccounts, PaidAccountsAttributes } from './PaidAccounts';
 
 export interface UsersAttributes {
     id?: number;
@@ -17,9 +18,41 @@ export interface UsersAttributes {
 
     // Not in database
     session?: Session;
+    paidAccount?: PaidAccountsAttributes;
 }
 
 export class Users extends Model<UsersAttributes> {
+
+    // create user
+    static async createUser(create: UsersAttributes) {
+        const userInstance = await Users.create(create);
+        const user: UsersAttributes = userInstance ? serializeTableObject(userInstance) : null;
+        return user;
+    }
+
+    // update user
+    static async updateUser(user: UsersAttributes) {
+        await Users.update(
+            user,
+            {
+                where: {
+                    id: user.id
+                }
+            }
+        );
+    }
+
+    // get user by email
+    static async getUserByEmail(email: string) {
+        const userInstance = await Users.findOne({
+            where: {
+                Email: email
+            }
+        });
+        const user: UsersAttributes = userInstance ? serializeTableObject(userInstance) : null;
+        return user;
+    }
+
     static async getUserBySession(req: NextApiRequest, res: NextApiResponse) {
         const session = await getServerAuthSession(req, res);
         if (!session) return null;
@@ -29,7 +62,9 @@ export class Users extends Model<UsersAttributes> {
             }
         });
         const userData: UsersAttributes = user ? serializeTableObject(user) : null;
+        const paidAccount = await PaidAccounts.getPaidAccountByUserID(userData.id!);
         userData.session = session!
+        userData.paidAccount = paidAccount;
         return userData;
     }
 }
