@@ -3,7 +3,7 @@ import styles from "./Button.module.css";
 type ButtonProps = {
   text?: string;
   icon?: JSX.Element;
-  size?: "small" | "medium" | "large" | "none";
+  size?: "xsmall" | "small" | "medium" | "large" | "none";
   iconSize?: "small" | "medium" | "large" | "none";
   className: string;
   disabled?: boolean;

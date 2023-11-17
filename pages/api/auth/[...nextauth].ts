@@ -9,6 +9,7 @@ import {
 import { Users, UsersAttributes } from "@/services/database/models/Users";
 import { verifyUserProvider } from "@/services/users";
 import GoogleProvider from "next-auth/providers/google";
+import { PaidAccounts, PaidAccountsAttributes } from "@/services/database/models/PaidAccounts";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -21,6 +22,7 @@ declare module "next-auth" {
         user: {
             id: string;
             internalUser: UsersAttributes;
+            paidAccount: PaidAccountsAttributes;
         } & DefaultSession["user"];
     }
 }
@@ -51,8 +53,10 @@ export const authOptions: NextAuthOptions = {
             if (session.user?.email) {
                 connectToDb();
                 const user = await Users.getUserByEmail(session.user.email);
+                const paidAccount = await PaidAccounts.getPaidAccountByUserID(user.id!);
                 session.user.id = user.id!.toString();
                 session.user.internalUser = user;
+                session.user.paidAccount = paidAccount;
             }
             return session;
         },

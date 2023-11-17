@@ -15,8 +15,18 @@
     pointer-events: none;
 }
 
-.small {
+.xsmall {
+    font-size: 1vw;
+    padding: 0.4vw .5vw;
+    gap: 1vw;
+    font-weight: 700;
+}
 
+.small {
+    font-size: 2vw;
+    padding: 0.4vw .5vw;
+    gap: 1vw;
+    font-weight: 700;
 }
 
 .smallIcon {

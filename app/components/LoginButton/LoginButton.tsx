@@ -1,6 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import styles from "./LoginButton.module.css";
 import { useState } from "react";
+import Button from "../Button/Button";
 
 const LoginButton: React.FC = () => {
   const session = useSession();
@@ -14,8 +15,25 @@ const LoginButton: React.FC = () => {
   return (
     <>
       {isLoggedIn && (
-        <div onClick={toggleSessionDetails} className={styles.loggedInButton}>
-          {session.data?.user.email?.charAt(0).toUpperCase()}
+        <div className={styles.loggedInContainer}>
+          <div onClick={toggleSessionDetails} className={styles.loggedInButton}>
+            {session.data?.user.email?.charAt(0).toUpperCase()}
+          </div>
+          <Button
+            text="Buy Credits"
+            size="xsmall"
+            className="containerBoxSmall"
+            markedAsImportant={false}
+            onClick={function (): void {}}
+          ></Button>
+          <p
+            style={{
+              fontSize: "1vw",
+            }}
+          >
+            {session.data?.user.paidAccount.AmountOfGenerations || 0} credits
+            left
+          </p>
         </div>
       )}
       {showSessionDetails && (
@@ -37,21 +55,15 @@ const LoginButton: React.FC = () => {
         </div>
       )}
       {!isLoggedIn && (
-        <button
+        <Button
+          text="Login"
+          size="small"
           className={`${styles.loginButton} containerBoxSmall`}
+          markedAsImportant={true}
           onClick={() => {
             signIn("google").catch(console.error);
           }}
-        >
-          Login
-        </button>
-        // <Button
-        //   onClick={() => {
-        //     signIn("google").catch(console.error);
-        //   }}
-        // >
-        //   Login
-        // </Button>
+        ></Button>
       )}
     </>
   );
