@@ -12,11 +12,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         connectToDb();
         const user = await Users.getUserBySession(req, res);
         if (!user) {
-            res.status(401).json({ error: 'Unauthorized' });
-            return;
+            res.status(200);
+        } else {
+            const paidAccount = await PaidAccounts.getPaidAccountByUserID(user.id!);
+            res.status(200).json({ paidAccount });
         }
-        const paidAccount = await PaidAccounts.getPaidAccountByUserID(user.id!);
-        res.status(200).json({ paidAccount });
     } catch (err) {
         res.status(500).json({ error: err });
     }

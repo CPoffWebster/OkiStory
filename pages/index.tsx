@@ -2,7 +2,7 @@ import LoginButton from "@/app/components/LoginButton/LoginButton";
 import styles from "./homepage.module.css";
 import Button from "@/app/components/Button/Button";
 import { useRouter } from "next/router";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import "../styles/globals.css"; // ToDo
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -19,6 +19,7 @@ export default function HomePage() {
 
   const getAmountOfGenerations = async () => {
     const paidAccount = await axios.post("/api/users/getAvailableGenerations");
+    if (paidAccount.data.paidAccount === null) return;
     setAmountOfGenerations(paidAccount.data.paidAccount.AmountOfGenerations);
   };
 

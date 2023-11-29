@@ -13,7 +13,7 @@ Credits
 - [x] Credits, purchasing, and/or user setup during MVP testing - 3 starter for now
 
 Home
-- [] number of books you can create
+- [x] number of books you can create
 - [x] default images
 
 Bookshelf

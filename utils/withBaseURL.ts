@@ -8,13 +8,11 @@ export const withBaseURL = (handler: NextApiHandler) => async (req: NextApiReque
         // Construct the request's base URL from the Host header
         const requestBaseURL = `${req.headers.host}`;
 
-        console.log('Base URL validation:', requestBaseURL, allowedBaseURL, requestBaseURL !== allowedBaseURL)
-
         // Check if the request's base URL matches the allowed base URL
-        // if (requestBaseURL !== allowedBaseURL) {
-        //     res.status(403).json({ error: "Forbidden: Request from unauthorized URL" });
-        //     return;
-        // }
+        if (requestBaseURL !== allowedBaseURL) {
+            res.status(403).json({ error: "Forbidden: Request from unauthorized URL" });
+            return;
+        }
 
         // If the base URL is valid, proceed with the original handler
         return handler(req, res);
