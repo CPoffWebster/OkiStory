@@ -50,7 +50,6 @@ export default function Story() {
       characterGUID: character!.GUID,
       themeGUID: 0,
     });
-    // sessionStorage.clear();
     router.push(`/read/${response.data.bookGuid}`);
   };
 

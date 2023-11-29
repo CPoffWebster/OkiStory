@@ -5,9 +5,13 @@ import Button from "../Button/Button";
 
 type LoginButtonProps = {
   session: SessionContextValue;
+  amountOfGenerations: number;
 };
 
-const LoginButton: React.FC<LoginButtonProps> = ({ session }) => {
+const LoginButton: React.FC<LoginButtonProps> = ({
+  session,
+  amountOfGenerations,
+}) => {
   const isLoggedIn = !!session.data;
 
   const [showSessionDetails, setShowSessionDetails] = useState(false);
@@ -34,8 +38,7 @@ const LoginButton: React.FC<LoginButtonProps> = ({ session }) => {
               fontSize: "1vw",
             }}
           >
-            {session.data?.user.paidAccount.AmountOfGenerations || 0} book
-            credits left
+            {amountOfGenerations || 0} book credits left
           </p>
         </div>
       )}
