@@ -58,15 +58,17 @@ const LoginButton: React.FC<LoginButtonProps> = ({ session }) => {
         </div>
       )}
       {!isLoggedIn && (
-        <Button
-          text="Login"
-          size="small"
-          className={`${styles.loginButton} containerBoxSmall`}
-          markedAsImportant={true}
-          onClick={() => {
-            signIn("google").catch(console.error);
-          }}
-        ></Button>
+        <div className={styles.loginButton}>
+          <Button
+            text="Login"
+            size="small"
+            className="containerBoxSmall"
+            markedAsImportant={true}
+            onClick={() => {
+              signIn("google").catch(console.error);
+            }}
+          ></Button>
+        </div>
       )}
     </>
   );
