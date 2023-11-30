@@ -14,10 +14,13 @@ input::-ms-reveal,
     font-family: 'Inika', sans-serif;
   }
 
-  body {
-    background-color: #f8f8f9;
-    padding: 2em;
-  }
+html body {
+  background-color: #f8f8f9 !important;
+  padding: 2em !important;
+  --tw-bg-opacity: 1 !important;
+  --tw-text-opacity: 1 !important;
+  color: black;
+}
 
 .containerBoxSmall {
   outline: 0;
