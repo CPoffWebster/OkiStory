@@ -32,8 +32,8 @@ type NavigationButtonsProps = {
   leftImportant?: boolean;
   rightImportant?: boolean;
   homeImportant?: boolean;
-  onFlipLeft: () => void;
-  onFlipRight: () => void;
+  onFlipLeft: () => Promise<void> | void;
+  onFlipRight: () => Promise<void> | void;
   onReturnHome: () => void;
 };
 

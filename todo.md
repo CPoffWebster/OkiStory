@@ -20,7 +20,7 @@ Bookshelf
 
 Reading
 - [x] left side representation
-- [] loading images on left happens after the book is loaded
+- [x] loading images on left happens after the book is loaded
 - [] loading from generation in general has some bugs + more testing
 
 Go Live
@@ -34,3 +34,7 @@ Post-POC
 - [] analytics
 - [] Text generation
 - [] Image generation
+
+
+Bug Fixes
+- [] spam clicking "next" causes issues

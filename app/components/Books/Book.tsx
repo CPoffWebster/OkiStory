@@ -69,21 +69,31 @@ const Book: React.FC<BookReaderProps> = ({
   }, [flippedPages]);
 
   const handleFlipLeft = () => {
-    if (currentIndex <= 1) return;
-    flipPage(currentIndex, false);
-    // Wait for the animation to complete before updating currentIndex
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) => prevIndex - 2);
-    }, 400);
+    return new Promise<void>((resolve, reject) => {
+      if (currentIndex <= 1) return;
+      flipPage(currentIndex, false);
+      // Wait for the animation to complete before updating currentIndex
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => prevIndex - 2);
+        resolve(); // Resolve the promise after the timeout
+      }, 500);
+    });
   };
 
   const handleFlipRight = () => {
-    if (currentIndex >= pageCount * 2) return;
-    flipPage(currentIndex, true);
-    // Wait for the animation to complete before updating currentIndex
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) => prevIndex + 2);
-    }, 400);
+    return new Promise<void>((resolve, reject) => {
+      if (currentIndex >= pageCount * 2) {
+        reject("Index out of bounds"); // Reject the promise if the condition is not met
+        return;
+      }
+
+      flipPage(currentIndex, true);
+      // Wait for the animation to complete before updating currentIndex
+      setTimeout(() => {
+        setCurrentIndex((prevIndex) => prevIndex + 2);
+        resolve(); // Resolve the promise after the timeout
+      }, 500);
+    });
   };
 
   return (

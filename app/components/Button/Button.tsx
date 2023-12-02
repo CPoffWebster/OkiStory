@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styles from "./Button.module.css";
 
 type ButtonProps = {
@@ -9,7 +10,7 @@ type ButtonProps = {
   disabled?: boolean;
   disabledMessage?: string;
   markedAsImportant?: boolean;
-  onClick(): void;
+  onClick(): Promise<void> | void;
 };
 
 const Button: React.FC<ButtonProps> = ({
@@ -22,36 +23,51 @@ const Button: React.FC<ButtonProps> = ({
   disabledMessage,
   markedAsImportant = false,
   onClick,
-}) => (
-  <div className={`${disabled ? styles.disabledWrapper : ""}`}>
-    <button
-      className={` ${styles.button} ${
-        markedAsImportant ? "markedAsImportant" : "notMarkedAsImportant"
-      } 
-    ${disabled ? styles.disabled : ""}
-    ${className}`}
-      disabled={disabled}
-      onClick={onClick}
-    >
-      <div className={`${styles.buttonContents} ${styles[size]} `}>
-        {text && <div>{text}</div>}
-        {icon && (
-          <div className={styles[iconSize]}>
-            <div
-              className={
-                markedAsImportant ? "markedAsImportant" : "notMarkedAsImportant"
-              }
-            >
-              {icon}
+}) => {
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const handleClick = async () => {
+    setIsDisabled(true); // Disable the button
+    try {
+      await onClick(); // Execute the passed onClick function
+    } finally {
+      setIsDisabled(false); // Re-enable the button
+    }
+  };
+
+  return (
+    <div className={`${disabled ? styles.disabledWrapper : ""}`}>
+      <button
+        className={` ${styles.button} ${
+          markedAsImportant ? "markedAsImportant" : "notMarkedAsImportant"
+        } 
+      ${disabled || isDisabled ? styles.disabled : ""}
+      ${className}`}
+        disabled={disabled}
+        onClick={handleClick}
+      >
+        <div className={`${styles.buttonContents} ${styles[size]} `}>
+          {text && <div>{text}</div>}
+          {icon && (
+            <div className={styles[iconSize]}>
+              <div
+                className={
+                  markedAsImportant
+                    ? "markedAsImportant"
+                    : "notMarkedAsImportant"
+                }
+              >
+                {icon}
+              </div>
             </div>
-          </div>
+          )}
+        </div>
+        {disabled && disabledMessage && (
+          <div className={styles.tooltip}>{disabledMessage}</div>
         )}
-      </div>
-      {disabled && disabledMessage && (
-        <div className={styles.tooltip}>{disabledMessage}</div>
-      )}
-    </button>
-  </div>
-);
+      </button>
+    </div>
+  );
+};
 
 export default Button;

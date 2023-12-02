@@ -14,6 +14,18 @@ export default function Story() {
   const session = useSession();
   const [character, setCharacter] = useState<CharactersAttributes | null>(null);
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
+  const [amountOfGenerations, setAmountOfGenerations] = useState<number>(0);
+
+  useEffect(() => {
+    // Fetch the latest session data
+    getAmountOfGenerations();
+  }, []);
+
+  const getAmountOfGenerations = async () => {
+    const paidAccount = await axios.post("/api/users/getAvailableGenerations");
+    if (paidAccount.data.paidAccount === null) return;
+    setAmountOfGenerations(paidAccount.data.paidAccount.AmountOfGenerations);
+  };
 
   // Initial load of characters
   useEffect(() => {
@@ -109,7 +121,7 @@ export default function Story() {
           size="medium"
           markedAsImportant={true}
           className="containerBoxSmall"
-          disabled={session.data?.user.paidAccount.AmountOfGenerations === 0}
+          disabled={amountOfGenerations === 0}
           disabledMessage="Please contact us to add more book credits to your account."
           onClick={handleSubmit}
         ></Button>

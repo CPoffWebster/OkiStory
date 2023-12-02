@@ -30,6 +30,25 @@ export default function GetBookData(props: { guid: string }) {
   const [coverPage, setCoverPage] = useState<React.JSX.Element | null>(null); // pagesContent[0]
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
 
+  // Initial load of location and character for newly created books
+  useEffect(() => {
+    (async () => {
+      const locationGUID = sessionStorage.getItem("Location") || "";
+      const characterGUID = sessionStorage.getItem("Character") || "";
+
+      if (locationGUID !== "" && characterGUID !== "") {
+        const location = await axios.post("/api/create/getLocation", {
+          guid: locationGUID,
+        });
+        setLocation(location.data.location);
+        const character = await axios.post("/api/create/getCharacter", {
+          guid: characterGUID,
+        });
+        setCharacter(character.data.character);
+      }
+    })();
+  }, []);
+
   // Initial load of book
   useEffect(() => {
     const intervalId = setInterval(async () => {
@@ -63,19 +82,12 @@ export default function GetBookData(props: { guid: string }) {
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
-  // Initial load of location and character
+  // Initial load of location and character for already created books
   useEffect(() => {
     (async () => {
       if (location !== null && character !== null) return;
-      let locationGUID = "";
-      let characterGUID = "";
-      if (book !== null) {
-        locationGUID = book.LocationGUID;
-        characterGUID = book.CharacterGUID;
-      } else {
-        locationGUID = sessionStorage.getItem("Location") || "";
-        characterGUID = sessionStorage.getItem("Character") || "";
-      }
+      let locationGUID = book.LocationGUID;
+      let characterGUID = book.CharacterGUID;
 
       if (locationGUID !== "" && characterGUID !== "") {
         const location = await axios.post("/api/create/getLocation", {
