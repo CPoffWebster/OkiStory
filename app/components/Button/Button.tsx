@@ -10,7 +10,7 @@ type ButtonProps = {
   disabled?: boolean;
   disabledMessage?: string;
   markedAsImportant?: boolean;
-  onClick(): Promise<void> | void;
+  onClick(): Promise<any> | void;
 };
 
 const Button: React.FC<ButtonProps> = ({
