@@ -82,9 +82,10 @@ export class ReadingAlphaDB {
      * @param options if dev is false, the entire database will be dropped and recreated.  If dev is true, the database will be altered.
      */
     public async createTables(options: { useDev?: boolean } = {}) {
-        const syncOptions: SyncOptions = (options.useDev === true)
-            ? ({ alter: true, force: true })  //  Force if dev
-            : ({ alter: true, force: false });  // Don't force it.  We're in prod
+        // const syncOptions: SyncOptions = (options.useDev === true)
+        //     ? ({ alter: true, force: true })  //  Force if dev
+        //     : ({ alter: true, force: false });  // Don't force it.  We're in prod
+        const syncOptions: SyncOptions = ({ alter: true, force: false });
 
         await this.tables.Users.sync(syncOptions)
         await this.tables.UserAccounts.sync(syncOptions)
