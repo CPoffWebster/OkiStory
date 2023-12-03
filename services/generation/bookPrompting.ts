@@ -35,6 +35,7 @@ export function bookPrompt(character: string, location: string, theme: string): 
     
     The narrative should be well-structured with a distinct beginning, middle, and end, avoiding any cliffhangers or abrupt stops.
     Each page, inclusive of the title page, should come with an accompanying image description.
+    The title page image description should not include specific text stating that it is the title page.
     These descriptions should be crafted to suit hand-drawn, simple designs appropriate for picture books.
     Consistency is key: ensure that the characters and settings maintain a uniform style throughout the story, both in textual description and in the envisioned artwork.
     
