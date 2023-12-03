@@ -19,6 +19,13 @@ const Book: React.FC<BookReaderProps> = ({
   const { flippedPages, flipPage } = useFlippedPages();
   const [renderedPages, setRenderedPages] = useState<React.JSX.Element[]>([]);
 
+  // call useEffect when any of the dependencies change
+  useEffect(() => {
+    console.log("pagesContent", pagesContent);
+    console.log("pageCount", pageCount);
+    console.log("pagesFound", pagesFound);
+  }, [pagesContent, pageCount, pagesFound]);
+
   // Pre-render pages
   useEffect(() => {
     const pageRendering = pagesContent.map((content, index) => {
@@ -105,7 +112,7 @@ const Book: React.FC<BookReaderProps> = ({
       )}
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
-        disableRightArrow={currentIndex >= pageCount * 2}
+        disableRightArrow={currentIndex >= pagesFound * 2}
         loadingRightArrow={
           pagesFound < pageCount && currentIndex >= pagesFound * 2
         }

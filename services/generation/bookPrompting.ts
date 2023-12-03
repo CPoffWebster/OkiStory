@@ -47,8 +47,8 @@ export function bookPrompt(character: string, location: string, theme: string): 
     Given the directions above, create a story with the following parameters:
     Character: ${character}
     Setting: ${location}
-    Theme: ${theme}
     `;
+    // Theme: ${theme} --> Todo: currently disabling theme
 }
 
 export function imagePrompt(imageDescription: string, character: string, location: string, style: string): string {

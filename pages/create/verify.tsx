@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 export default function Story() {
   const router = useRouter();
   const session = useSession();
+  const [disableGeneration, setDisableGeneration] = useState<boolean>(true);
   const [character, setCharacter] = useState<CharactersAttributes | null>(null);
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
   const [amountOfGenerations, setAmountOfGenerations] = useState<number>(0);
@@ -29,9 +30,34 @@ export default function Story() {
 
   // Initial load of characters
   useEffect(() => {
+    allowGeneration();
     getCharacter();
     getLocation();
   }, []);
+
+  const allowGeneration = async () => {
+    try {
+      const response = await axios.get("/api/generation/allowGeneration");
+      console.log("RESPONSE HERE", response.data);
+      if (response.data.mostRecentBook) {
+        const currentTime = new Date().getTime();
+        const creationTime = new Date(
+          response.data.mostRecentBook.createdAt
+        ).getTime();
+        const timeDiff = (currentTime - creationTime) / 1000; // Difference in seconds
+        console.log("TIME DIFFERENCE", timeDiff);
+
+        if (timeDiff < 60) {
+          // Book was created within the last 60 seconds
+          setDisableGeneration(true);
+          // Set a timer to re-check after the remaining time until 60 seconds are completed
+          setTimeout(allowGeneration, (60 - timeDiff) * 1000);
+        } else setDisableGeneration(false);
+      } else setDisableGeneration(false);
+    } catch (error) {
+      console.error("Error checking generation allowance", error);
+    }
+  };
 
   const getCharacter = async () => {
     const character = await axios.post("/api/create/getCharacter", {
@@ -57,12 +83,19 @@ export default function Story() {
   };
 
   const handleSubmit = async (): Promise<void> => {
-    const response = await axios.post("/api/generation/story", {
-      locationGUID: location!.GUID,
-      characterGUID: character!.GUID,
-      themeGUID: 0,
-    });
-    router.push(`/read/${response.data.bookGuid}`);
+    await allowGeneration();
+
+    if (!disableGeneration) {
+      alert("Please wait before generating a new story.");
+      return;
+    }
+
+    // const response = await axios.post("/api/generation/story", {
+    //   locationGUID: location!.GUID,
+    //   characterGUID: character!.GUID,
+    //   themeGUID: 0,
+    // });
+    // router.push(`/read/${response.data.bookGuid}`);
   };
 
   const handleLocation = () => {
@@ -116,15 +149,27 @@ export default function Story() {
             router.push("/");
           }}
         ></Button>
-        <Button
-          text="Create Story!"
-          size="medium"
-          markedAsImportant={true}
-          className="containerBoxSmall"
-          disabled={amountOfGenerations === 0}
-          disabledMessage="Please contact us to add more book credits to your account."
-          onClick={handleSubmit}
-        ></Button>
+        {disableGeneration ? (
+          <Button
+            text="Create Story!"
+            size="medium"
+            markedAsImportant={true}
+            className="containerBoxSmall"
+            disabled={disableGeneration}
+            disabledMessage="Please wait before generating a new story."
+            onClick={handleSubmit}
+          ></Button>
+        ) : (
+          <Button
+            text="Create Story!"
+            size="medium"
+            markedAsImportant={true}
+            className="containerBoxSmall"
+            disabled={amountOfGenerations === 0}
+            disabledMessage="Please contact us to add more book credits to your account."
+            onClick={handleSubmit}
+          ></Button>
+        )}
       </div>
     </div>
   );

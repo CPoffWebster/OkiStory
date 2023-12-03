@@ -22,7 +22,15 @@ Bookshelf
 Reading
 - [x] left side representation
 - [x] loading images on left happens after the book is loaded
-- [] loading from generation in general has some bugs + more testing
+- [better] don't allow going to the next page until it actually exists - disabled (PLUS - show an indication that it's being created/generated)
+
+Creating Books
+- [x] text creations not being updated in the database
+      - created the bucket, needs to be tested
+- [?] estimated pricings not working
+- [better] queue for creating books -> rate limits applied https://platform.openai.com/account/limits
+- [] ERROR HANDLING: how to deal with issues with creating images
+    - ex: image_generations id 64 has no image
 
 Go Live
 - [] Create UAT vs prod

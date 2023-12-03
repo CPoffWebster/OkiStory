@@ -86,12 +86,12 @@ async function updateGeneratedTextRecord<T>(prompt: string, generation: TextGene
 
     let inputPrice = 0;
     let outputPrice = 0;
-    switch (generation.Model) {
+    switch (generation.Model.toLowerCase()) {
         case 'gpt-3.5-turbo':
             inputPrice = 0.0000015;
             outputPrice = 0.000002;
             break;
-        case 'GPT-4':
+        case 'gpt-4':
             inputPrice = 0.00003;
             outputPrice = 0.00006;
             break;

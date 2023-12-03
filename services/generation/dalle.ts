@@ -78,12 +78,9 @@ async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGen
     await imageBucket.upload(generation.GCSLocation, compressedImage);
 
     let price = 0;
-    switch (generation.Model) {
-        case ('1024x1024'):
-            price = .04;
-            break;
-        case ('256x256'):
-            price = .016;
+    switch (generation.Model.toLowerCase()) {
+        case ('dall-e-3'):
+            price = .08;
             break;
         case ('test'):
             price = 0;
