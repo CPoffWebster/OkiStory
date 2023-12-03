@@ -15,4 +15,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 }
 
-export default withAuthAdmin(handler);
+// export default withAuthAdmin(handler);
+export default handler;

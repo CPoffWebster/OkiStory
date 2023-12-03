@@ -32,6 +32,7 @@ Go Live
 
 Post-POC
 - [] height scaling vs width scaling - min and max size
+- [] migrations
 - [] analytics
 - [] image loading speed
 - [] Text generation prompts
