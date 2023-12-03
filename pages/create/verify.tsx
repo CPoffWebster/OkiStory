@@ -38,20 +38,18 @@ export default function Story() {
   const allowGeneration = async () => {
     try {
       const response = await axios.get("/api/generation/allowGeneration");
-      console.log("RESPONSE HERE", response.data);
       if (response.data.mostRecentBook) {
         const currentTime = new Date().getTime();
         const creationTime = new Date(
           response.data.mostRecentBook.createdAt
         ).getTime();
         const timeDiff = (currentTime - creationTime) / 1000; // Difference in seconds
-        console.log("TIME DIFFERENCE", timeDiff);
 
-        if (timeDiff < 60) {
-          // Book was created within the last 60 seconds
+        if (timeDiff < 90) {
+          // Book was created within the last 90 seconds
           setDisableGeneration(true);
-          // Set a timer to re-check after the remaining time until 60 seconds are completed
-          setTimeout(allowGeneration, (60 - timeDiff) * 1000);
+          // Set a timer to re-check after the remaining time until 90 seconds are completed
+          setTimeout(allowGeneration, (90 - timeDiff) * 1000);
         } else setDisableGeneration(false);
       } else setDisableGeneration(false);
     } catch (error) {

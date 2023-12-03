@@ -19,13 +19,6 @@ const Book: React.FC<BookReaderProps> = ({
   const { flippedPages, flipPage } = useFlippedPages();
   const [renderedPages, setRenderedPages] = useState<React.JSX.Element[]>([]);
 
-  // call useEffect when any of the dependencies change
-  useEffect(() => {
-    console.log("pagesContent", pagesContent);
-    console.log("pageCount", pageCount);
-    console.log("pagesFound", pagesFound);
-  }, [pagesContent, pageCount, pagesFound]);
-
   // Pre-render pages
   useEffect(() => {
     const pageRendering = pagesContent.map((content, index) => {
