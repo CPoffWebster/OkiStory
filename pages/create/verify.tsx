@@ -83,17 +83,17 @@ export default function Story() {
   const handleSubmit = async (): Promise<void> => {
     await allowGeneration();
 
-    if (!disableGeneration) {
+    if (disableGeneration) {
       alert("Please wait before generating a new story.");
       return;
     }
 
-    // const response = await axios.post("/api/generation/story", {
-    //   locationGUID: location!.GUID,
-    //   characterGUID: character!.GUID,
-    //   themeGUID: 0,
-    // });
-    // router.push(`/read/${response.data.bookGuid}`);
+    const response = await axios.post("/api/generation/story", {
+      locationGUID: location!.GUID,
+      characterGUID: character!.GUID,
+      themeGUID: 0,
+    });
+    router.push(`/read/${response.data.bookGuid}`);
   };
 
   const handleLocation = () => {
