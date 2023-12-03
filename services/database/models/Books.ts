@@ -1,9 +1,10 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { DataTypes, Model, Op, Sequelize } from 'sequelize';
 import { serializeTableObject } from '../modelSerialize';
 
 export interface BooksAttributes {
     id?: number;
     GUID: string;
+    DefaultBook?: boolean;
     UserID: number;
     Title?: string;
     GeneratedImageID?: number;
@@ -45,15 +46,6 @@ export class Books extends Model<BooksAttributes> {
         return book ? serializeTableObject(book) : null;
     }
 
-    static async totalUserBooks(userID: number) {
-        const totalBooks = await Books.count({
-            where: {
-                UserID: userID
-            }
-        });
-        return totalBooks;
-    }
-
     static async getUserBooks(userID: number, count: number, offset: number): Promise<BooksAttributes[] | null> {
         const books = await Books.findAll({
             limit: count,
@@ -69,13 +61,18 @@ export class Books extends Model<BooksAttributes> {
         return books ? books.map(book => serializeTableObject(book)) : null;
     }
 
-    static async getDefaultBook() {
-        const book = await Books.findOne({
+    static async getDefaultBooks(count: number, offset: number): Promise<BooksAttributes[] | null> {
+        const books = await Books.findAll({
+            limit: count,
+            offset: offset,
+            order: [
+                ['createdAt', 'DESC']
+            ],
             where: {
-                id: process.env.DEFAULT_BOOK_ID
+                DefaultBook: true
             }
         });
-        return book ? serializeTableObject(book) : null;
+        return books ? books.map(book => serializeTableObject(book)) : null;
     }
 }
 
@@ -83,6 +80,7 @@ export function initBooks(sequelize: Sequelize) {
     Books.init({
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         GUID: { type: DataTypes.STRING(255) },
+        DefaultBook: { type: DataTypes.BOOLEAN, defaultValue: false },
         UserID: { type: DataTypes.INTEGER },
         Title: { type: DataTypes.STRING(255) },
         GeneratedTextID: { type: DataTypes.INTEGER },

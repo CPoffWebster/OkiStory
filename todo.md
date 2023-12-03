@@ -17,6 +17,7 @@ Home
 Bookshelf
 - [x] background image
 - [x] selection as books not boxes
+- [x] default books as a database column
 
 Reading
 - [x] left side representation
@@ -32,8 +33,9 @@ Go Live
 Post-POC
 - [] height scaling vs width scaling - min and max size
 - [] analytics
-- [] Text generation
-- [] Image generation
+- [] image loading speed
+- [] Text generation prompts
+- [] Image generation prompts
 
 
 Bug Fixes

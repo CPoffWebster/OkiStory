@@ -24,7 +24,7 @@ export class Pages extends Model<PagesAttributes> {
         return { pages, created }
     }
 
-    static async getBookPages(bookID: number) {
+    static async getBookPages(bookID: number): Promise<PagesAttributes[] | null> {
         const pages = await Pages.findAll({
             where: {
                 BookID: bookID

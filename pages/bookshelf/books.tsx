@@ -3,7 +3,6 @@ import styles from "./books.module.css";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { BooksAttributes } from "@/services/database/models/Books";
-import { useSession } from "next-auth/react";
 import NavigationButtons from "@/app/components/NavButtons/NavButtons";
 import XDBook from "@/app/components/XDBook/XDBook";
 
@@ -11,10 +10,14 @@ const numberOfBooks = 3;
 
 export default function BookShelf() {
   const router = useRouter();
-  const session = useSession();
   const [skipBooks, setSkipBooks] = useState<number>(0); // [0, 3, 6, 9, 12, 15, 18, 21, 24, 27
   const [books, setBooks] = useState<BooksAttributes[] | null>(null);
   const [totalUserBooks, setTotalUserBooks] = useState<number>(0);
+
+  // Initial load of books
+  useEffect(() => {
+    getBooks(0);
+  }, []);
 
   // Get books from database
   const getBooks = async (offset: number) => {
@@ -26,19 +29,13 @@ export default function BookShelf() {
     setTotalUserBooks(booksBatch.data.totalBooks);
   };
 
-  // Initial load of books
-  useEffect(() => {
-    // if (!session.data?.user) return;
-    getBooks(0);
-  }, [session]);
-
   // Load next batch of books
   const handleNextBooks = async (direction: string) => {
-    let newSkipBooks = 0;
+    let newSkipBooks = skipBooks;
     if (direction === "back") newSkipBooks = skipBooks - numberOfBooks;
     if (direction === "forward") newSkipBooks = skipBooks + numberOfBooks;
     setSkipBooks(newSkipBooks);
-    getBooks(newSkipBooks);
+    await getBooks(newSkipBooks);
   };
 
   return (
@@ -51,9 +48,9 @@ export default function BookShelf() {
         />
         <div className={styles.booksOnShelf}>
           {books &&
-            books.map((book, index) => (
+            books.map((book) => (
               <div
-                key={index}
+                key={book.GUID}
                 onClick={() => router.push(`/read/${book.GUID}`)}
               >
                 <XDBook book={book} />

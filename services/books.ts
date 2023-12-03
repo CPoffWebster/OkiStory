@@ -1,17 +1,6 @@
-import { connectToDb } from "./database/database";
 import { Books, BooksAttributes } from "./database/models/Books";
 import { ImageGenerations } from "./database/models/ImageGenerations";
 import { Pages, PagesAttributes } from "./database/models/Pages";
-
-/**
- * Get the total count of books for a user
- * @param userID 
- * @returns count of books
- */
-export async function totalUserBooks(userID: number) {
-    const totalBooks = await Books.totalUserBooks(userID);
-    return totalBooks;
-}
 
 /**
  * Get the bookshelf list of books for a user
@@ -20,30 +9,54 @@ export async function totalUserBooks(userID: number) {
  * @param offset x number of books to skip
  * @returns 
  */
-export async function getUserBooks(userID: number, count: number, offset: number) {
-    const books = await Books.getUserBooks(userID, count, offset);
-    if (books === null) return [];
+export async function getUserBooks(userID: number, count: number, offset: number): Promise<[number, BooksAttributes[]]> {
+    // create a transaction to get both the count of the user books and the count of the default books
+    const [userTotal, defaultTotal] = await Promise.all([
+        Books.count({ where: { UserID: userID } }),
+        Books.count({ where: { DefaultBook: true } })
+    ]);
 
-    const booksWithPhotoLocation = await Promise.all(
-        books.map(async (book) => {
-            // const storage = getStorage();
-            const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID!);
-            book.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
-            return book;
-        })
-    );
+    // Fetch user's books
+    let books = await Books.getUserBooks(userID, count, offset);
+    if (books === null) books = [];
 
-    return booksWithPhotoLocation;
+    // Calculate the number of user-specific books that have been skipped or displayed
+    const userBooksFetched = Math.min(userTotal, offset + count);
+
+    // Check if all user-specific books are fetched
+    if (userBooksFetched >= userTotal) {
+        // Calculate new offset for default books
+        const defaultBooksOffset = Math.max(0, offset - userTotal);
+
+        // Calculate how many more books are needed to meet the count
+        const remainingCount = count - books.length;
+
+        // Fetch default books with the new offset
+        const defaultBooks = await Books.getDefaultBooks(remainingCount, defaultBooksOffset);
+        if (defaultBooks !== null) {
+            books = [...books, ...defaultBooks];
+        }
+    }
+
+    return [userTotal + defaultTotal, await addImageGCSLocation(books)];
 }
 
-export async function getDefaultBooks() {
-    const book = await Books.getDefaultBook();
-    if (book === null) return [];
+/**
+ * Get the bookshelf list of default books available for all users
+ * @param count x number of books
+ * @param offset x number of books to skip
+ * @returns 
+ */
+export async function getDefaultBooks(count: number, offset: number): Promise<[number, BooksAttributes[]]> {
+    const defaultTotal = await Books.count({
+        where: {
+            DefaultBook: true
+        }
+    });
+    const books = await Books.getDefaultBooks(count, offset);
+    if (books === null) return [0, []];
 
-    const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID!);
-    book.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
-    return book;
-
+    return [defaultTotal, await addImageGCSLocation(books)];
 }
 
 /**
@@ -79,4 +92,15 @@ export async function getPagesByBookId(bookID: number): Promise<PagesAttributes[
     );
 
     return pagesWithPhotoLocation;
+}
+
+// Process books and add imageGCSLocation
+async function addImageGCSLocation(books: BooksAttributes[]): Promise<BooksAttributes[]> {
+    return Promise.all(
+        books.map(async (book) => {
+            const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID!);
+            book.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
+            return book;
+        })
+    );
 }
