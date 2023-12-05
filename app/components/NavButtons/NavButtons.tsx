@@ -29,6 +29,7 @@ type NavigationButtonsProps = {
   disableLeftArrow: boolean;
   disableRightArrow: boolean;
   loadingRightArrow?: boolean;
+  rightArrowMessage?: string;
   leftImportant?: boolean;
   rightImportant?: boolean;
   homeImportant?: boolean;
@@ -41,6 +42,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   disableLeftArrow,
   disableRightArrow,
   loadingRightArrow,
+  rightArrowMessage,
   leftImportant = false,
   rightImportant = false,
   homeImportant = false,
@@ -69,6 +71,10 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
       icon={<ArrowRightIcon />}
       onClick={onFlipRight}
       disabled={disableRightArrow || loadingRightArrow}
+      // disabledMessage={rightArrowMessage}
+      {...((disableRightArrow || loadingRightArrow) && {
+        disabledMessage: rightArrowMessage,
+      })}
     ></Button>
   </div>
 );

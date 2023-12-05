@@ -144,6 +144,7 @@ export default function Story() {
           markedAsImportant={false}
           icon={<HomeIcon />}
           onClick={() => {
+            sessionStorage.clear();
             router.push("/");
           }}
         ></Button>

@@ -45,6 +45,7 @@ export default function GetBookData(props: { guid: string }) {
           guid: characterGUID,
         });
         setCharacter(character.data.character);
+        sessionStorage.clear();
       }
     })();
   }, []);

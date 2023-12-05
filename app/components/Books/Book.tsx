@@ -56,6 +56,7 @@ const Book: React.FC<BookReaderProps> = ({
 
   // Update the page flip state
   useEffect(() => {
+    console.log(currentIndex, pageCount, pagesFound);
     const pages = Array.from(
       document.getElementsByClassName(styles.page)
     ) as HTMLElement[];
@@ -105,11 +106,16 @@ const Book: React.FC<BookReaderProps> = ({
       )}
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
-        disableRightArrow={currentIndex >= pagesFound * 2}
+        disableRightArrow={
+          pageCount != pagesFound
+            ? currentIndex >= pagesFound * 2 - 4
+            : currentIndex >= pageCount * 2
+        }
         loadingRightArrow={
           pagesFound < pageCount && currentIndex >= pagesFound * 2
         }
         rightImportant={currentIndex < pageCount * 2}
+        rightArrowMessage="Loading..."
         homeImportant={currentIndex >= pageCount * 2}
         onFlipLeft={handleFlipLeft}
         onFlipRight={handleFlipRight}

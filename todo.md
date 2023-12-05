@@ -27,9 +27,9 @@ Reading
 Creating Books
 - [x] text creations not being updated in the database
       - created the bucket, needs to be tested
-- [?] estimated pricings not working
+- [x] estimated pricings not working
 - [better] queue for creating books -> rate limits applied https://platform.openai.com/account/limits
-- [] ERROR HANDLING: how to deal with issues with creating images
+- [] **ERROR HANDLING**: how to deal with issues with creating images
     - ex: image_generations id 64 has no image
 
 Go Live
@@ -48,4 +48,4 @@ Post-POC
 
 
 Bug Fixes
-- [] spam clicking "next" causes issues
+- [?] spam clicking "next" causes issues
