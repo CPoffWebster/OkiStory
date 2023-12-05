@@ -71,7 +71,6 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
       icon={<ArrowRightIcon />}
       onClick={onFlipRight}
       disabled={disableRightArrow || loadingRightArrow}
-      // disabledMessage={rightArrowMessage}
       {...((disableRightArrow || loadingRightArrow) && {
         disabledMessage: rightArrowMessage,
       })}

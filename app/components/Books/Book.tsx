@@ -97,6 +97,15 @@ const Book: React.FC<BookReaderProps> = ({
     });
   };
 
+  // Html variables
+  const disableRightArrow =
+    pageCount != pagesFound
+      ? currentIndex >= pagesFound * 2 - 4
+      : currentIndex >= pageCount * 2;
+  const isLoading =
+    pagesFound < pageCount || pageCount === 0 || pagesFound === 0;
+  console.log(disableRightArrow, isLoading, pagesFound, pageCount);
+
   return (
     <div>
       {currentIndex === 0 ? (
@@ -106,16 +115,10 @@ const Book: React.FC<BookReaderProps> = ({
       )}
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
-        disableRightArrow={
-          pageCount != pagesFound
-            ? currentIndex >= pagesFound * 2 - 4
-            : currentIndex >= pageCount * 2
-        }
-        loadingRightArrow={
-          pagesFound < pageCount && currentIndex >= pagesFound * 2
-        }
+        disableRightArrow={disableRightArrow}
+        loadingRightArrow={isLoading}
+        rightArrowMessage={isLoading ? "Loading..." : undefined}
         rightImportant={currentIndex < pageCount * 2}
-        rightArrowMessage="Loading..."
         homeImportant={currentIndex >= pageCount * 2}
         onFlipLeft={handleFlipLeft}
         onFlipRight={handleFlipRight}

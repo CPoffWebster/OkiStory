@@ -49,3 +49,22 @@ Post-POC
 
 Bug Fixes
 - [?] spam clicking "next" causes issues
+
+
+
+
+
+POST MVP IDEAS
+1. Easy
+   1. Themes, Styles, etc for book creation
+   2. Rating books
+   3. User Experience redesign, custom skins?
+   4. dev-ops improvements for loading speed improvements
+2. Medium
+   1. Custom Character / Location creation
+   2. programatic sharing books (if it's rated high make available to others)
+   3. Reading / Learning w/ Phonics: https://www.readingrockets.org/reading-101/reading-and-writing-basics/phonics-and-decoding
+   4. Differentiating AI tools + self hosting
+   5. Reading out loud
+3. Hard
+   1. Choose your own adventure books
