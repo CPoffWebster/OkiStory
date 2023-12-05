@@ -45,7 +45,7 @@ export async function generateImage(prompt: string, generation: ImageGenerations
             console.log('generateImage Image Generated:', image);
             await updateGeneratedImageRecord(image.data[0].url!, generation, endTime - startTime);
         } catch (err) {
-            console.log('error:', err);
+            console.log('Error generating image:', err);
         }
     }
 

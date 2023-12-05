@@ -18,6 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         res.status(200).json({ book: book, pages: pages });
     } catch (err) {
+        console.error('read/getBook API Route Error:', err);
         res.status(500).json({ error: err });
     }
 

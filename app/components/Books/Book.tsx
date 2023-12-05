@@ -103,8 +103,7 @@ const Book: React.FC<BookReaderProps> = ({
       ? currentIndex >= pagesFound * 2 - 4
       : currentIndex >= pageCount * 2;
   const isLoading =
-    pagesFound < pageCount || pageCount === 0 || pagesFound === 0;
-  console.log(disableRightArrow, isLoading, pagesFound, pageCount);
+    pagesFound < pageCount || pageCount === undefined || pagesFound === 0;
 
   return (
     <div>
