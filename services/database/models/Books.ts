@@ -14,9 +14,6 @@ export interface BooksAttributes {
     ThemeGUID: string;
     StyleGUID: string;
     PageCount?: number;
-
-    // Not in database
-    imageGCSLocation?: string; // location of image from GeneratedImageID
 }
 
 export class Books extends Model<BooksAttributes> {

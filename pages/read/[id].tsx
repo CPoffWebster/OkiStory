@@ -58,21 +58,11 @@ export default function GetBookData(props: { guid: string }) {
         guid: props.guid,
       });
       const data: BooksAttributes = response.data.book;
-      if (
-        data &&
-        data.PageCount !== null &&
-        data.imageGCSLocation !== undefined &&
-        data.Title !== ""
-      ) {
+      if (data && data.PageCount !== null && data.Title !== "") {
         setBook(data);
         const coverPage = (
           <div className={styles.coverContainer}>
             <h1 className={styles.title}>{data.Title}</h1>
-            {/* <img
-              className={styles.coverImage}
-              src={`/api/images/getImage?filename=${data.imageGCSLocation}&imageType=book`}
-              alt={"selection-image"}
-            /> */}
             <ImageWithFallback
               className={styles.coverImage}
               src={`/api/images/getImage?imageID=${data.GeneratedImageID}&imageType=book`}
@@ -126,31 +116,21 @@ export default function GetBookData(props: { guid: string }) {
 
         let pagesConfigured = 0;
         for (let i = 0; i < data.length; i++) {
-          if (
-            data[i].imageGCSLocation &&
-            data[i].imageGCSLocation !== undefined
-          ) {
-            pagesConfigured++;
-            const newImageContent = (
-              // <img
-              //   className={styles.pageImage}
-              //   src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
-              //   alt={"selection-image"}
-              // />
-              <ImageWithFallback
-                className={styles.pageImage}
-                src={`/api/images/getImage?imageID=${data[i].GeneratedImageID}&imageType=book`}
-                alt={"selection-image"}
-              />
-            );
-            const newTextContent = (
-              <div className={styles.pageText}>
-                <p key="PageText">{data[i].Text}</p>
-              </div>
-            );
-            updatePagesContent.push(newImageContent);
-            updatePagesContent.push(newTextContent);
-          }
+          pagesConfigured++;
+          const newImageContent = (
+            <ImageWithFallback
+              className={styles.pageImage}
+              src={`/api/images/getImage?imageID=${data[i].GeneratedImageID}&imageType=book`}
+              alt={"selection-image"}
+            />
+          );
+          const newTextContent = (
+            <div className={styles.pageText}>
+              <p key="PageText">{data[i].Text}</p>
+            </div>
+          );
+          updatePagesContent.push(newImageContent);
+          updatePagesContent.push(newTextContent);
         }
         if (
           data.length === book!.PageCount &&
