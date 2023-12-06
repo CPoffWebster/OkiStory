@@ -45,7 +45,7 @@ export const Selection: React.FC<SelectionProps> = ({
         <div className={styles.selectionImage}>
           {!imageLoaded && <div className={imagePlaceholder}></div>}
           <img
-            src={`/api/images/getImage?filename=${element.GCSLocation}&imageType=${elementType}`}
+            src={`/api/images/getImage?imageID=${element.GUID}&imageType=${elementType}`}
             onLoad={() => setImageLoaded(true)}
             alt={"selectionImage"}
             style={{ display: imageLoaded ? "block" : "none" }}
