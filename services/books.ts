@@ -38,7 +38,7 @@ export async function getUserBooks(userID: number, count: number, offset: number
         }
     }
 
-    return [userTotal + defaultTotal, await addImageGCSLocation(books)];
+    return [userTotal + defaultTotal, await addImageGCSLocationArray(books) as BooksAttributes[]];
 }
 
 /**
@@ -56,7 +56,7 @@ export async function getDefaultBooks(count: number, offset: number): Promise<[n
     const books = await Books.getDefaultBooks(count, offset);
     if (books === null) return [0, []];
 
-    return [defaultTotal, await addImageGCSLocation(books)];
+    return [defaultTotal, await addImageGCSLocationArray(books) as BooksAttributes[]];
 }
 
 /**
@@ -67,10 +67,7 @@ export async function getDefaultBooks(count: number, offset: number): Promise<[n
 export async function getBookByGUID(guid: string): Promise<BooksAttributes | null> {
     const book = await Books.getBook(guid);
     if (book === null) return null;
-
-    const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID!);
-    book.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
-    return book;
+    return await addImageGCSLocation(book) as BooksAttributes;
 }
 
 /**
@@ -81,26 +78,20 @@ export async function getBookByGUID(guid: string): Promise<BooksAttributes | nul
 export async function getPagesByBookId(bookID: number): Promise<PagesAttributes[] | null> {
     const pages = await Pages.getBookPages(bookID);
     if (pages === null) return null;
-
-    const pagesWithPhotoLocation = await Promise.all(
-        pages.map(async (page) => {
-            // const storage = getStorage();
-            const imageGeneration = await ImageGenerations.getGeneration(page.GeneratedImageID);
-            page.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
-            return page;
-        })
-    );
-
-    return pagesWithPhotoLocation;
+    return await addImageGCSLocationArray(pages) as PagesAttributes[];
 }
 
-// Process books and add imageGCSLocation
-async function addImageGCSLocation(books: BooksAttributes[]): Promise<BooksAttributes[]> {
+async function addImageGCSLocationArray(books: (BooksAttributes | PagesAttributes)[]): Promise<(BooksAttributes | PagesAttributes)[]> {
     return Promise.all(
         books.map(async (book) => {
-            const imageGeneration = await ImageGenerations.getGeneration(book.GeneratedImageID!);
-            book.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
-            return book;
+            return await addImageGCSLocation(book);
         })
-    );
+    ) as Promise<(BooksAttributes | PagesAttributes)[]>;
+}
+
+async function addImageGCSLocation(imageUpdate: (BooksAttributes | PagesAttributes)) {
+    const imageGeneration = await ImageGenerations.getGeneration(imageUpdate.GeneratedImageID!);
+    imageUpdate.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
+    imageUpdate.imageError = imageGeneration?.Error ? true : false;
+    return imageUpdate;
 }

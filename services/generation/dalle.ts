@@ -44,8 +44,10 @@ export async function generateImage(prompt: string, generation: ImageGenerations
             endTime = performance.now();
             console.log('generateImage Image Generated:', image);
             await updateGeneratedImageRecord(image.data[0].url!, generation, endTime - startTime);
-        } catch (err) {
-            console.log('Error generating image:', err);
+        } catch (error) {
+            const errorResponse = (error as any).response.data || (error as any).message;
+            console.log('Error generating image:', error);
+            await updateGeneratedImageRecordError(generation, endTime - startTime, errorResponse);
         }
     }
 
@@ -88,5 +90,17 @@ async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGen
     }
     generation.APICallMilliSeconds = seconds;
     generation.EstimatedPrice = price;
+    await ImageGenerations.updateGeneration(generation);
+}
+
+/**
+ * Update the database record with an error
+ * @param generation database record
+ * @param seconds time it took to generate the text
+ * @param error error message
+ */
+async function updateGeneratedImageRecordError(generation: ImageGenerationsAttributes, seconds: number, error: string) {
+    generation.Error = error;
+    generation.APICallMilliSeconds = seconds;
     await ImageGenerations.updateGeneration(generation);
 }

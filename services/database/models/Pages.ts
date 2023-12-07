@@ -10,6 +10,7 @@ export interface PagesAttributes {
 
     // Not in database
     imageGCSLocation?: string; // location of image from GeneratedImageID
+    imageError?: boolean; // error from generating image
 }
 
 export class Pages extends Model<PagesAttributes> {

@@ -11,6 +11,7 @@ export interface ImageGenerationsAttributes {
     APICallMilliSeconds?: number;
     EstimatedPrice?: number;
     GCSLocation?: string;
+    Error?: string;
 }
 
 export class ImageGenerations extends Model<ImageGenerationsAttributes> {
@@ -48,6 +49,7 @@ export function initImageGenerations(sequelize: Sequelize) {
         APICallMilliSeconds: { type: DataTypes.INTEGER, allowNull: true },
         EstimatedPrice: { type: DataTypes.DECIMAL(10, 8), allowNull: true },
         GCSLocation: { type: DataTypes.STRING(256), allowNull: true },
+        Error: { type: DataTypes.TEXT, allowNull: true },
     }, {
         sequelize, modelName: 'image_generations', tableName: `image_generations`,
         timestamps: true
