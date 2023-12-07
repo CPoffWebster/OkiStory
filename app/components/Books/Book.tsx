@@ -56,7 +56,6 @@ const Book: React.FC<BookReaderProps> = ({
 
   // Update the page flip state
   useEffect(() => {
-    console.log(currentIndex, pageCount, pagesFound);
     const pages = Array.from(
       document.getElementsByClassName(styles.page)
     ) as HTMLElement[];
