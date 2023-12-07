@@ -91,11 +91,11 @@ const LoginButton: React.FC<LoginButtonProps> = ({
           >
             <p>
               <span style={{ color: "#FFD700" }}>🌟</span> Enjoying Oki Story?
-              We'd love your feedback!
+              We&apos;d love your feedback!
               <span style={{ color: "#FFD700" }}>📚</span>
               <br />
-              Currently, we're not accepting payments, but we're offering free
-              book credits for your feedback.
+              Currently, we&apos;re not accepting payments, but we&apos;re
+              offering free book credits for your feedback.
             </p>
             <p>
               Reach out at{" "}
