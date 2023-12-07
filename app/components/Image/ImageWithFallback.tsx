@@ -9,7 +9,7 @@ interface ImageWithFallbackProps {
 
 const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   src,
-  defaultImage = "/error_image.png",
+  defaultImage = "/happy_book.png",
   alt,
   className,
 }) => {
@@ -20,7 +20,11 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
       className={className}
       src={currentSrc}
       alt={alt}
+      onLoad={(test) => {
+        // console.log("loaded", src, test);
+      }}
       onError={(err) => {
+        // console.log("error", err);
         setCurrentSrc(defaultImage);
       }}
     />
