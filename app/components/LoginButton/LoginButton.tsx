@@ -2,6 +2,7 @@ import { SessionContextValue, signIn, signOut } from "next-auth/react";
 import styles from "./LoginButton.module.css";
 import { useState } from "react";
 import Button from "../Button/Button";
+import Modal from "./BuyCreditsModal";
 
 type LoginButtonProps = {
   session: SessionContextValue;
@@ -13,10 +14,15 @@ const LoginButton: React.FC<LoginButtonProps> = ({
   amountOfGenerations,
 }) => {
   const isLoggedIn = !!session.data;
-
   const [showSessionDetails, setShowSessionDetails] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   const toggleSessionDetails = () => {
     setShowSessionDetails(!showSessionDetails);
+  };
+
+  const toggleModal = () => {
+    setShowModal(!showModal); // Toggle modal visibility
   };
 
   return (
@@ -26,13 +32,13 @@ const LoginButton: React.FC<LoginButtonProps> = ({
           <div onClick={toggleSessionDetails} className={styles.loggedInButton}>
             {session.data?.user.email?.charAt(0).toUpperCase()}
           </div>
-          {/* <Button
+          <Button
             text="Buy Credits"
             size="xsmall"
             className="containerBoxSmall"
             markedAsImportant={false}
-            onClick={function (): void {}}
-          ></Button> */}
+            onClick={toggleModal}
+          ></Button>
           <p
             style={{
               fontSize: "1vw",
@@ -72,6 +78,37 @@ const LoginButton: React.FC<LoginButtonProps> = ({
             }}
           ></Button>
         </div>
+      )}
+      {showModal && (
+        <Modal onClose={toggleModal}>
+          <div
+            style={{
+              fontFamily: "Arial, sans-serif",
+              fontSize: 16,
+              color: "#333",
+              textAlign: "center",
+            }}
+          >
+            <p>
+              <span style={{ color: "#FFD700" }}>🌟</span> Enjoying Oki Story?
+              We'd love your feedback!
+              <span style={{ color: "#FFD700" }}>📚</span>
+              <br />
+              Currently, we're not accepting payments, but we're offering free
+              book credits for your feedback.
+            </p>
+            <p>
+              Reach out at{" "}
+              <a
+                href="mailto:info@okistory.com"
+                style={{ textDecoration: "none", color: "#008CBA" }}
+              >
+                info@okistory.com
+              </a>{" "}
+              for more details!
+            </p>
+          </div>
+        </Modal>
       )}
     </>
   );
