@@ -24,7 +24,7 @@ const XDBook: React.FC<XDBookProps> = ({ book }) => {
             <h1 className={styles.title}>{book.Title}</h1>
             <div className={styles.image}>
               <img
-                src={`/api/images/getImage?imageID=${book.GeneratedImageID}&imageType=book`}
+                src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
               />
             </div>
           </div>

@@ -7,7 +7,6 @@ import axios from "axios";
 import styles from "./id.module.css";
 import { LocationsAttributes } from "@/services/database/models/Locations";
 import { Selection } from "@/app/components/Selections/Selection";
-import ImageWithFallback from "@/app/components/Image/ImageWithFallback";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const guid = context.query.id as unknown as string; // Access 'id' directly
@@ -57,7 +56,7 @@ export default function GetBookData(props: { guid: string }) {
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
       });
-      const data: BooksAttributes = response.data.book;
+      const data = response.data.book;
       if (
         data &&
         data.PageCount !== null &&
@@ -68,14 +67,9 @@ export default function GetBookData(props: { guid: string }) {
         const coverPage = (
           <div className={styles.coverContainer}>
             <h1 className={styles.title}>{data.Title}</h1>
-            {/* <img
+            <img
               className={styles.coverImage}
               src={`/api/images/getImage?filename=${data.imageGCSLocation}&imageType=book`}
-              alt={"selection-image"}
-            /> */}
-            <ImageWithFallback
-              className={styles.coverImage}
-              src={`/api/images/getImage?imageID=${data.GeneratedImageID}&imageType=book`}
               alt={"selection-image"}
             />
           </div>
@@ -118,7 +112,7 @@ export default function GetBookData(props: { guid: string }) {
         guid: props.guid,
         includePages: true,
       });
-      const data: PagesAttributes[] = response.data.pages;
+      const data = response.data.pages;
       if (data && data.length !== 0) {
         setPages(data);
         const updatePagesContent: React.JSX.Element[] = [];
@@ -132,14 +126,9 @@ export default function GetBookData(props: { guid: string }) {
           ) {
             pagesConfigured++;
             const newImageContent = (
-              // <img
-              //   className={styles.pageImage}
-              //   src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
-              //   alt={"selection-image"}
-              // />
-              <ImageWithFallback
+              <img
                 className={styles.pageImage}
-                src={`/api/images/getImage?imageID=${data[i].GeneratedImageID}&imageType=book`}
+                src={`/api/images/getImage?filename=${data[i].imageGCSLocation}&imageType=book`}
                 alt={"selection-image"}
               />
             );
