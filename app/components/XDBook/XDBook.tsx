@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BooksAttributes } from "@/services/database/models/Books";
 import styles from "./XDBook.module.css";
+import ImageWithFallback from "../Image/ImageWithFallback";
 
 type XDBookProps = {
   book: BooksAttributes;
@@ -23,8 +24,11 @@ const XDBook: React.FC<XDBookProps> = ({ book }) => {
           >
             <h1 className={styles.title}>{book.Title}</h1>
             <div className={styles.image}>
-              <img
-                src={`/api/images/getImage?filename=${book.imageGCSLocation}&imageType=book`}
+              <ImageWithFallback
+                filename={book.imageGCSLocation || ""}
+                imageType="book"
+                error={book.imageError}
+                alt={"selection-image"}
               />
             </div>
           </div>
