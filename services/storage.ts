@@ -1,9 +1,6 @@
 import { Bucket, Storage } from '@google-cloud/storage';
 
-export const charactersBucket = process.env.CHARACTERS_GCS_BUCKET!;
-export const locationsBucket = process.env.LOCATIONS_GCS_BUCKET!;
-export const booksBucket = process.env.BOOKS_GCS_BUCKET!;
-export const textGenerationsBucket = process.env.TEXT_GENERATIONS_GCS_BUCKET!;
+export const okiStoryGCSBucket = process.env.OKI_STORY_GCS_BUCKET!;
 
 export function getStorage() {
     const storage = new Storage();

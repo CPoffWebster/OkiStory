@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { booksBucket, getStorage } from '../storage';
+import { getStorage, okiStoryGCSBucket } from '../storage';
 import { v4 as uuidv4 } from 'uuid';
 import { Readable } from 'stream';
 import axios from 'axios';
@@ -46,7 +46,7 @@ export async function generateImage(prompt: string, generation: ImageGenerations
             await updateGeneratedImageRecord(image.data[0].url!, generation, endTime - startTime);
         } catch (error) {
             const errorResponse = (error as any).response.data || (error as any).message;
-            console.log('Error generating image:', error);
+            console.error('Error generating image:', error);
             await updateGeneratedImageRecordError(generation, endTime - startTime, errorResponse);
         }
     }
@@ -62,7 +62,7 @@ export async function generateImage(prompt: string, generation: ImageGenerations
  */
 async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGenerationsAttributes, seconds: number) {
     const storage = getStorage();
-    const imageBucket = storage.getBucket(booksBucket);
+    const imageBucket = storage.getBucket(okiStoryGCSBucket);
 
     // Download the image and convert it to a stream
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
@@ -74,9 +74,9 @@ async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGen
     const guid = uuidv4();
     const currentDate = new Date();
     const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()}`;
-    generation.GCSLocation = `${formattedDate}/${guid}.png`;
+    generation.GCSLocation = `books/${formattedDate}/${guid}.png`;
 
-    console.log('Uploading', generation.GCSLocation, 'to', booksBucket);
+    console.log('Uploading', generation.GCSLocation, 'to', okiStoryGCSBucket);
     await imageBucket.upload(generation.GCSLocation, compressedImage);
 
     let price = 0;

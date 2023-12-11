@@ -43,7 +43,7 @@ Post-POC
 - [] height scaling vs width scaling - min and max size
 - [] migrations
 - [] analytics
-- [] image loading speed
+- [x] image loading speed
 - [] Text generation prompts
 - [] Image generation prompts
 
@@ -56,7 +56,6 @@ POST MVP IDEAS
    1. Themes, Styles, etc for book creation
    2. Rating books
    3. User Experience redesign, custom skins?
-   4. dev-ops improvements for loading speed improvements
 2. Medium
    1. Custom Character / Location creation
    2. programatic sharing books (if it's rated high make available to others)

@@ -1,4 +1,4 @@
-import { booksBucket, charactersBucket, getStorage, locationsBucket } from "@/services/storage";
+import { getStorage, okiStoryGCSBucket } from "@/services/storage";
 import { withBaseURL } from "@/utils/withBaseURL";
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -11,19 +11,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
         const bucketMap: Record<string, string> = {
-            'character': charactersBucket,
-            'location': locationsBucket,
-            'book': booksBucket
+            'character': 'characters/',
+            'location': 'locations/',
+            'book': 'books/'
         };
-        const bucket = bucketMap[imageType.toLowerCase()];
-
-        if (!bucket) {
-            res.status(404).end();
-            return;
+        let GCSLocation = bucketMap[imageType.toLowerCase()];
+        // Introduced a bug when updating GCS bucket to OKI_STORY_GCS_BUCKET=okistory-dev
+        // This removes the bucket name from the filename for new images
+        if (filename.startsWith(GCSLocation)) {
+            GCSLocation = '';
         }
 
         const storage = getStorage();
-        const stream = await storage.getReadStream(`gs://${bucket}/${filename}`);
+        console.log(`gs://${okiStoryGCSBucket}/${GCSLocation}${filename}`)
+        const stream = await storage.getReadStream(`gs://${okiStoryGCSBucket}/${GCSLocation}${filename}`);
         if (!stream) {
             res.status(500).end(`Error getting image. Filename: ${filename}; ImageType: ${imageType}`);
             return;

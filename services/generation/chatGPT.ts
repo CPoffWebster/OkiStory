@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import { TextGenerations, TextGenerationsAttributes } from '../database/models/TextGenerations';
-import { getStorage, textGenerationsBucket } from '../storage';
+import { getStorage, okiStoryGCSBucket } from '../storage';
 import { v4 as uuidv4 } from 'uuid';
 import { Readable } from 'stream';
 import { generatedTextStory } from '@/static-examples/exampleBook';
@@ -68,7 +68,7 @@ export async function generateText(prompt: string, model: string, generation: Te
  */
 async function updateGeneratedTextRecord<T>(prompt: string, generation: TextGenerationsAttributes, generatedText: string, seconds: number) {
     const storage = getStorage();
-    const textBucket = storage.getBucket(textGenerationsBucket);
+    const textBucket = storage.getBucket(okiStoryGCSBucket);
     const generatedTextOutput: T = JSON.parse(generatedText);
     const dataStream = Readable.from(JSON.stringify(JSON.stringify({
         ...generatedTextOutput,
@@ -79,9 +79,9 @@ async function updateGeneratedTextRecord<T>(prompt: string, generation: TextGene
     const guid = uuidv4();
     const currentDate = new Date();
     const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()}`;
+    generation.GCSLocation = `text-generations/${formattedDate}/${guid}.json`;
 
-    generation.GCSLocation = `${formattedDate}/${guid}.json`;
-    console.log('Uploading', generation.GCSLocation, 'to', textGenerationsBucket)
+    console.log('Uploading', generation.GCSLocation, 'to', okiStoryGCSBucket)
     await textBucket.upload(generation.GCSLocation, dataStream);
 
     let inputPrice = 0;
