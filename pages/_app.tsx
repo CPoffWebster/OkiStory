@@ -11,12 +11,13 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
+  const GOOGLE_TAG_MANAGER_ID = "G-DW4563ZMBT";
   return (
     <SessionProvider session={session}>
       <Head>
         <script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-DW4563ZMBT"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_TAG_MANAGER_ID}`}
         ></script>
         <script
           dangerouslySetInnerHTML={{
@@ -24,7 +25,7 @@ export default function App({
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-DW4563ZMBT');
+              gtag('config', '${GOOGLE_TAG_MANAGER_ID}');
             `,
           }}
         />
