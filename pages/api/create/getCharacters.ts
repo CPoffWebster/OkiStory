@@ -6,10 +6,15 @@ import { Characters } from '@/services/database/models/Characters';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.log('api/create/getCharacters API Route Triggered');
 
-    connectToDb();
-    let characters = await Characters.getDefaultCharacters();
+    try {
+        connectToDb();
+        let characters = await Characters.getDefaultCharacters();
 
-    res.status(200).json({ characters });
+        res.status(200).json({ characters });
+    } catch (err) {
+        console.error('Error in api/create/getCharacters', err)
+        res.status(500).json({ err });
+    }
 };
 
 export default withAuth(handler);

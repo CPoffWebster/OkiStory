@@ -8,10 +8,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { guid } = req.body;
 
-    connectToDb();
-    let character = await Characters.getCharacter(guid);
+    try {
+        connectToDb();
+        let character = await Characters.getCharacter(guid);
 
-    res.status(200).json({ character });
+        res.status(200).json({ character });
+    } catch (err) {
+        console.error('Error in api/create/getCharacter', err);
+        res.status(500).json({ err });
+    }
 };
 
 export default withBaseURL(handler);

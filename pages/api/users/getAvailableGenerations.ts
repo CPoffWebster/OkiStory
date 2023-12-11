@@ -18,6 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             res.status(200).json({ paidAccount });
         }
     } catch (err) {
+        console.error('Error in users/getAvailableGenerations', err);
         res.status(500).json({ error: err });
     }
 

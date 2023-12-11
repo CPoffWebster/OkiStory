@@ -8,10 +8,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const { guid } = req.body;
 
-    connectToDb();
-    let location = await Locations.getLocation(guid);
+    try {
+        connectToDb();
+        let location = await Locations.getLocation(guid);
 
-    res.status(200).json({ location });
+        res.status(200).json({ location });
+    } catch (err) {
+        console.error('Error in api/create/getLocation', err)
+        res.status(500).json({ err });
+    }
 };
 
 export default withBaseURL(handler);

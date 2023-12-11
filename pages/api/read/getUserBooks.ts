@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         res.status(200).json({ bookList: books, totalBooks: total });
     } catch (err) {
-        console.log('Error in read/getUserBooks', err);
+        console.error('Error in api/read/getUserBooks', err);
         res.status(500).json({ error: err });
     }
 

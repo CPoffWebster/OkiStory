@@ -9,28 +9,34 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     console.log(`getImage API Route Triggered: ${filename}, ${imageType}`)
 
-    const bucketMap: Record<string, string> = {
-        'character': charactersBucket,
-        'location': locationsBucket,
-        'book': booksBucket
-    };
-    const bucket = bucketMap[imageType.toLowerCase()];
+    try {
+        const bucketMap: Record<string, string> = {
+            'character': charactersBucket,
+            'location': locationsBucket,
+            'book': booksBucket
+        };
+        const bucket = bucketMap[imageType.toLowerCase()];
 
-    if (!bucket) {
-        res.status(404).end();
-        return;
+        if (!bucket) {
+            res.status(404).end();
+            return;
+        }
+
+        const storage = getStorage();
+        const stream = await storage.getReadStream(`gs://${bucket}/${filename}`);
+        if (!stream) {
+            res.status(500).end(`Error getting image. Filename: ${filename}; ImageType: ${imageType}`);
+            return;
+        }
+
+        res.setHeader('Content-Type', 'image/jpeg')
+        res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
+        stream.pipe(res);
+    } catch (err) {
+        console.error('Error in api/images/getImage', err);
+        res.status(500).json({ err });
     }
 
-    const storage = getStorage();
-    const stream = await storage.getReadStream(`gs://${bucket}/${filename}`);
-    if (!stream) {
-        res.status(500).end(`Error getting image. Filename: ${filename}; ImageType: ${imageType}`);
-        return;
-    }
-
-    res.setHeader('Content-Type', 'image/jpeg')
-    res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
-    stream.pipe(res);
 }
 
 export default withBaseURL(handler);

@@ -46,19 +46,25 @@ export const authOptions: NextAuthOptions = {
                 await verifyUserProvider(profile);
                 return true;
             } catch (error) {
+                console.error("Error in signIn callback", error);
                 throw new Error("identity_provider_mismatch");
             }
         },
         async session({ session }) {
-            if (session.user?.email) {
-                connectToDb();
-                const user = await Users.getUserByEmail(session.user.email);
-                const paidAccount = await PaidAccounts.getPaidAccountByUserID(user.id!);
-                session.user.id = user.id!.toString();
-                session.user.internalUser = user;
-                session.user.paidAccount = paidAccount;
+            try {
+                if (session.user?.email) {
+                    connectToDb();
+                    const user = await Users.getUserByEmail(session.user.email);
+                    const paidAccount = await PaidAccounts.getPaidAccountByUserID(user.id!);
+                    session.user.id = user.id!.toString();
+                    session.user.internalUser = user;
+                    session.user.paidAccount = paidAccount;
+                }
+                return session;
+            } catch (error) {
+                console.error("Error in session callback", error);
+                throw error;
             }
-            return session;
         },
     },
 };
