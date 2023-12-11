@@ -116,7 +116,6 @@ export default function GetBookData(props: { guid: string }) {
 
         let pagesConfigured = 0;
         for (let i = 0; i < data.length; i++) {
-          console.log(i, data[i].imageGCSLocation);
           if (data[i].imageGCSLocation || data[i].imageError === true) {
             pagesConfigured++;
             const newImageContent = (

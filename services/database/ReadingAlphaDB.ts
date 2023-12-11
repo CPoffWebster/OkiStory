@@ -82,9 +82,10 @@ export class ReadingAlphaDB {
      * @param options if dev is false, the entire database will be dropped and recreated.  If dev is true, the database will be altered.
      */
     public async createTables(options: { useDev?: boolean } = {}) {
-        const syncOptions: SyncOptions = (options.useDev === true)
-            ? ({ alter: true, force: true })  //  Force if dev
-            : ({ alter: true, force: false });  // Don't force it.  We're in prod
+        // const syncOptions: SyncOptions = (options.useDev === true)
+        //     ? ({ alter: true, force: true })  //  Force if dev
+        //     : ({ alter: true, force: false });  // Don't force it.  We're in prod
+        const syncOptions: SyncOptions = { alter: true, force: false };
 
         await this.tables.Users.sync(syncOptions)
         await this.tables.UserAccounts.sync(syncOptions)
@@ -103,15 +104,17 @@ export class ReadingAlphaDB {
      * Seed the database with default data.
      */
     public async seedData() {
+        console.log('Seeding data...')
         const transaction = await this.sequelize.transaction();
 
         try {
             await seedDefaultCharacters(transaction);
             await seedDefaultLocations(transaction);
             // Call other seeding functions like seedDefaultLocations(transaction);
-
             await transaction.commit();
+            console.log('Seeding data complete.')
         } catch (error) {
+            console.error('Error seeding data:', error);
             await transaction.rollback();
             throw error;
         }
