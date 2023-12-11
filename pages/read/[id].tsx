@@ -28,27 +28,32 @@ export default function GetBookData(props: { guid: string }) {
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
   const [character, setCharacter] = useState<LocationsAttributes | null>(null);
   const [pages, setPages] = useState<PagesAttributes[]>([]);
-  const [coverPage, setCoverPage] = useState<React.JSX.Element | null>(null); // pagesContent[0]
+  const [coverPage, setCoverPage] = useState<React.JSX.Element | null>(null);
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
+
+  // Initial load of location and character
+  const getBookCreationElements = async (
+    locationGUID: string,
+    characterGUID: string
+  ) => {
+    if (locationGUID !== "" && characterGUID !== "") {
+      const location = await axios.post("/api/create/getLocation", {
+        guid: locationGUID,
+      });
+      setLocation(location.data.location);
+      const character = await axios.post("/api/create/getCharacter", {
+        guid: characterGUID,
+      });
+      setCharacter(character.data.character);
+      sessionStorage.clear();
+    }
+  };
 
   // Initial load of location and character for newly created books
   useEffect(() => {
-    (async () => {
-      const locationGUID = sessionStorage.getItem("Location") || "";
-      const characterGUID = sessionStorage.getItem("Character") || "";
-
-      if (locationGUID !== "" && characterGUID !== "") {
-        const location = await axios.post("/api/create/getLocation", {
-          guid: locationGUID,
-        });
-        setLocation(location.data.location);
-        const character = await axios.post("/api/create/getCharacter", {
-          guid: characterGUID,
-        });
-        setCharacter(character.data.character);
-        sessionStorage.clear();
-      }
-    })();
+    const locationGUID = sessionStorage.getItem("Location") || "";
+    const characterGUID = sessionStorage.getItem("Character") || "";
+    getBookCreationElements(locationGUID, characterGUID);
   }, []);
 
   // Initial load of book
@@ -61,8 +66,8 @@ export default function GetBookData(props: { guid: string }) {
       if (
         data &&
         data.PageCount !== null &&
-        // data.imageGCSLocation !== undefined &&
-        data.Title !== ""
+        data.Title !== "" &&
+        (data.imageGCSLocation || data.imageError === true)
       ) {
         setBook(data);
         const coverPage = (
@@ -81,29 +86,17 @@ export default function GetBookData(props: { guid: string }) {
         setCoverPage(coverPage);
         clearInterval(intervalId);
       }
-    }, 1000);
+    }, 5000);
 
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
   // Initial load of location and character for already created books
   useEffect(() => {
-    (async () => {
-      if (location !== null && character !== null) return;
-      let locationGUID = book.LocationGUID;
-      let characterGUID = book.CharacterGUID;
-
-      if (locationGUID !== "" && characterGUID !== "") {
-        const location = await axios.post("/api/create/getLocation", {
-          guid: locationGUID,
-        });
-        setLocation(location.data.location);
-        const character = await axios.post("/api/create/getCharacter", {
-          guid: characterGUID,
-        });
-        setCharacter(character.data.character);
-      }
-    })();
+    if (location !== null && character !== null) return;
+    let locationGUID = book.LocationGUID;
+    let characterGUID = book.CharacterGUID;
+    getBookCreationElements(locationGUID, characterGUID);
   }, [book]);
 
   // Initial load of pages
@@ -123,28 +116,26 @@ export default function GetBookData(props: { guid: string }) {
 
         let pagesConfigured = 0;
         for (let i = 0; i < data.length; i++) {
-          // if (
-          //   data[i].imageGCSLocation &&
-          //   data[i].imageGCSLocation !== undefined
-          // ) {
-          pagesConfigured++;
-          const newImageContent = (
-            <ImageWithFallback
-              className={styles.pageImage}
-              filename={data[i].imageGCSLocation || ""}
-              imageType="book"
-              error={data[i].imageError}
-              alt={"selection-image"}
-            />
-          );
-          const newTextContent = (
-            <div className={styles.pageText}>
-              <p key="PageText">{data[i].Text}</p>
-            </div>
-          );
-          updatePagesContent.push(newImageContent);
-          updatePagesContent.push(newTextContent);
-          // }
+          console.log(i, data[i].imageGCSLocation);
+          if (data[i].imageGCSLocation || data[i].imageError === true) {
+            pagesConfigured++;
+            const newImageContent = (
+              <ImageWithFallback
+                className={styles.pageImage}
+                filename={data[i].imageGCSLocation || ""}
+                imageType="book"
+                error={data[i].imageError}
+                alt={"selection-image"}
+              />
+            );
+            const newTextContent = (
+              <div className={styles.pageText}>
+                <p key="PageText">{data[i].Text}</p>
+              </div>
+            );
+            updatePagesContent.push(newImageContent);
+            updatePagesContent.push(newTextContent);
+          }
         }
         if (
           data.length === book!.PageCount &&
@@ -154,9 +145,9 @@ export default function GetBookData(props: { guid: string }) {
         }
         setPagesContent(updatePagesContent);
       }
-    }, 1000);
+    }, 5000);
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => clearInterval(intervalId);
   }, [book]);
 
   return (
