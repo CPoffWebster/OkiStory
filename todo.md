@@ -30,17 +30,17 @@ Creating Books
       - created the bucket, needs to be tested
 - [x] estimated pricings not working
 - [better] queue for creating books -> rate limits applied https://platform.openai.com/account/limits
-- [?] **ERROR HANDLING**: how to deal with issues with creating images
+- [x] **ERROR HANDLING**: how to deal with issues with creating images
     - ex: image_generations id 64 has no image
 
 Go Live
-- [] Create UAT vs prod
+- [x] Create UAT vs prod
 - [] reset the database
 - [] create a set of pre-generated books
 
 
 Post-POC
-- [] height scaling vs width scaling - min and max size
+- [ILikeThis] height scaling vs width scaling - min and max size
 - [] migrations
 - [] analytics
 - [x] image loading speed
