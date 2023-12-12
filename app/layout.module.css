@@ -1,16 +1,26 @@
 .landscapePrompt {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Ensure it's above other content */
-    font-size: 1.5rem;
-    text-align: center;
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it's above other content */
+  text-align: center;
+  cursor: pointer; /* Optional: changes cursor on hover */
+  padding: 5vw;
+}
+
+.mainText {
+  font-size: 1.5rem;
+  margin-bottom: 1rem; /* Adds space between the texts */
+}
+
+.secondaryText {
+  font-size: 1rem; /* Smaller font size for the secondary text */
+}

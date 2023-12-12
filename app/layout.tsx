@@ -25,8 +25,12 @@ const Layout = ({ children }: LayoutProps) => {
           className={styles.landscapePrompt}
           onClick={() => setIsLandscape(false)}
         >
-          Please switch to portrait mode for the best experience. Click to
-          disable this message.
+          <div className={styles.mainText}>
+            Please switch to portrait mode for the best experience.
+          </div>
+          <div className={styles.secondaryText}>
+            Click to disable this message.
+          </div>
         </div>
       )}
       {children}
