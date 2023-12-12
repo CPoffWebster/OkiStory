@@ -4,6 +4,7 @@ import type { Session } from "next-auth";
 import Head from "next/head";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.css";
+import Layout from "@/app/layout";
 
 // Use of the <SessionProvider> is mandatory to allow components that call
 // `useSession()` anywhere in your application to access the `session` object.
@@ -30,7 +31,9 @@ export default function App({
           }}
         />
       </Head>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionProvider>
   );
 }

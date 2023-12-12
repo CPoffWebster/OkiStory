@@ -16,7 +16,7 @@ input::-ms-reveal,
 
 html body {
   background-color: #f8f8f9 !important;
-  padding: 2em !important;
+  padding: 2vw !important;
   --tw-bg-opacity: 1 !important;
   --tw-text-opacity: 1 !important;
   color: black;
