@@ -26,7 +26,6 @@ const XDBook: React.FC<XDBookProps> = ({ book }) => {
             <div className={styles.image}>
               <ImageWithFallback
                 filename={book.imageGCSLocation || ""}
-                imageType="book"
                 error={book.imageError}
                 alt={"selection-image"}
               />

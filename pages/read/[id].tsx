@@ -76,7 +76,6 @@ export default function GetBookData(props: { guid: string }) {
             <ImageWithFallback
               className={styles.coverImage}
               filename={data.imageGCSLocation || ""}
-              imageType="book"
               error={data.imageError}
               alt={"selection-image"}
             />
@@ -122,7 +121,6 @@ export default function GetBookData(props: { guid: string }) {
               <ImageWithFallback
                 className={styles.pageImage}
                 filename={data[i].imageGCSLocation || ""}
-                imageType="book"
                 error={data[i].imageError}
                 alt={"selection-image"}
               />

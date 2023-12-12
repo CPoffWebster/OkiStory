@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 interface ImageWithFallbackProps {
   filename: string;
-  imageType: string;
   error?: boolean;
   defaultImage?: string;
   alt?: string;
@@ -11,13 +10,12 @@ interface ImageWithFallbackProps {
 
 const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   filename,
-  imageType,
   error,
   defaultImage = "/error_image.png",
   alt,
   className,
 }) => {
-  const initialSrc = `/api/images/getImage?filename=${filename}&imageType=${imageType}`;
+  const initialSrc = `/api/images/getImage?filename=${filename}`;
   const [currentSrc, setCurrentSrc] = useState(initialSrc);
 
   useEffect(() => {
