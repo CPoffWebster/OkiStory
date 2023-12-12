@@ -48,11 +48,7 @@ export default function Story() {
           onSelectElement={() => handleSubmit()}
         ></Selections>
       )}
-      <div
-        style={{
-          marginTop: "2vw",
-        }}
-      >
+      <div className={styles.buttonContainer}>
         <Button
           text="Home"
           className="containerBoxSmall"

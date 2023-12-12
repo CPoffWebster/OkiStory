@@ -23,6 +23,8 @@ html body {
 }
 
 .containerBoxSmall {
+  display: flex;
+  align-items: center;
   outline: 0;
   border: 0;
   cursor: pointer;

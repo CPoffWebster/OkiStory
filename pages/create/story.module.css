@@ -25,3 +25,18 @@
 .titleFiller {
   color: purple;
 }
+
+.buttonContainer {
+  width: 50%;
+  height: 8vw;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 50%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 2vw;
+  /* border: 1px solid #000; */
+  /* border-radius: 1vw; */
+}
