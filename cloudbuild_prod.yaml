@@ -1,6 +1,6 @@
 # Define substitutions for convenience
 substitutions:
-  _PROJECT_IMAGE_NAME: "okistory_prod"
+  _PROJECT_IMAGE_NAME: "okistory-prod"
   _PROJECT_ID: "reading-alpha-dev"
 
 ### Deploy Steps ###
