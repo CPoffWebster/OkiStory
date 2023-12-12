@@ -1,6 +1,6 @@
 # Define substitutions for convenience
 substitutions:
-  _READING_ALPHA_IMAGE_NAME: "reading-alpha"
+  _PROJECT_IMAGE_NAME: "okistory"
   _PROJECT_ID: "reading-alpha-dev"
 
 ### Deploy Steps ###
@@ -11,13 +11,13 @@ steps:
       [
         "build",
         "-t",
-        "gcr.io/$PROJECT_ID/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA",
+        "gcr.io/$PROJECT_ID/$_PROJECT_IMAGE_NAME:$COMMIT_SHA",
         ".",
       ]
 
   # Push the container image to Container Registry
   - name: "gcr.io/cloud-builders/docker"
-    args: ["push", "gcr.io/$PROJECT_ID/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA"]
+    args: ["push", "gcr.io/$PROJECT_ID/$_PROJECT_IMAGE_NAME:$COMMIT_SHA"]
 
   # Deploy container image to Cloud Run
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
@@ -25,8 +25,40 @@ steps:
     args:
       - "run"
       - "deploy"
-      - "$_READING_ALPHA_IMAGE_NAME-dev"
+      - "$_PROJECT_IMAGE_NAME"
       - "--image"
-      - "gcr.io/$PROJECT_ID/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA"
+      - "gcr.io/$PROJECT_ID/$_PROJECT_IMAGE_NAME:$COMMIT_SHA"
       - "--region"
       - "us-central1"
+# # Define substitutions for convenience
+# substitutions:
+#   _READING_ALPHA_IMAGE_NAME: "reading-alpha"
+#   _PROJECT_ID: "reading-alpha-dev"
+
+# ### Deploy Steps ###
+# steps:
+#   # Build the container image
+#   - name: "gcr.io/cloud-builders/docker"
+#     args:
+#       [
+#         "build",
+#         "-t",
+#         "gcr.io/$PROJECT_ID/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA",
+#         ".",
+#       ]
+
+#   # Push the container image to Container Registry
+#   - name: "gcr.io/cloud-builders/docker"
+#     args: ["push", "gcr.io/$PROJECT_ID/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA"]
+
+#   # Deploy container image to Cloud Run
+#   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+#     entrypoint: gcloud
+#     args:
+#       - "run"
+#       - "deploy"
+#       - "$_READING_ALPHA_IMAGE_NAME-dev"
+#       - "--image"
+#       - "gcr.io/$PROJECT_ID/$_READING_ALPHA_IMAGE_NAME:$COMMIT_SHA"
+#       - "--region"
+#       - "us-central1"
