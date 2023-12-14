@@ -42,12 +42,11 @@ export async function generateImage(prompt: string, generation: ImageGenerations
                 n: 1
             });
             endTime = performance.now();
-            console.info(`LOOK HERE: generateImage Image Generated: ${image}`)
-            console.info('generateImage Image Generated:', image.toString());
+            console.info(`GenerateImage Image Generated: ${JSON.stringify(image)}`);
             await updateGeneratedImageRecord(image.data[0].url!, generation, endTime - startTime);
-        } catch (error: any) {
+        } catch (error) {
             const errorResponse = (error as any).response.data || (error as any).message;
-            console.error('Error generating image:', error.toString());
+            console.error(`Error generating image: ${JSON.stringify(error)}`);
             await updateGeneratedImageRecordError(generation, endTime - startTime, errorResponse);
         }
     }
