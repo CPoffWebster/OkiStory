@@ -11,8 +11,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         let characters = await Characters.getDefaultCharacters();
 
         res.status(200).json({ characters });
-    } catch (err: any) {
-        console.error('Error in api/create/getCharacters', err.toString())
+    } catch (err) {
+        console.error(`Error in api/create/getCharacters: ${JSON.stringify(err)}`);
         res.status(500).json({ err });
     }
 };

@@ -11,8 +11,8 @@ export const withAuthAdmin = (handler: NextApiHandler) => async (req: NextApiReq
         }
 
         return handler(req, res);
-    } catch (error: any) {
-        console.error('Authentication error:', error.toString());
+    } catch (error) {
+        console.error(`withAuthAdmin error: ${JSON.stringify(error)}`);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

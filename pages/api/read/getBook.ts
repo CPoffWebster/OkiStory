@@ -5,9 +5,9 @@ import { PagesAttributes } from '@/services/database/models/Pages';
 import { withBaseURL } from '@/utils/withBaseURL';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.info('read/getBook API Route Triggered');
 
     const { guid, includePages } = req.body;
+    console.info(`read/getBook API Route Triggered; guid: ${guid}, includePages: ${includePages}`);
 
     try {
         connectToDb();
@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         res.status(200).json({ book: book, pages: pages });
     } catch (err: any) {
-        console.error('Error in api/read/getBook', err.toString());
+        console.error(`Error in api/read/getBook; guid: ${guid}, includePages: ${includePages}, err: ${JSON.stringify(err)}`);
         res.status(500).json({ error: err });
     }
 

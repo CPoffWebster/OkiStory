@@ -98,8 +98,8 @@ async function createInRealTime(newBook: BooksAttributes) {
                     savePage(newBook, pageList, currentPageIndex - 1, character, location, style);
                 }
             }
-        } catch (err: any) {
-            console.error('ERROR: createInRealTime:', err.toString());
+        } catch (err) {
+            console.error(`ERROR: createInRealTime ${JSON.stringify(err)}`)
         }
     };
 

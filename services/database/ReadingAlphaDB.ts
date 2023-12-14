@@ -113,8 +113,8 @@ export class ReadingAlphaDB {
             // Call other seeding functions like seedDefaultLocations(transaction);
             await transaction.commit();
             console.info('Seeding data complete.')
-        } catch (error: any) {
-            console.error('Error seeding data:', error.toString());
+        } catch (error) {
+            console.error(`Error seeding data: ${JSON.stringify(error)}`)
             await transaction.rollback();
             throw error;
         }

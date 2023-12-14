@@ -5,9 +5,9 @@ import { Users } from '@/services/database/models/Users';
 import { withBaseURL } from '@/utils/withBaseURL';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.info('read/getUserBooks API Route Triggered');
 
     const { count, offset } = req.body;
+    console.info(`read/getUserBooks API Route Triggered; count: ${count}, offset: ${offset}`);
 
     try {
         connectToDb();
@@ -20,8 +20,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             [total, books] = await getDefaultBooks(count, offset);
         }
         res.status(200).json({ bookList: books, totalBooks: total });
-    } catch (err: any) {
-        console.error('Error in api/read/getUserBooks', err.toString());
+    } catch (err) {
+        console.error(`Error in api/read/getUserBooks; count: ${count}, offset: ${offset}, err: ${JSON.stringify(err)}`);
         res.status(500).json({ error: err });
     }
 

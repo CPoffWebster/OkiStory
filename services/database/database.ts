@@ -15,7 +15,7 @@ export function connectToDb() {
             // console.info('Database connection has been established successfully.');
         })
         .catch((err) => {
-            console.error('Unable to connect to the database:', err.toString());
+            console.error(`Unable to connect to the database; settings: ${JSON.stringify(settings)}, error: ${JSON.stringify(err)}`);
         });
 
     return new ReadingAlphaDB(sequelize);

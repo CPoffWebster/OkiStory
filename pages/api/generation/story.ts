@@ -4,9 +4,9 @@ import { withAuth } from "@/utils/withAuth";
 import { Users } from '@/services/database/models/Users';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.info('api/generation/story API Route Triggered');
 
     const { locationGUID, characterGUID, themeGUID } = req.body;
+    console.info(`api/generation/story API Route Triggered; locationGUID: ${locationGUID}, characterGUID: ${characterGUID}, themeGUID: ${themeGUID}`);
 
     try {
         const user = await Users.getUserBySession(req, res);
@@ -17,8 +17,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const guid = await initializeBookCreation(locationGUID, characterGUID, themeGUID, user.id!);
 
         res.status(200).json({ bookGuid: guid });
-    } catch (err: any) {
-        console.error('Error in api/generation/story', err.toString());
+    } catch (err) {
+        console.error(`Error in api/generation/story; locationGUID: ${locationGUID}, characterGUID: ${characterGUID}, themeGUID: ${themeGUID}, error: ${JSON.stringify(err)}`);
         res.status(500).json({ err });
     }
 

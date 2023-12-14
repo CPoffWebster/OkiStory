@@ -16,8 +16,8 @@ export const withBaseURL = (handler: NextApiHandler) => async (req: NextApiReque
 
         // If the base URL is valid, proceed with the original handler
         return handler(req, res);
-    } catch (error: any) {
-        console.error('Base URL validation error:', error.toString());
+    } catch (error) {
+        console.error(`Error in withBaseURL: ${JSON.stringify(error)}`);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
