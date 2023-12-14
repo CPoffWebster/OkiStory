@@ -42,6 +42,7 @@ export async function generateImage(prompt: string, generation: ImageGenerations
                 n: 1
             });
             endTime = performance.now();
+            console.info(`LOOK HERE: generateImage Image Generated: ${image}`)
             console.info('generateImage Image Generated:', image.toString());
             await updateGeneratedImageRecord(image.data[0].url!, generation, endTime - startTime);
         } catch (error: any) {
