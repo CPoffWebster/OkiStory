@@ -20,7 +20,7 @@ const openai = new OpenAI({
  * @param generation generated text record
  */
 export async function generateText(prompt: string, model: string, generation: TextGenerationsAttributes) {
-    console.log('STARTED: generateText:', model)
+    console.info('STARTED: generateText:', model)
     let generatedText = ''; // `{ "response": "Hello World" }`
     let endTime = 0;
     const startTime = performance.now();
@@ -51,12 +51,12 @@ export async function generateText(prompt: string, model: string, generation: Te
             endTime = performance.now();
             // return generatedText;
             await updateGeneratedTextRecord(prompt, generation, generatedText, endTime - startTime);
-        } catch (error) {
-            console.log('Error generating text:', error);
+        } catch (error: any) {
+            console.error('Error generating text:', error.toString());
         }
     }
 
-    console.log('DONE: generateText', endTime - startTime, 'ms');
+    console.info('DONE: generateText', endTime - startTime, 'ms');
 };
 
 /**
@@ -81,7 +81,7 @@ async function updateGeneratedTextRecord<T>(prompt: string, generation: TextGene
     const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()}`;
     generation.GCSLocation = `text-generations/${formattedDate}/${guid}.json`;
 
-    console.log('Uploading', generation.GCSLocation, 'to', okiStoryGCSBucket)
+    console.info('Uploading', generation.GCSLocation, 'to', okiStoryGCSBucket)
     await textBucket.upload(generation.GCSLocation, dataStream);
 
     let inputPrice = 0;

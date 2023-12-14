@@ -104,7 +104,7 @@ export class ReadingAlphaDB {
      * Seed the database with default data.
      */
     public async seedData() {
-        console.log('Seeding data...')
+        console.info('Seeding data...')
         const transaction = await this.sequelize.transaction();
 
         try {
@@ -112,9 +112,9 @@ export class ReadingAlphaDB {
             await seedDefaultLocations(transaction);
             // Call other seeding functions like seedDefaultLocations(transaction);
             await transaction.commit();
-            console.log('Seeding data complete.')
-        } catch (error) {
-            console.error('Error seeding data:', error);
+            console.info('Seeding data complete.')
+        } catch (error: any) {
+            console.error('Error seeding data:', error.toString());
             await transaction.rollback();
             throw error;
         }

@@ -12,10 +12,10 @@ export function connectToDb() {
     sequelize
         .authenticate()
         .then(() => {
-            // console.log('Database connection has been established successfully.');
+            // console.info('Database connection has been established successfully.');
         })
         .catch((err) => {
-            console.log('Unable to connect to the database:', err);
+            console.error('Unable to connect to the database:', err.toString());
         });
 
     return new ReadingAlphaDB(sequelize);

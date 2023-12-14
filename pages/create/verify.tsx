@@ -52,8 +52,8 @@ export default function Story() {
           setTimeout(allowGeneration, (90 - timeDiff) * 1000);
         } else setDisableGeneration(false);
       } else setDisableGeneration(false);
-    } catch (error) {
-      console.error("Error checking generation allowance", error);
+    } catch (error: any) {
+      console.error("Error checking generation allowance", error.toString());
     }
   };
 

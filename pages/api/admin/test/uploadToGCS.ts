@@ -9,7 +9,7 @@ import { withAuthAdmin } from '@/utils/withAuthAdmin';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-    console.log("STARTED: uploadToGCS");
+    console.info("STARTED: uploadToGCS");
 
     const image = generatedImage;
 
@@ -27,7 +27,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()}`;
     const GCSLocation = `books/${formattedDate}/THISISATEST.png`;
 
-    // console.log('Uploading', GCSLocation, 'to', booksBucket);
     await imageBucket.upload(GCSLocation, compressedImage);
 
     res.status(200).json({ data: "Done" });

@@ -6,7 +6,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const filename = req.query.filename as string;
 
-    console.log(`getImage API Route Triggered: ${filename}`)
+    console.info(`getImage API Route Triggered: ${filename}`)
 
     try {
         const storage = getStorage();
@@ -19,8 +19,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         res.setHeader('Content-Type', 'image/jpeg')
         res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
         stream.pipe(res);
-    } catch (err) {
-        console.error('Error in api/images/getImage', err);
+    } catch (err: any) {
+        console.error('Error in api/images/getImage', err.toString());
         res.status(500).json({ err });
     }
 

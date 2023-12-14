@@ -14,7 +14,7 @@ import { PaidAccounts } from './database/models/PaidAccounts';
  */
 export async function verifyUserLogin(email: string, password: string): Promise<boolean> {
     if (!email || !password) {
-        console.log(`Email: "${email}" or Password: "not shown" is invalid.`)
+        console.info(`Email: "${email}" or Password: "not shown" is invalid.`)
         return false;
     }
 
@@ -24,24 +24,24 @@ export async function verifyUserLogin(email: string, password: string): Promise<
         const user = await Users.getUserByEmail(email);
 
         if (user === null) {
-            console.log(`Email: "${email}" not found.`)
+            console.info(`Email: "${email}" not found.`)
             return false;
         }
 
         if (!user.Password) {
-            console.log(`Email: "${email}" has no password.`)
+            console.info(`Email: "${email}" has no password.`)
             return false;
         }
 
         const match = await bcrypt.compare(password, user.Password);
         if (!match) {
-            console.log(`Email: "${email}" entered invalid password.`)
+            console.info(`Email: "${email}" entered invalid password.`)
             return false;
         }
 
         await Users.updateUser({ ...user, LastLogin: new Date() });
-    } catch (err) {
-        console.error(`Error checkLoginDB for ${email}: ${err}`);
+    } catch (err: any) {
+        console.error(`Error checkLoginDB for ${email}: ${err.toString()}`);
         return false;
     }
 
@@ -60,7 +60,7 @@ export async function verifyUserProvider(profile: Profile | any) {
 
     if (user !== null) {
         if (user.Password === null && user.Provider === iss) {
-            console.log(`Email: "${email}" found under provider: "${iss}".`);
+            console.info(`Email: "${email}" found under provider: "${iss}".`);
             await Users.updateUser({ ...user, LastLogin: new Date() });
             return user;
         } else {
@@ -69,7 +69,7 @@ export async function verifyUserProvider(profile: Profile | any) {
     }
 
     if (user === null) {
-        console.log(`Email: "${email}" not found under provider: "${iss}". Creating new account.`);
+        console.info(`Email: "${email}" not found under provider: "${iss}". Creating new account.`);
         const newUser: UsersAttributes = {
             Email: email,
             Provider: iss,

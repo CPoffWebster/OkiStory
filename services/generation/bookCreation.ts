@@ -52,7 +52,7 @@ async function initiateBookCreation(newBook: BooksAttributes) {
  * @param newBook 
  */
 async function createInRealTime(newBook: BooksAttributes) {
-    console.log('START: createInRealTime')
+    console.info('START: createInRealTime')
 
     let keyValueMap = new Map<string, string | number>();
     let pageList: generatedTextPage[] = [];
@@ -98,8 +98,8 @@ async function createInRealTime(newBook: BooksAttributes) {
                     savePage(newBook, pageList, currentPageIndex - 1, character, location, style);
                 }
             }
-        } catch (err) {
-            console.log('ERROR: createInRealTime:', err);
+        } catch (err: any) {
+            console.error('ERROR: createInRealTime:', err.toString());
         }
     };
 
@@ -108,7 +108,7 @@ async function createInRealTime(newBook: BooksAttributes) {
 
     // Start the text generation
     await generateText(prompt, model, textGenerationWithID);
-    console.log("DONE: createInRealTime")
+    console.info("DONE: createInRealTime")
 }
 
 /**

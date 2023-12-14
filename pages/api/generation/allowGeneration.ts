@@ -6,7 +6,7 @@ import { serializeTableObject } from '@/services/database/modelSerialize';
 import { connectToDb } from '@/services/database/database';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.log('api/generation/allowGeneration API Route Triggered');
+    console.info('api/generation/allowGeneration API Route Triggered');
 
     try {
         connectToDb();
@@ -20,8 +20,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
 
         res.status(200).json({ mostRecentBook: mostRecentBook ? serializeTableObject(mostRecentBook) : null });
-    } catch (err) {
-        console.error('Error in api/generation/allowGeneration', err);
+    } catch (err: any) {
+        console.error('Error in api/generation/allowGeneration', err.toString());
         res.status(500).json({ err });
     }
 

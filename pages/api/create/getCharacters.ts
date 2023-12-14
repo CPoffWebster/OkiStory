@@ -4,15 +4,15 @@ import { connectToDb } from '@/services/database/database';
 import { Characters } from '@/services/database/models/Characters';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.log('api/create/getCharacters API Route Triggered');
+    console.info('api/create/getCharacters API Route Triggered');
 
     try {
         connectToDb();
         let characters = await Characters.getDefaultCharacters();
 
         res.status(200).json({ characters });
-    } catch (err) {
-        console.error('Error in api/create/getCharacters', err)
+    } catch (err: any) {
+        console.error('Error in api/create/getCharacters', err.toString())
         res.status(500).json({ err });
     }
 };

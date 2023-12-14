@@ -53,7 +53,7 @@ export function parseGsUrl(urlString: string) {
 export async function uploadStream(bucket: Bucket, filename: string, stream: NodeJS.ReadableStream) {
     //  Creates an object that represents the destination
     const newFile = bucket.file(filename, {})
-    console.log('Uploading', filename);
+    console.info('Uploading', filename);
     return new Promise<string>((ok, rej) => {
         //  Create a writable stream on Google Storage bucket
         const destinationWriteStream = newFile.createWriteStream();

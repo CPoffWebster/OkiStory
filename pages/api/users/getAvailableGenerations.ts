@@ -5,8 +5,7 @@ import { Users } from '@/services/database/models/Users';
 import { PaidAccounts } from '@/services/database/models/PaidAccounts';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.log('users/getAvailableGenerations API Route Triggered');
-
+    console.info('users/getAvailableGenerations API Route Triggered');
 
     try {
         connectToDb();
@@ -17,8 +16,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const paidAccount = await PaidAccounts.getPaidAccountByUserID(user.id!);
             res.status(200).json({ paidAccount });
         }
-    } catch (err) {
-        console.error('Error in users/getAvailableGenerations', err);
+    } catch (err: any) {
+        console.error('Error in users/getAvailableGenerations', err.toString());
         res.status(500).json({ error: err });
     }
 

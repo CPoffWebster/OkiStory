@@ -45,8 +45,8 @@ export const authOptions: NextAuthOptions = {
             try {
                 await verifyUserProvider(profile);
                 return true;
-            } catch (error) {
-                console.error("Error in signIn callback", error);
+            } catch (error: any) {
+                console.error("Error in signIn callback", error.toString());
                 throw new Error("identity_provider_mismatch");
             }
         },
@@ -61,8 +61,8 @@ export const authOptions: NextAuthOptions = {
                     session.user.paidAccount = paidAccount;
                 }
                 return session;
-            } catch (error) {
-                console.error("Error in session callback", error);
+            } catch (error: any) {
+                console.error("Error in session callback", error.toString());
                 throw error;
             }
         },

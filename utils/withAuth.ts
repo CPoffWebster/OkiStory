@@ -11,8 +11,8 @@ export const withAuth = (handler: NextApiHandler) => async (req: NextApiRequest,
         }
 
         return handler(req, res);
-    } catch (error) {
-        console.error('Authentication error:', error);
+    } catch (error: any) {
+        console.error('Authentication error:', error.toString());
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

@@ -4,15 +4,15 @@ import { connectToDb } from '@/services/database/database';
 import { Locations } from '@/services/database/models/Locations';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.log('api/create/getLocations API Route Triggered');
+    console.info('api/create/getLocations API Route Triggered');
 
     try {
         connectToDb();
         let locations = await Locations.getDefaultLocations();
 
         res.status(200).json({ locations });
-    } catch (err) {
-        console.error('Error in api/create/getLocations', err);
+    } catch (err: any) {
+        console.error('Error in api/create/getLocations', err.toString());
         res.status(500).json({ err });
     }
 };
