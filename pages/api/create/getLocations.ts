@@ -11,8 +11,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         let locations = await Locations.getDefaultLocations();
 
         res.status(200).json({ locations });
-    } catch (err: any) {
-        console.error('Error in api/create/getLocations', err.toString());
+    } catch (err) {
+        console.error(`Error in api/create/getLocations: ${JSON.stringify(err)}`);
         res.status(500).json({ err });
     }
 };

@@ -36,25 +36,21 @@ export default function Story() {
   }, []);
 
   const allowGeneration = async () => {
-    try {
-      const response = await axios.get("/api/generation/allowGeneration");
-      if (response.data.mostRecentBook) {
-        const currentTime = new Date().getTime();
-        const creationTime = new Date(
-          response.data.mostRecentBook.createdAt
-        ).getTime();
-        const timeDiff = (currentTime - creationTime) / 1000; // Difference in seconds
+    const response = await axios.get("/api/generation/allowGeneration");
+    if (response.data.mostRecentBook) {
+      const currentTime = new Date().getTime();
+      const creationTime = new Date(
+        response.data.mostRecentBook.createdAt
+      ).getTime();
+      const timeDiff = (currentTime - creationTime) / 1000; // Difference in seconds
 
-        if (timeDiff < 90) {
-          // Book was created within the last 90 seconds
-          setDisableGeneration(true);
-          // Set a timer to re-check after the remaining time until 90 seconds are completed
-          setTimeout(allowGeneration, (90 - timeDiff) * 1000);
-        } else setDisableGeneration(false);
+      if (timeDiff < 90) {
+        // Book was created within the last 90 seconds
+        setDisableGeneration(true);
+        // Set a timer to re-check after the remaining time until 90 seconds are completed
+        setTimeout(allowGeneration, (90 - timeDiff) * 1000);
       } else setDisableGeneration(false);
-    } catch (error: any) {
-      console.error("Error checking generation allowance", error.toString());
-    }
+    } else setDisableGeneration(false);
   };
 
   const getCharacter = async () => {

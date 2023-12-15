@@ -52,7 +52,7 @@ export async function generateText(prompt: string, model: string, generation: Te
             // return generatedText;
             await updateGeneratedTextRecord(prompt, generation, generatedText, endTime - startTime);
         } catch (error: any) {
-            console.error('Error generating text:', error.toString());
+            console.error(`Error generating text: ${JSON.stringify(error)}`)
         }
     }
 

@@ -20,8 +20,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
 
         res.status(200).json({ mostRecentBook: mostRecentBook ? serializeTableObject(mostRecentBook) : null });
-    } catch (err: any) {
-        console.error('Error in api/generation/allowGeneration', err.toString());
+    } catch (err) {
+        console.error(`Error in api/generation/allowGeneration: ${JSON.stringify(err)}`);
         res.status(500).json({ err });
     }
 

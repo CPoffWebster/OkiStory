@@ -19,8 +19,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         res.setHeader('Content-Type', 'image/jpeg')
         res.setHeader('Cache-Control', 'public, max-age=31536000'); // Cache for 1 year
         stream.pipe(res);
-    } catch (err: any) {
-        console.error('Error in api/images/getImage', err.toString());
+    } catch (err) {
+        console.error(`Error in api/images/getImage; filename: ${filename}, error: ${JSON.stringify(err)}`);
         res.status(500).json({ err });
     }
 
