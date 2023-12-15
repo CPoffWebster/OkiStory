@@ -1,4 +1,4 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { DataTypes, Model, Sequelize, Transaction } from 'sequelize';
 import { serializeTableObject } from '../modelSerialize';
 
 export interface PagesAttributes {
@@ -25,11 +25,12 @@ export class Pages extends Model<PagesAttributes> {
         return { pages, created }
     }
 
-    static async getBookPages(bookID: number): Promise<PagesAttributes[] | null> {
+    static async getBookPages(bookID: number, transaction: Transaction): Promise<PagesAttributes[] | null> {
         const pages = await Pages.findAll({
             where: {
                 BookID: bookID
-            }
+            },
+            transaction: transaction
         });
 
         return pages ? pages.map(page => serializeTableObject(page)) : null;

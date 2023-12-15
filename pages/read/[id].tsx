@@ -17,19 +17,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function GetBookData(props: { guid: string }) {
-  const [book, setBook] = useState<BooksAttributes>({
-    GUID: "",
-    LocationGUID: "",
-    CharacterGUID: "",
-    ThemeGUID: "",
-    StyleGUID: "",
-    UserID: 0,
-  });
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
   const [character, setCharacter] = useState<LocationsAttributes | null>(null);
-  const [pages, setPages] = useState<PagesAttributes[]>([]);
-  const [coverPage, setCoverPage] = useState<React.JSX.Element | null>(null);
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
+  const [bookPageCount, setBookPageCount] = useState<number>(0);
+  const [pagesFound, setPagesFound] = useState<number>(0);
+
+  // Initial load of location and character for newly created books
+  useEffect(() => {
+    const locationGUID = sessionStorage.getItem("Location") || "";
+    const characterGUID = sessionStorage.getItem("Character") || "";
+    getBookCreationElements(locationGUID, characterGUID);
+    getBook();
+  }, []);
 
   // Initial load of location and character
   const getBookCreationElements = async (
@@ -49,103 +49,42 @@ export default function GetBookData(props: { guid: string }) {
     }
   };
 
-  // Initial load of location and character for newly created books
-  useEffect(() => {
-    const locationGUID = sessionStorage.getItem("Location") || "";
-    const characterGUID = sessionStorage.getItem("Character") || "";
-    getBookCreationElements(locationGUID, characterGUID);
-  }, []);
-
-  // Initial load of book
-  useEffect(() => {
-    const intervalId = setInterval(async () => {
+  // Get book and pages data
+  const getBook = async () => {
+    // Continuously check for book data until a condition is met
+    const interval = setInterval(async () => {
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
       });
-      const data: BooksAttributes = response.data.book;
+      const bookData: BooksAttributes = response.data.book;
+      const pagesData: PagesAttributes[] = response.data.pages;
       if (
-        data &&
-        data.PageCount !== null &&
-        data.Title !== "" &&
-        (data.imageGCSLocation || data.imageError === true)
+        bookData !== null &&
+        pagesData !== null &&
+        pagesData.length === bookData.PageCount
       ) {
-        setBook(data);
-        const coverPage = (
-          <div className={styles.coverContainer}>
-            <h1 className={styles.title}>{data.Title}</h1>
-            <ImageWithFallback
-              className={styles.coverImage}
-              filename={data.imageGCSLocation || ""}
-              error={data.imageError}
-              alt={"selection-image"}
-            />
-          </div>
+        if (location === null && character === null) {
+          getBookCreationElements(
+            bookData.LocationGUID,
+            bookData.CharacterGUID
+          );
+        }
+        const [pagesContent, pagesConfigured] = createBookLayout(
+          bookData,
+          pagesData
         );
-        setPagesContent([coverPage]);
-        setCoverPage(coverPage);
-        clearInterval(intervalId);
-      }
-    }, 5000);
-
-    return () => clearInterval(intervalId); // Cleanup on unmount
-  }, []);
-
-  // Initial load of location and character for already created books
-  useEffect(() => {
-    if (location !== null && character !== null) return;
-    let locationGUID = book.LocationGUID;
-    let characterGUID = book.CharacterGUID;
-    getBookCreationElements(locationGUID, characterGUID);
-  }, [book]);
-
-  // Initial load of pages
-  useEffect(() => {
-    if (book === null) return; // Skip if book is null
-
-    const intervalId = setInterval(async () => {
-      const response = await axios.post("/api/read/getBook", {
-        guid: props.guid,
-        includePages: true,
-      });
-      const data: PagesAttributes[] = response.data.pages;
-      if (data && data.length !== 0) {
-        setPages(data);
-        const updatePagesContent: React.JSX.Element[] = [];
-        updatePagesContent.push(coverPage!);
-
-        let pagesConfigured = 0;
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].imageGCSLocation || data[i].imageError === true) {
-            pagesConfigured++;
-            const newImageContent = (
-              <ImageWithFallback
-                className={styles.pageImage}
-                filename={data[i].imageGCSLocation || ""}
-                error={data[i].imageError}
-                alt={"selection-image"}
-              />
-            );
-            const newTextContent = (
-              <div className={styles.pageText}>
-                <p key="PageText">{data[i].Text}</p>
-              </div>
-            );
-            updatePagesContent.push(newImageContent);
-            updatePagesContent.push(newTextContent);
-          }
-        }
+        setPagesContent(pagesContent);
+        setBookPageCount(bookData.PageCount);
+        setPagesFound(pagesData.length);
         if (
-          data.length === book!.PageCount &&
-          pagesConfigured === book!.PageCount
+          bookData.PageCount === pagesData.length &&
+          pagesData.length === pagesConfigured
         ) {
-          clearInterval(intervalId);
+          clearInterval(interval);
         }
-        setPagesContent(updatePagesContent);
       }
     }, 5000);
-
-    return () => clearInterval(intervalId);
-  }, [book]);
+  };
 
   return (
     <>
@@ -170,9 +109,55 @@ export default function GetBookData(props: { guid: string }) {
       </span>
       <Book
         pagesContent={pagesContent}
-        pageCount={book.PageCount!}
-        pagesFound={pages.length}
+        pageCount={bookPageCount}
+        pagesFound={pagesFound}
       />
     </>
   );
+}
+
+/**
+ * Creates the book layout
+ * @param bookData BooksAttributes
+ * @param pagesData PagesAttributes[]
+ * @returns React.JSX.Element[]
+ */
+function createBookLayout(
+  bookData: BooksAttributes,
+  pagesData: PagesAttributes[]
+): [React.JSX.Element[], number] {
+  if (bookData === null) return [[], 0];
+  const updatePagesContent: React.JSX.Element[] = [];
+  updatePagesContent.push(
+    <div className={styles.coverContainer}>
+      <h1 className={styles.title}>{bookData.Title}</h1>
+      <ImageWithFallback
+        className={styles.coverImage}
+        filename={bookData.imageGCSLocation || ""}
+        error={bookData.imageError}
+        alt={"selection-image"}
+      />
+    </div>
+  );
+  if (pagesData === null) [updatePagesContent, 0];
+  let pagesConfigured = 0;
+  for (let i = 0; i < pagesData.length; i++) {
+    if (pagesData[i].imageGCSLocation || pagesData[i].imageError === true) {
+      pagesConfigured++;
+      updatePagesContent.push(
+        <ImageWithFallback
+          className={styles.pageImage}
+          filename={pagesData[i].imageGCSLocation || ""}
+          error={pagesData[i].imageError}
+        />
+      );
+      updatePagesContent.push(
+        <div className={styles.pageText}>
+          <p>{pagesData[i].Text}</p>
+        </div>
+      );
+    }
+  }
+
+  return [updatePagesContent, pagesConfigured];
 }

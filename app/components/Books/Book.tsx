@@ -24,9 +24,10 @@ const Book: React.FC<BookReaderProps> = ({
     const pageRendering = pagesContent.map((content, index) => {
       // Determine if the page should have left/right offset
       let style = {};
-      if (currentIndex !== 0) {
-        if (index % 2 !== 0) style = { left: "1vw" };
-        else style = { right: "1vw" };
+      if (index % 2 !== 0) {
+        style = { left: "1vw" };
+      } else {
+        style = { right: "1vw", zIndex: `${pagesContent.length - index}` };
       }
       return (
         <div
@@ -40,19 +41,6 @@ const Book: React.FC<BookReaderProps> = ({
     });
     setRenderedPages(pageRendering);
   }, [pagesContent, currentIndex]); // Include currentIndex in dependency array
-
-  // Set the z-index of the pages so that the odd pages are on top of the even pages
-  useEffect(() => {
-    const pages = Array.from(
-      document.getElementsByClassName(styles.page)
-    ) as HTMLElement[];
-
-    pages.forEach((page, i) => {
-      if (i % 2 === 0) {
-        page.style.zIndex = `${pages.length - i}`;
-      }
-    });
-  }, [pagesContent]);
 
   // Update the page flip state
   useEffect(() => {
@@ -117,7 +105,7 @@ const Book: React.FC<BookReaderProps> = ({
         loadingRightArrow={isLoading}
         rightArrowMessage={isLoading ? "Loading..." : undefined}
         rightImportant={currentIndex < pageCount * 2}
-        homeImportant={currentIndex >= pageCount * 2}
+        homeImportant={currentIndex != 0 && currentIndex >= pageCount * 2}
         onFlipLeft={handleFlipLeft}
         onFlipRight={handleFlipRight}
         onReturnHome={() => router.push("/")}

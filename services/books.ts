@@ -13,39 +13,43 @@ import { connectToDb } from "./database/database";
  * @returns 
  */
 export async function getUserBooks(userID: number, count: number, offset: number): Promise<[number, BooksAttributes[]]> {
-    // create a transaction to get both the count of the user books and the count of the default books
     const db = connectToDb();
     const transaction = await db.transaction();
-    const [userTotal, defaultTotal] = await Promise.all([
-        Books.count({ where: { UserID: userID }, transaction }),
-        Books.count({ where: { DefaultBook: true }, transaction })
-    ]);
+    try {
+        const [userTotal, defaultTotal] = await Promise.all([
+            Books.count({ where: { UserID: userID }, transaction }),
+            Books.count({ where: { DefaultBook: true }, transaction })
+        ]);
 
-    // Fetch user's books
-    let books = await Books.getUserBooks(userID, count, offset, transaction);
-    if (books === null) books = [];
+        // Fetch user's books
+        let books = await Books.getUserBooks(userID, count, offset, transaction);
+        if (books === null) books = [];
 
-    await transaction.commit(); // Commit the transaction
+        // Calculate the number of user-specific books that have been skipped or displayed
+        const userBooksFetched = Math.min(userTotal, offset + count);
 
-    // Calculate the number of user-specific books that have been skipped or displayed
-    const userBooksFetched = Math.min(userTotal, offset + count);
+        // Check if all user-specific books are fetched
+        if (userBooksFetched >= userTotal) {
+            // Calculate new offset for default books
+            const defaultBooksOffset = Math.max(0, offset - userTotal);
 
-    // Check if all user-specific books are fetched
-    if (userBooksFetched >= userTotal) {
-        // Calculate new offset for default books
-        const defaultBooksOffset = Math.max(0, offset - userTotal);
+            // Calculate how many more books are needed to meet the count
+            const remainingCount = count - books.length;
 
-        // Calculate how many more books are needed to meet the count
-        const remainingCount = count - books.length;
-
-        // Fetch default books with the new offset
-        const defaultBooks = await Books.getDefaultBooks(remainingCount, defaultBooksOffset);
-        if (defaultBooks !== null) {
-            books = [...books, ...defaultBooks];
+            // Fetch default books with the new offset
+            const defaultBooks = await Books.getDefaultBooks(remainingCount, defaultBooksOffset, transaction);
+            if (defaultBooks !== null) {
+                books = [...books, ...defaultBooks];
+            }
         }
-    }
 
-    return [userTotal + defaultTotal, await addImageGCSLocationArray(books) as BooksAttributes[]];
+        const updatedBooks = await addImageGCSLocationArray(books, transaction) as BooksAttributes[];
+        await transaction.commit(); // Commit the transaction
+        return [userTotal + defaultTotal, updatedBooks];
+    } catch (error) {
+        await transaction.rollback(); // Rollback the transaction in case of error
+        throw error;
+    }
 }
 
 /**
@@ -55,55 +59,58 @@ export async function getUserBooks(userID: number, count: number, offset: number
  * @returns 
  */
 export async function getDefaultBooks(count: number, offset: number): Promise<[number, BooksAttributes[]]> {
-    const defaultTotal = await Books.count({
-        where: {
-            DefaultBook: true
-        }
-    });
-    const books = await Books.getDefaultBooks(count, offset);
-    if (books === null) return [0, []];
-
-    return [defaultTotal, await addImageGCSLocationArray(books) as BooksAttributes[]];
-}
-
-/**
- * Get a book by its GUID
- * @param guid 
- * @returns 
- */
-export async function getBookByGUID(guid: string): Promise<BooksAttributes | null> {
-    const book = await Books.getBook(guid);
-    if (book === null) return null;
-    return await addImageGCSLocation(book) as BooksAttributes;
-}
-
-/**
- * Get the pages for a book
- * @param bookID 
- * @returns 
- */
-export async function getPagesByBookId(bookID: number): Promise<PagesAttributes[] | null> {
-    const pages = await Pages.getBookPages(bookID);
-    if (pages === null) return null;
-    return await addImageGCSLocationArray(pages) as PagesAttributes[];
-}
-
-// Modified addImageGCSLocationArray to use a transaction
-async function addImageGCSLocationArray(books: (BooksAttributes | PagesAttributes)[]): Promise<(BooksAttributes | PagesAttributes)[]> {
     const db = connectToDb();
     const transaction = await db.transaction();
     try {
-        const updatedBooks = await Promise.all(
-            books.map(async (book) => {
-                return await addImageGCSLocation(book, transaction); // Pass the transaction to the function
-            })
-        );
+        const defaultTotal = await Books.count({
+            where: { DefaultBook: true },
+            transaction: transaction
+        });
+        const books = await Books.getDefaultBooks(count, offset, transaction);
+        if (books === null) return [0, []];
+
+        const updatedBooks = await addImageGCSLocationArray(books, transaction) as BooksAttributes[];
         await transaction.commit(); // Commit the transaction
-        return updatedBooks as unknown as Promise<(BooksAttributes | PagesAttributes)[]>;
+        return [defaultTotal, updatedBooks];
     } catch (error) {
         await transaction.rollback(); // Rollback the transaction in case of error
         throw error;
     }
+}
+
+/**
+ * Get a book and its pages by its GUID
+ * @param guid 
+ * @returns 
+ */
+export async function getBookByGUID(guid: string): Promise<[BooksAttributes | null, PagesAttributes[] | null]> {
+    const db = connectToDb();
+    const transaction = await db.transaction();
+    try {
+        let book = await Books.getBook(guid, transaction);
+        if (book === null) return [null, null];
+        book = await addImageGCSLocation(book, transaction) as BooksAttributes;
+
+        let pages = await Pages.getBookPages(book.id!, transaction);
+        if (pages === null) return [book, null];
+        pages = await addImageGCSLocationArray(pages, transaction) as PagesAttributes[];
+
+        await transaction.commit(); // Commit the transaction
+        return [book, pages];
+    } catch (error) {
+        await transaction.rollback(); // Rollback the transaction in case of error
+        throw error;
+    }
+}
+
+// Modified addImageGCSLocationArray to use a transaction
+async function addImageGCSLocationArray(books: (BooksAttributes | PagesAttributes)[], transaction: Transaction): Promise<(BooksAttributes | PagesAttributes)[]> {
+    const updatedBooks = await Promise.all(
+        books.map(async (book) => {
+            return await addImageGCSLocation(book, transaction); // Pass the transaction to the function
+        })
+    );
+    return updatedBooks as unknown as Promise<(BooksAttributes | PagesAttributes)[]>;
 }
 
 // Modified addImageGCSLocation to accept a transaction

@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { connectToDb } from '@/services/database/database';
-import { getBookByGUID, getPagesByBookId } from '@/services/books';
-import { PagesAttributes } from '@/services/database/models/Pages';
+import { getBookByGUID } from '@/services/books';
 import { withBaseURL } from '@/utils/withBaseURL';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -10,12 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.info(`read/getBook API Route Triggered; guid: ${guid}, includePages: ${includePages}`);
 
     try {
-        connectToDb();
-        let pages: PagesAttributes[] | null = null;
-        const book = await getBookByGUID(guid);
-        if (book && includePages) {
-            pages = await getPagesByBookId(book.id!);
-        }
+        const [book, pages] = await getBookByGUID(guid);
         res.status(200).json({ book: book, pages: pages });
     } catch (err: any) {
         console.error(`Error in api/read/getBook; guid: ${guid}, includePages: ${includePages}, err: ${JSON.stringify(err)}`);

@@ -38,16 +38,17 @@ export class Books extends Model<BooksAttributes> {
         );
     }
 
-    static async getBook(guid: string) {
+    static async getBook(guid: string, transaction: Transaction) {
         const book = await Books.findOne({
             where: {
                 GUID: guid
-            }
+            },
+            transaction: transaction
         });
         return book ? serializeTableObject(book) : null;
     }
 
-    static async getUserBooks(userID: number, count: number, offset: number, transaction: Transaction | null = null): Promise<BooksAttributes[] | null> {
+    static async getUserBooks(userID: number, count: number, offset: number, transaction: Transaction): Promise<BooksAttributes[] | null> {
         const books = await Books.findAll({
             limit: count,
             offset: offset,
@@ -63,7 +64,7 @@ export class Books extends Model<BooksAttributes> {
         return books ? books.map(book => serializeTableObject(book)) : null;
     }
 
-    static async getDefaultBooks(count: number, offset: number): Promise<BooksAttributes[] | null> {
+    static async getDefaultBooks(count: number, offset: number, transaction: Transaction): Promise<BooksAttributes[] | null> {
         const books = await Books.findAll({
             limit: count,
             offset: offset,
@@ -72,7 +73,8 @@ export class Books extends Model<BooksAttributes> {
             ],
             where: {
                 DefaultBook: true
-            }
+            },
+            transaction: transaction
         });
         return books ? books.map(book => serializeTableObject(book)) : null;
     }
