@@ -1,4 +1,4 @@
-import { DataTypes, Model, Op, Sequelize } from 'sequelize';
+import { DataTypes, Model, Op, Sequelize, Transaction } from 'sequelize';
 import { serializeTableObject } from '../modelSerialize';
 
 export interface BooksAttributes {
@@ -47,7 +47,7 @@ export class Books extends Model<BooksAttributes> {
         return book ? serializeTableObject(book) : null;
     }
 
-    static async getUserBooks(userID: number, count: number, offset: number): Promise<BooksAttributes[] | null> {
+    static async getUserBooks(userID: number, count: number, offset: number, transaction: Transaction | null = null): Promise<BooksAttributes[] | null> {
         const books = await Books.findAll({
             limit: count,
             offset: offset,
@@ -55,8 +55,9 @@ export class Books extends Model<BooksAttributes> {
                 ['createdAt', 'DESC']
             ],
             where: {
-                UserID: userID
-            }
+                UserID: userID,
+            },
+            transaction: transaction
         });
 
         return books ? books.map(book => serializeTableObject(book)) : null;

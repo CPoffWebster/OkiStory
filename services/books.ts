@@ -1,6 +1,9 @@
+import sequelize from "sequelize/lib/sequelize";
 import { Books, BooksAttributes } from "./database/models/Books";
 import { ImageGenerations } from "./database/models/ImageGenerations";
 import { Pages, PagesAttributes } from "./database/models/Pages";
+import { Transaction } from 'sequelize';
+import { connectToDb } from "./database/database";
 
 /**
  * Get the bookshelf list of books for a user
@@ -11,14 +14,18 @@ import { Pages, PagesAttributes } from "./database/models/Pages";
  */
 export async function getUserBooks(userID: number, count: number, offset: number): Promise<[number, BooksAttributes[]]> {
     // create a transaction to get both the count of the user books and the count of the default books
+    const db = connectToDb();
+    const transaction = await db.transaction();
     const [userTotal, defaultTotal] = await Promise.all([
-        Books.count({ where: { UserID: userID } }),
-        Books.count({ where: { DefaultBook: true } })
+        Books.count({ where: { UserID: userID }, transaction }),
+        Books.count({ where: { DefaultBook: true }, transaction })
     ]);
 
     // Fetch user's books
-    let books = await Books.getUserBooks(userID, count, offset);
+    let books = await Books.getUserBooks(userID, count, offset, transaction);
     if (books === null) books = [];
+
+    await transaction.commit(); // Commit the transaction
 
     // Calculate the number of user-specific books that have been skipped or displayed
     const userBooksFetched = Math.min(userTotal, offset + count);
@@ -81,16 +88,27 @@ export async function getPagesByBookId(bookID: number): Promise<PagesAttributes[
     return await addImageGCSLocationArray(pages) as PagesAttributes[];
 }
 
+// Modified addImageGCSLocationArray to use a transaction
 async function addImageGCSLocationArray(books: (BooksAttributes | PagesAttributes)[]): Promise<(BooksAttributes | PagesAttributes)[]> {
-    return Promise.all(
-        books.map(async (book) => {
-            return await addImageGCSLocation(book);
-        })
-    ) as Promise<(BooksAttributes | PagesAttributes)[]>;
+    const db = connectToDb();
+    const transaction = await db.transaction();
+    try {
+        const updatedBooks = await Promise.all(
+            books.map(async (book) => {
+                return await addImageGCSLocation(book, transaction); // Pass the transaction to the function
+            })
+        );
+        await transaction.commit(); // Commit the transaction
+        return updatedBooks as unknown as Promise<(BooksAttributes | PagesAttributes)[]>;
+    } catch (error) {
+        await transaction.rollback(); // Rollback the transaction in case of error
+        throw error;
+    }
 }
 
-async function addImageGCSLocation(imageUpdate: (BooksAttributes | PagesAttributes)) {
-    const imageGeneration = await ImageGenerations.getGeneration(imageUpdate.GeneratedImageID!);
+// Modified addImageGCSLocation to accept a transaction
+async function addImageGCSLocation(imageUpdate: (BooksAttributes | PagesAttributes), transaction: Transaction | null = null) {
+    const imageGeneration = await ImageGenerations.getGeneration(imageUpdate.GeneratedImageID!, transaction); // Use the transaction
     imageUpdate.imageGCSLocation = imageGeneration?.GCSLocation ? `${imageGeneration?.GCSLocation}` : undefined;
     imageUpdate.imageError = imageGeneration?.Error ? true : false;
     return imageUpdate;

@@ -1,4 +1,4 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { DataTypes, Model, Sequelize, Transaction } from 'sequelize';
 import { serializeTableObject } from '../modelSerialize';
 
 export interface ImageGenerationsAttributes {
@@ -32,8 +32,8 @@ export class ImageGenerations extends Model<ImageGenerationsAttributes> {
         );
     }
 
-    static async getGeneration(id: number): Promise<ImageGenerationsAttributes | null> {
-        const imageGeneration = await ImageGenerations.findByPk(id);
+    static async getGeneration(id: number, transaction: Transaction | null): Promise<ImageGenerationsAttributes | null> {
+        const imageGeneration = await ImageGenerations.findByPk(id, { transaction: transaction });
         return imageGeneration ? serializeTableObject(imageGeneration) : null;
     }
 }
