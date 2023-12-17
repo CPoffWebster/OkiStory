@@ -148,6 +148,7 @@ function createBookLayout(
     <div className={styles.coverContainer}>
       <h1 className={styles.title}>{bookData.Title}</h1>
       <ImageWithFallback
+        key={`page-image-cover`}
         className={styles.coverImage}
         filename={bookData.imageGCSLocation || ""}
         error={bookData.imageError}
@@ -162,6 +163,7 @@ function createBookLayout(
       // pagesConfigured++;
       updatePagesContent.push(
         <ImageWithFallback
+          key={`page-image-${i}`}
           className={styles.pageImage}
           filename={pagesData[i].imageGCSLocation || ""}
           error={pagesData[i].imageError}
