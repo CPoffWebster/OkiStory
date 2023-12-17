@@ -98,9 +98,6 @@ const Book: React.FC<BookReaderProps> = ({
 
   return (
     <div>
-      {!coverConfigured && (
-        <div className={styles.coverContainer}>IsLoading...</div>
-      )}
       {currentIndex === 0 ? (
         <div className={styles.coverContainer}>{renderedPages}</div>
       ) : (

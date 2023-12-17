@@ -17,9 +17,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function GetBookData(props: { guid: string }) {
+  const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([
+    <div className={styles.coverContainer}>
+      <h1 className={styles.title} style={{ marginTop: "-10vw" }}>
+        Loading your story!
+      </h1>
+      <div className={styles.spinner}></div>
+    </div>,
+  ]);
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
   const [character, setCharacter] = useState<LocationsAttributes | null>(null);
-  const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
   const [bookPageCount, setBookPageCount] = useState<number>(0);
   const [coverConfigured, setCoverConfigured] = useState<boolean>(false);
   const [pagesConfigured, setPagesConfigured] = useState<number>(0);
