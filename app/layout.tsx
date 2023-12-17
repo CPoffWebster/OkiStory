@@ -1,3 +1,4 @@
+"use client"; // This is a client component 👈🏽
 import { ReactNode, useEffect, useState } from "react";
 import styles from "./layout.module.css";
 

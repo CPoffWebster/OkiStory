@@ -18,8 +18,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         await transaction.commit();
 
         res.status(200).json({ location, character });
-
-
     } catch (err) {
         console.error(`Error in api/read/getCreationElements API Route Triggered; locationGUID: ${locationGUID}, characterGUID: ${characterGUID}, err: ${JSON.stringify(err)}`);
         res.status(500).json({ error: err });

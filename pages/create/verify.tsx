@@ -7,19 +7,19 @@ import Button from "@/app/components/Button/Button";
 import styles from "./verify.module.css";
 import axios from "axios";
 import { HomeIcon } from "@/app/components/Icons/HomeIcon";
-import { useSession } from "next-auth/react";
 
 export default function Story() {
   const router = useRouter();
-  const session = useSession();
   const [disableGeneration, setDisableGeneration] = useState<boolean>(true);
   const [character, setCharacter] = useState<CharactersAttributes | null>(null);
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
   const [amountOfGenerations, setAmountOfGenerations] = useState<number>(0);
 
+  // Initial load of characters
   useEffect(() => {
-    // Fetch the latest session data
-    getAmountOfGenerations();
+    getAmountOfGenerations(); // Fetch the latest session data
+    allowGeneration();
+    getCreationElements();
   }, []);
 
   const getAmountOfGenerations = async () => {
@@ -27,13 +27,6 @@ export default function Story() {
     if (paidAccount.data.paidAccount === null) return;
     setAmountOfGenerations(paidAccount.data.paidAccount.AmountOfGenerations);
   };
-
-  // Initial load of characters
-  useEffect(() => {
-    allowGeneration();
-    getCharacter();
-    getLocation();
-  }, []);
 
   const allowGeneration = async () => {
     const response = await axios.get("/api/generation/allowGeneration");
@@ -53,27 +46,18 @@ export default function Story() {
     } else setDisableGeneration(false);
   };
 
-  const getCharacter = async () => {
-    const character = await axios.post("/api/create/getCharacter", {
-      guid: sessionStorage.getItem("Character"),
+  const getCreationElements = async () => {
+    const response = await axios.post("/api/read/getCreationElements", {
+      locationGUID: sessionStorage.getItem("Location"),
+      characterGUID: sessionStorage.getItem("Character"),
     });
-    if (character.data.character === null) {
-      alert("Error fetching character, please try again.");
+    if (response.data.location === null || response.data.character === null) {
+      alert("Error fetching location and character, please try again.");
       router.push("/");
       return;
     }
-    setCharacter(character.data.character);
-  };
-  const getLocation = async () => {
-    const location = await axios.post("/api/create/getLocation", {
-      guid: sessionStorage.getItem("Location"),
-    });
-    if (location.data.location === null) {
-      alert("Error fetching location, please try again.");
-      router.push("/");
-      return;
-    }
-    setLocation(location.data.location);
+    setLocation(response.data.location);
+    setCharacter(response.data.character);
   };
 
   const handleSubmit = async (): Promise<void> => {
