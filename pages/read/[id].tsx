@@ -37,7 +37,7 @@ export default function GetBookData(props: { guid: string }) {
     characterGUID: string
   ) => {
     if (locationGUID !== "" && characterGUID !== "") {
-      const response = await axios.post("/api/create/getCreationElements", {
+      const response = await axios.post("/api/read/getCreationElements", {
         locationGUID,
         characterGUID,
       });
