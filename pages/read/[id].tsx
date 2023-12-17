@@ -21,6 +21,7 @@ export default function GetBookData(props: { guid: string }) {
   const [character, setCharacter] = useState<LocationsAttributes | null>(null);
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
   const [bookPageCount, setBookPageCount] = useState<number>(0);
+  const [coverConfigured, setCoverConfigured] = useState<boolean>(false);
   const [pagesConfigured, setPagesConfigured] = useState<number>(0);
 
   // Initial load of location and character for newly created books
@@ -66,16 +67,17 @@ export default function GetBookData(props: { guid: string }) {
         pagesData !== null &&
         pagesData.length === bookData.PageCount
       ) {
-        const [pagesContent, pagesConfigured] = createBookLayout(
-          bookData,
-          pagesData
-        );
-        console.log(pagesContent, pagesConfigured);
-        setPagesContent(pagesContent);
         setBookPageCount(bookData.PageCount);
-        setPagesConfigured(pagesConfigured);
+        const [pagesContentUpdate] = createBookLayout(
+          bookData,
+          pagesData,
+          setCoverConfigured,
+          setPagesConfigured
+        );
+        setPagesContent(pagesContentUpdate);
 
         if (
+          coverConfigured &&
           bookData.PageCount === pagesData.length &&
           pagesData.length === pagesConfigured
         ) {
@@ -113,6 +115,7 @@ export default function GetBookData(props: { guid: string }) {
       <Book
         pagesContent={pagesContent}
         pageCount={bookPageCount}
+        coverConfigured={coverConfigured}
         pagesConfigured={pagesConfigured}
       />
     </>
@@ -127,10 +130,13 @@ export default function GetBookData(props: { guid: string }) {
  */
 function createBookLayout(
   bookData: BooksAttributes,
-  pagesData: PagesAttributes[]
-): [React.JSX.Element[], number] {
-  if (bookData === null) return [[], 0];
+  pagesData: PagesAttributes[],
+  setCoverConfigured: React.Dispatch<React.SetStateAction<boolean>>,
+  setPagesConfigured: React.Dispatch<React.SetStateAction<number>>
+): [React.JSX.Element[]] {
+  if (bookData === null) return [[]];
   const updatePagesContent: React.JSX.Element[] = [];
+
   updatePagesContent.push(
     <div className={styles.coverContainer}>
       <h1 className={styles.title}>{bookData.Title}</h1>
@@ -138,26 +144,21 @@ function createBookLayout(
         className={styles.coverImage}
         filename={bookData.imageGCSLocation || ""}
         error={bookData.imageError}
-        alt={"selection-image"}
+        onLoad={() => setCoverConfigured(true)}
       />
     </div>
   );
   if (pagesData === null) [updatePagesContent, 0];
 
-  let pagesConfigured = 0;
-  const incrementPagesConfigured = () => {
-    pagesConfigured++;
-  };
-
   for (let i = 0; i < pagesData.length; i++) {
     if (pagesData[i].imageGCSLocation || pagesData[i].imageError === true) {
-      pagesConfigured++;
+      // pagesConfigured++;
       updatePagesContent.push(
         <ImageWithFallback
           className={styles.pageImage}
           filename={pagesData[i].imageGCSLocation || ""}
           error={pagesData[i].imageError}
-          onLoad={incrementPagesConfigured}
+          onLoad={() => setPagesConfigured((curr) => curr + 1)}
         />
       );
       updatePagesContent.push(
@@ -168,5 +169,5 @@ function createBookLayout(
     }
   }
 
-  return [updatePagesContent, pagesConfigured];
+  return [updatePagesContent];
 }

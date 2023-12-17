@@ -6,12 +6,14 @@ import NavigationButtons, { useFlippedPages } from "../NavButtons/NavButtons";
 interface BookReaderProps {
   pagesContent: React.JSX.Element[];
   pageCount: number;
+  coverConfigured: boolean;
   pagesConfigured: number;
 }
 
 const Book: React.FC<BookReaderProps> = ({
   pagesContent,
   pageCount,
+  coverConfigured,
   pagesConfigured,
 }) => {
   const router = useRouter();
@@ -96,6 +98,9 @@ const Book: React.FC<BookReaderProps> = ({
 
   return (
     <div>
+      {!coverConfigured && (
+        <div className={styles.coverContainer}>IsLoading...</div>
+      )}
       {currentIndex === 0 ? (
         <div className={styles.coverContainer}>{renderedPages}</div>
       ) : (
