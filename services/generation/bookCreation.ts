@@ -178,27 +178,6 @@ function createPagesInRealTime(generatedText: string, pageList: generatedTextPag
  * @param generatedText 
  * @returns value of the key
  */
-// function parseJsonKey(key: string, generatedText: string): [string | number, number] | null {
-//     const pattern = `"${key}":`;
-//     const startIdx = generatedText.indexOf(pattern);
-
-//     if (startIdx === -1) return null;
-
-//     let endIdx, value;
-//     const valueStartIdx = startIdx + pattern.length;
-
-//     if (generatedText.charAt(valueStartIdx) === '"') {
-//         // String value
-//         endIdx = generatedText.indexOf('"', valueStartIdx + 1);
-//         value = generatedText.substring(valueStartIdx + 1, endIdx);
-//     } else {
-//         // Numeric or otherwise
-//         endIdx = generatedText.indexOf(',', valueStartIdx);
-//         value = generatedText.substring(valueStartIdx, endIdx);
-//     }
-
-//     return [value, endIdx];
-// }
 function parseJsonKey(key: string, generatedText: string): [string | number, number] | null {
     const regexPattern = new RegExp(`"${key}":\\s*("[^"]*"|\\d+)`);
     const match = generatedText.match(regexPattern);
@@ -211,8 +190,6 @@ function parseJsonKey(key: string, generatedText: string): [string | number, num
     // Remove quotes if it's a string
     return [value.startsWith('"') ? value.slice(1, -1) : Number(value), endIdx];
 }
-
-
 
 /**
  * Saves the book to the database

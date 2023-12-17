@@ -1,4 +1,4 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { DataTypes, Model, Sequelize, Transaction } from 'sequelize';
 import { serializeTableObject } from '../modelSerialize';
 
 export interface CharactersAttributes {
@@ -17,8 +17,8 @@ export interface CharactersAttributes {
 }
 
 export class Characters extends Model<CharactersAttributes> {
-    static async getCharacter(guid: string) {
-        const character = await Characters.findOne({ where: { GUID: guid } });
+    static async getCharacter(guid: string, transaction?: Transaction) {
+        const character = await Characters.findOne({ where: { GUID: guid }, transaction });
         return character ? serializeTableObject(character) : null;
     }
 

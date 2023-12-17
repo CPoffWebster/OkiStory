@@ -30,7 +30,7 @@ export async function generateText(prompt: string, model: string, generation: Te
         for (const char of streamText) {
             generatedText += char;
             textGenerationEmitter.emit('textGenerated', generatedText);
-            await new Promise(resolve => setTimeout(resolve, .01))
+            await new Promise(resolve => setTimeout(resolve, .1))
         }
 
         const endTime = performance.now();

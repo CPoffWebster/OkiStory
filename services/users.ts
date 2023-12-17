@@ -40,8 +40,8 @@ export async function verifyUserLogin(email: string, password: string): Promise<
         }
 
         await Users.updateUser({ ...user, LastLogin: new Date() });
-    } catch (err: any) {
-        console.error(`Error checkLoginDB for ${email}: ${err.toString()}`);
+    } catch (err) {
+        console.error(`Error checkLoginDB for ${email}; error: ${JSON.stringify(err)}`);
         return false;
     }
 

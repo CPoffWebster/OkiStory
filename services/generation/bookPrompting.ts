@@ -5,14 +5,15 @@ import { Locations } from "../database/models/Locations";
 
 export async function getStoryIDs(book: BooksAttributes, styleID: number = 0): Promise<string[]> {
     const db = connectToDb();
-    // const tran = await db.transaction();
+    const tran = await db.transaction();
 
-    const dbChar = await Characters.getCharacter(book.CharacterGUID);
-    const dbLoc = await Locations.getLocation(book.LocationGUID);
+    const dbChar = await Characters.getCharacter(book.CharacterGUID, tran);
+    const dbLoc = await Locations.getLocation(book.LocationGUID, tran);
     const character = `${dbChar.Name} (Description: ${dbChar.GenerationDescription})`;
     const location = `${dbLoc.Name} (Description: ${dbLoc.GenerationDescription})`;
     const theme = `${themes[0].name} (Description: ${themes[0].desc})`;
     const style = styles[styleID];
+    await tran.commit();
     return [character, location, theme, style]
 }
 

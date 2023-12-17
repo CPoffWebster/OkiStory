@@ -4,6 +4,8 @@ import { ImageGenerations } from "./database/models/ImageGenerations";
 import { Pages, PagesAttributes } from "./database/models/Pages";
 import { Transaction } from 'sequelize';
 import { connectToDb } from "./database/database";
+import { Locations, LocationsAttributes } from "./database/models/Locations";
+import { Characters, CharactersAttributes } from "./database/models/Characters";
 
 /**
  * Get the bookshelf list of books for a user
@@ -83,20 +85,22 @@ export async function getDefaultBooks(count: number, offset: number): Promise<[n
  * @param guid 
  * @returns 
  */
-export async function getBookByGUID(guid: string): Promise<[BooksAttributes | null, PagesAttributes[] | null]> {
+export async function getBookByGUID(guid: string): Promise<[BooksAttributes | null, PagesAttributes[] | null, LocationsAttributes | null, CharactersAttributes | null]> {
     const db = connectToDb();
     const transaction = await db.transaction();
     try {
         let book = await Books.getBook(guid, transaction);
-        if (book === null) return [null, null];
+        if (book === null) return [null, null, null, null];
         book = await addImageGCSLocation(book, transaction) as BooksAttributes;
+        let location: LocationsAttributes = await Locations.getLocation(book.LocationGUID, transaction);
+        let character: CharactersAttributes = await Characters.getCharacter(book.CharacterGUID, transaction);
 
         let pages = await Pages.getBookPages(book.id!, transaction);
-        if (pages === null) return [book, null];
+        if (pages === null) return [book, null, location, character];
         pages = await addImageGCSLocationArray(pages, transaction) as PagesAttributes[];
 
         await transaction.commit(); // Commit the transaction
-        return [book, pages];
+        return [book, pages, location, character];
     } catch (error) {
         await transaction.rollback(); // Rollback the transaction in case of error
         throw error;

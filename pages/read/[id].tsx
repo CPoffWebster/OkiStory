@@ -37,38 +37,35 @@ export default function GetBookData(props: { guid: string }) {
     characterGUID: string
   ) => {
     if (locationGUID !== "" && characterGUID !== "") {
-      const location = await axios.post("/api/create/getLocation", {
-        guid: locationGUID,
+      const response = await axios.post("/api/create/getCreationElements", {
+        locationGUID,
+        characterGUID,
       });
-      setLocation(location.data.location);
-      const character = await axios.post("/api/create/getCharacter", {
-        guid: characterGUID,
-      });
-      setCharacter(character.data.character);
+      setLocation(response.data.location);
+      setCharacter(response.data.character);
       sessionStorage.clear();
     }
   };
 
   // Get book and pages data
   const getBook = async () => {
-    // Continuously check for book data until a condition is met
-    const interval = setInterval(async () => {
+    const fetchBookData = async () => {
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
       });
       const bookData: BooksAttributes = response.data.book;
       const pagesData: PagesAttributes[] = response.data.pages;
+
+      if (location === null && character === null) {
+        setLocation(response.data.location);
+        setCharacter(response.data.character);
+      }
+
       if (
         bookData !== null &&
         pagesData !== null &&
         pagesData.length === bookData.PageCount
       ) {
-        if (location === null && character === null) {
-          getBookCreationElements(
-            bookData.LocationGUID,
-            bookData.CharacterGUID
-          );
-        }
         const [pagesContent, pagesConfigured] = createBookLayout(
           bookData,
           pagesData
@@ -76,6 +73,7 @@ export default function GetBookData(props: { guid: string }) {
         setPagesContent(pagesContent);
         setBookPageCount(bookData.PageCount);
         setPagesFound(pagesData.length);
+
         if (
           bookData.PageCount === pagesData.length &&
           pagesData.length === pagesConfigured
@@ -83,7 +81,11 @@ export default function GetBookData(props: { guid: string }) {
           clearInterval(interval);
         }
       }
-    }, 5000);
+    };
+
+    // Call fetchBookData immediately and then set an interval
+    fetchBookData();
+    const interval = setInterval(fetchBookData, 5000);
   };
 
   return (

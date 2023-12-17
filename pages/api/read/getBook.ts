@@ -4,14 +4,14 @@ import { withBaseURL } from '@/utils/withBaseURL';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
-    const { guid, includePages } = req.body;
-    console.info(`read/getBook API Route Triggered; guid: ${guid}, includePages: ${includePages}`);
+    const { guid } = req.body;
+    console.info(`read/getBook API Route Triggered; guid: ${guid}`);
 
     try {
-        const [book, pages] = await getBookByGUID(guid);
-        res.status(200).json({ book: book, pages: pages });
-    } catch (err: any) {
-        console.error(`Error in api/read/getBook; guid: ${guid}, includePages: ${includePages}, err: ${JSON.stringify(err)}`);
+        const [book, pages, location, character] = await getBookByGUID(guid);
+        res.status(200).json({ book, pages, location, character });
+    } catch (err) {
+        console.error(`Error in api/read/getBook; guid: ${guid}, err: ${JSON.stringify(err)}`);
         res.status(500).json({ error: err });
     }
 

@@ -1,4 +1,4 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { DataTypes, Model, Sequelize, Transaction } from 'sequelize';
 import { serializeTableObject } from '../modelSerialize';
 
 export interface LocationsAttributes {
@@ -18,8 +18,8 @@ export interface LocationsAttributes {
 
 export class Locations extends Model<LocationsAttributes> {
 
-    static async getLocation(guid: string) {
-        const location = await Locations.findOne({ where: { GUID: guid } });
+    static async getLocation(guid: string, transaction?: Transaction) {
+        const location = await Locations.findOne({ where: { GUID: guid }, transaction });
         return location ? serializeTableObject(location) : null;
     }
 
