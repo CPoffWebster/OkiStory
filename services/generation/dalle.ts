@@ -30,7 +30,7 @@ export async function generateImage(prompt: string, generation: ImageGenerations
 
     if (model === 'test') {
         const image = generatedImage;
-        await new Promise(resolve => setTimeout(resolve, 10000));
+        await new Promise(resolve => setTimeout(resolve, 15000));
         const endTime = performance.now();
         await updateGeneratedImageRecord(image.data[0].url!, generation, endTime - startTime);
     } else {

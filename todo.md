@@ -1,4 +1,53 @@
 
+
+
+
+
+Creating / Reading
+- [ ] Issue with cover page API call error
+- [x] Allow next page based off pagesConfigured and image/text loaded
+- [ ] Loading icon for book creation
+
+
+
+
+
+
+
+
+Post-POC
+- [ILikeThis] height scaling vs width scaling - min and max size
+- [] migrations
+- [] analytics
+- [x] image loading speed
+- [] Text generation prompts
+- [] Image generation prompts
+
+
+
+
+
+POST MVP IDEAS
+1. Easy
+   1. Themes, Styles, etc for book creation
+   2. Rating books
+   3. User Experience redesign, custom skins?
+2. Medium
+   1. Custom Character / Location creation
+   2. programatic sharing books (if it's rated high make available to others)
+   3. Reading / Learning w/ Phonics: https://www.readingrockets.org/reading-101/reading-and-writing-basics/phonics-and-decoding
+   4. Differentiating AI tools + self hosting
+   5. Reading out loud
+3. Hard
+   1. Choose your own adventure books
+
+
+
+
+
+
+### MVP Finished 12/1
+
 Overall
 - [x] background color
 - [x] On/Off buttons
@@ -37,30 +86,3 @@ Go Live
 - [x] Create UAT vs prod
 - [] reset the database
 - [] create a set of pre-generated books
-
-
-Post-POC
-- [ILikeThis] height scaling vs width scaling - min and max size
-- [] migrations
-- [] analytics
-- [x] image loading speed
-- [] Text generation prompts
-- [] Image generation prompts
-
-
-
-
-
-POST MVP IDEAS
-1. Easy
-   1. Themes, Styles, etc for book creation
-   2. Rating books
-   3. User Experience redesign, custom skins?
-2. Medium
-   1. Custom Character / Location creation
-   2. programatic sharing books (if it's rated high make available to others)
-   3. Reading / Learning w/ Phonics: https://www.readingrockets.org/reading-101/reading-and-writing-basics/phonics-and-decoding
-   4. Differentiating AI tools + self hosting
-   5. Reading out loud
-3. Hard
-   1. Choose your own adventure books

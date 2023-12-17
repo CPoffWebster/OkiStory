@@ -28,7 +28,6 @@ export function useFlippedPages() {
 type NavigationButtonsProps = {
   disableLeftArrow: boolean;
   disableRightArrow: boolean;
-  loadingRightArrow?: boolean;
   rightArrowMessage?: string;
   leftImportant?: boolean;
   rightImportant?: boolean;
@@ -41,7 +40,6 @@ type NavigationButtonsProps = {
 const NavigationButtons: React.FC<NavigationButtonsProps> = ({
   disableLeftArrow,
   disableRightArrow,
-  loadingRightArrow,
   rightArrowMessage,
   leftImportant = false,
   rightImportant = false,
@@ -70,8 +68,8 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({
       markedAsImportant={rightImportant}
       icon={<ArrowRightIcon />}
       onClick={onFlipRight}
-      disabled={disableRightArrow || loadingRightArrow}
-      {...((disableRightArrow || loadingRightArrow) && {
+      disabled={disableRightArrow}
+      {...(disableRightArrow && {
         disabledMessage: rightArrowMessage,
       })}
     ></Button>

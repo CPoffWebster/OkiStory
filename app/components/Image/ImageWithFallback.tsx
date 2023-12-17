@@ -6,6 +6,7 @@ interface ImageWithFallbackProps {
   defaultImage?: string;
   alt?: string;
   className?: string;
+  onLoad?: () => void;
 }
 
 const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
@@ -14,6 +15,7 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
   defaultImage = "/error_image.png",
   alt,
   className,
+  onLoad,
 }) => {
   const initialSrc = `/api/images/getImage?filename=${filename}`;
   const [currentSrc, setCurrentSrc] = useState(initialSrc);
@@ -24,7 +26,9 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
     }
   }, [error, defaultImage]);
 
-  return <img className={className} src={currentSrc} alt={alt} />;
+  return (
+    <img className={className} src={currentSrc} alt={alt} onLoad={onLoad} />
+  );
 };
 
 export default ImageWithFallback;

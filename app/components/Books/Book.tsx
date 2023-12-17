@@ -6,13 +6,13 @@ import NavigationButtons, { useFlippedPages } from "../NavButtons/NavButtons";
 interface BookReaderProps {
   pagesContent: React.JSX.Element[];
   pageCount: number;
-  pagesFound: number;
+  pagesConfigured: number;
 }
 
 const Book: React.FC<BookReaderProps> = ({
   pagesContent,
   pageCount,
-  pagesFound,
+  pagesConfigured,
 }) => {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -86,11 +86,13 @@ const Book: React.FC<BookReaderProps> = ({
 
   // Html variables
   const disableRightArrow =
-    pageCount != pagesFound
-      ? currentIndex >= pagesFound * 2 - 4
+    pageCount != pagesConfigured
+      ? currentIndex >= pagesConfigured * 2
       : currentIndex >= pageCount * 2;
   const isLoading =
-    pagesFound < pageCount || pageCount === undefined || pagesFound === 0;
+    pagesConfigured < pageCount ||
+    pageCount === undefined ||
+    pagesConfigured === 0;
 
   return (
     <div>
@@ -102,7 +104,6 @@ const Book: React.FC<BookReaderProps> = ({
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
         disableRightArrow={disableRightArrow}
-        loadingRightArrow={isLoading}
         rightArrowMessage={isLoading ? "Loading..." : undefined}
         rightImportant={currentIndex < pageCount * 2}
         homeImportant={currentIndex != 0 && currentIndex >= pageCount * 2}

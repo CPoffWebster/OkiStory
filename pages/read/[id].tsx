@@ -21,7 +21,7 @@ export default function GetBookData(props: { guid: string }) {
   const [character, setCharacter] = useState<LocationsAttributes | null>(null);
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([]);
   const [bookPageCount, setBookPageCount] = useState<number>(0);
-  const [pagesFound, setPagesFound] = useState<number>(0);
+  const [pagesConfigured, setPagesConfigured] = useState<number>(0);
 
   // Initial load of location and character for newly created books
   useEffect(() => {
@@ -70,9 +70,10 @@ export default function GetBookData(props: { guid: string }) {
           bookData,
           pagesData
         );
+        console.log(pagesContent, pagesConfigured);
         setPagesContent(pagesContent);
         setBookPageCount(bookData.PageCount);
-        setPagesFound(pagesData.length);
+        setPagesConfigured(pagesConfigured);
 
         if (
           bookData.PageCount === pagesData.length &&
@@ -112,7 +113,7 @@ export default function GetBookData(props: { guid: string }) {
       <Book
         pagesContent={pagesContent}
         pageCount={bookPageCount}
-        pagesFound={pagesFound}
+        pagesConfigured={pagesConfigured}
       />
     </>
   );
@@ -142,7 +143,12 @@ function createBookLayout(
     </div>
   );
   if (pagesData === null) [updatePagesContent, 0];
+
   let pagesConfigured = 0;
+  const incrementPagesConfigured = () => {
+    pagesConfigured++;
+  };
+
   for (let i = 0; i < pagesData.length; i++) {
     if (pagesData[i].imageGCSLocation || pagesData[i].imageError === true) {
       pagesConfigured++;
@@ -151,6 +157,7 @@ function createBookLayout(
           className={styles.pageImage}
           filename={pagesData[i].imageGCSLocation || ""}
           error={pagesData[i].imageError}
+          onLoad={incrementPagesConfigured}
         />
       );
       updatePagesContent.push(
