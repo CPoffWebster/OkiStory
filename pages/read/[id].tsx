@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default function GetBookData(props: { guid: string }) {
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([
-    <div className={styles.coverContainer}>
+    <div key="initial-loading" className={styles.coverContainer}>
       <h1 className={styles.title} style={{ marginTop: "-10vw" }}>
         Loading your story!
       </h1>
