@@ -22,18 +22,19 @@ export interface BooksAttributes {
 
 export class Books extends Model<BooksAttributes> {
 
-    static async createBook(book: BooksAttributes) {
-        const newBook = await Books.create(book);
+    static async createBook(book: BooksAttributes, transaction: Transaction) {
+        const newBook = await Books.create(book, { transaction });
         return serializeTableObject(newBook)
     }
 
-    static async updateBook(book: BooksAttributes) {
+    static async updateBook(book: BooksAttributes, transaction: Transaction) {
         await Books.update(
             book,
             {
                 where: {
                     id: book.id
-                }
+                },
+                transaction: transaction
             }
         );
     }

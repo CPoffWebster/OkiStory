@@ -26,7 +26,6 @@ const propertyParsingNames = ['title', 'titleImageDescription', 'pageCount'];
 const propertyParsingListNames = ['pageNumber', 'text', 'imageDescription'];
 
 export async function initializeBookCreation(locationGUID: string, characterGUID: string, themeGUID: string, userID: number) {
-    connectToDb();
     const bookGUID = uuidv4();
     const newBook: BooksAttributes = {
         GUID: bookGUID,
@@ -42,6 +41,7 @@ export async function initializeBookCreation(locationGUID: string, characterGUID
 
 // Used as a buffer so no await is needed
 async function initiateBookCreation(newBook: BooksAttributes) {
+    connectToDb();
     PaidAccounts.updatedAmountOfGenerations(newBook.UserID!);
     createInRealTime(newBook);
 }
@@ -62,17 +62,20 @@ async function createInRealTime(newBook: BooksAttributes) {
     let bookOverall = true;
 
     // Create the text generation record
+    const db = connectToDb();
+    const transaction = await db.transaction();
     const model = process.env.TEXT_GENERATION_MODEL || 'test'
-    const [character, location, theme, style] = await getStoryIDs(newBook);
+    const [character, location, theme, style] = await getStoryIDs(newBook, transaction);
     const prompt = bookPrompt(character, location, theme);
     const generation: TextGenerationsAttributes = {
         Company: 'OpenAI',
         Model: model,
         InputCharacters: prompt.length,
     };
-    const textGenerationWithID: TextGenerationsAttributes = await TextGenerations.createGeneration(generation);
+    const textGenerationWithID: TextGenerationsAttributes = await TextGenerations.createGeneration(generation, transaction);
     newBook.GeneratedTextID = textGenerationWithID.id!;
-    newBook = await Books.createBook(newBook) as unknown as BooksAttributes;
+    newBook = await Books.createBook(newBook, transaction) as unknown as BooksAttributes;
+    await transaction.commit();
 
     // Listen for the text generation event
     const handleTextGenerated = (newText: string) => {
@@ -201,6 +204,8 @@ function parseJsonKey(key: string, generatedText: string): [string | number, num
  * @param style 
  */
 async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, string | number>, character: string, location: string, style: string) {
+    const db = connectToDb();
+    const transaction = await db.transaction();
 
     // Create the image generation record
     const model = process.env.IMAGE_GENERATION_MODEL || "test";
@@ -214,14 +219,16 @@ async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, strin
         Type: 'create',
         Input: prompt,
     };
-    const imageGenerationWithID = await ImageGenerations.createGeneration(generation) as unknown as ImageGenerationsAttributes;
+    const imageGenerationWithID = await ImageGenerations.createGeneration(generation, transaction) as unknown as ImageGenerationsAttributes;
 
     newBook.Title = keyValueMap.get('title') as string;
     newBook.GeneratedImageID = imageGenerationWithID.id!;
     newBook.PageCount = keyValueMap.get('pageCount') as number;
-    await Books.updateBook(newBook);
+    await Books.updateBook(newBook, transaction);
+    await transaction.commit();
 
     // Start the image generation
+    console.log("Generating title page image", imageGenerationWithID.id)
     await generateImage(prompt, imageGenerationWithID, model, size);
 }
 
@@ -236,6 +243,8 @@ async function saveBook(newBook: BooksAttributes, keyValueMap: Map<string, strin
  * @param style 
  */
 async function savePage(newBook: BooksAttributes, pageList: generatedTextPage[], currentPageIndex: number, character: string, location: string, style: string) {
+    const db = connectToDb();
+    const transaction = await db.transaction();
 
     // Create the image generation record
     const model = process.env.IMAGE_GENERATION_MODEL || "test";
@@ -248,15 +257,17 @@ async function savePage(newBook: BooksAttributes, pageList: generatedTextPage[],
         Type: 'create',
         Input: prompt,
     };
-    const imageGenerationWithID = await ImageGenerations.createGeneration(generation) as unknown as ImageGenerationsAttributes;
+    const imageGenerationWithID = await ImageGenerations.createGeneration(generation, transaction) as unknown as ImageGenerationsAttributes;
 
     await Pages.save({
         BookID: newBook.id!,
         PageNumber: pageList[currentPageIndex].pageNumber as number,
         GeneratedImageID: imageGenerationWithID.id!,
         Text: pageList[currentPageIndex].text
-    });
+    }, transaction);
+    await transaction.commit();
 
     // Start the image generation
+    console.log("Generating page image", imageGenerationWithID.id)
     await generateImage(prompt, imageGenerationWithID, model, size);
 }

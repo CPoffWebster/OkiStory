@@ -1,19 +1,16 @@
+import { Transaction } from "sequelize";
 import { connectToDb } from "../database/database";
 import { BooksAttributes } from "../database/models/Books";
 import { Characters } from "../database/models/Characters";
 import { Locations } from "../database/models/Locations";
 
-export async function getStoryIDs(book: BooksAttributes, styleID: number = 0): Promise<string[]> {
-    const db = connectToDb();
-    const tran = await db.transaction();
-
-    const dbChar = await Characters.getCharacter(book.CharacterGUID, tran);
-    const dbLoc = await Locations.getLocation(book.LocationGUID, tran);
+export async function getStoryIDs(book: BooksAttributes, transaction: Transaction): Promise<string[]> {
+    const dbChar = await Characters.getCharacter(book.CharacterGUID, transaction);
+    const dbLoc = await Locations.getLocation(book.LocationGUID, transaction);
     const character = `${dbChar.Name} (Description: ${dbChar.GenerationDescription})`;
     const location = `${dbLoc.Name} (Description: ${dbLoc.GenerationDescription})`;
     const theme = `${themes[0].name} (Description: ${themes[0].desc})`;
-    const style = styles[styleID];
-    await tran.commit();
+    const style = styles[0];
     return [character, location, theme, style]
 }
 

@@ -14,12 +14,13 @@ export interface PagesAttributes {
 }
 
 export class Pages extends Model<PagesAttributes> {
-    static async save(page: PagesAttributes) {
+    static async save(page: PagesAttributes, transaction: Transaction) {
         const [pages, created] = (await Pages.findOrCreate({
             where: {
                 BookID: page.BookID,
                 PageNumber: page.PageNumber
             },
+            transaction: transaction,
             defaults: page
         }))
         return { pages, created }

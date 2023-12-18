@@ -4,10 +4,10 @@
 
 
 Creating / Reading
-- [ ] Issue with cover page API call error
+- [?] Issue with cover page API call error
 - [x] Allow next page based off pagesConfigured and image/text loaded
-- [ ] Loading icon for book creation
-
+- [x] Loading icon for book creation
+- [ ] withBaseURL not working as I want it to, check getImage api - http://localhost:3000/api/images/getImage?filename=books/12-17-2023/92125c1d-8af6-460e-aaf7-c1351b125e7d.png
 
 
 

@@ -23,14 +23,14 @@ const openai = new OpenAI({
  */
 export async function generateImage(prompt: string, generation: ImageGenerationsAttributes, model: string, size: string) {
 
-    console.info('STARTED: generateImage:', model)
+    console.info('STARTED: generateImage:', generation.id)
 
     let endTime = 0;
     const startTime = performance.now();
 
     if (model === 'test') {
         const image = generatedImage;
-        await new Promise(resolve => setTimeout(resolve, 15000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
         const endTime = performance.now();
         await updateGeneratedImageRecord(image.data[0].url!, generation, endTime - startTime);
     } else {
@@ -42,12 +42,11 @@ export async function generateImage(prompt: string, generation: ImageGenerations
                 n: 1
             });
             endTime = performance.now();
-            console.info(`GenerateImage Image Generated: ${JSON.stringify(image)}`);
+            console.info(`GenerateImage Image Generated: id: ${generation.id}, image: ${JSON.stringify(image)}`);
             await updateGeneratedImageRecord(image.data[0].url!, generation, endTime - startTime);
         } catch (error) {
-            const errorResponse = (error as any).response.data || (error as any).message;
             console.error(`Error generating image: ${JSON.stringify(error)}`);
-            await updateGeneratedImageRecordError(generation, endTime - startTime, errorResponse);
+            await updateGeneratedImageRecordError(generation, endTime - startTime, JSON.stringify(error));
         }
     }
 
@@ -76,7 +75,7 @@ async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGen
     const formattedDate = `${currentDate.getMonth() + 1}-${currentDate.getDate()}-${currentDate.getFullYear()}`;
     generation.GCSLocation = `books/${formattedDate}/${guid}.png`;
 
-    console.info('Uploading', generation.GCSLocation, 'to', okiStoryGCSBucket);
+    console.info(`Uploading id ${generation.id} location`, generation.GCSLocation, 'to', okiStoryGCSBucket);
     await imageBucket.upload(generation.GCSLocation, compressedImage);
 
     let price = 0;
@@ -90,6 +89,7 @@ async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGen
     }
     generation.APICallMilliSeconds = seconds;
     generation.EstimatedPrice = price;
+    console.info(`Updating image generation id ${generation.id}`);
     await ImageGenerations.updateGeneration(generation);
 }
 

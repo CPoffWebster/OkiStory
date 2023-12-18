@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Readable } from 'stream';
 import { generatedTextStory } from '@/static-examples/exampleBook';
 import { EventEmitter } from 'events';
+import { connectToDb } from '../database/database';
 
 export const textGenerationEmitter = new EventEmitter();
 
@@ -51,7 +52,7 @@ export async function generateText(prompt: string, model: string, generation: Te
             endTime = performance.now();
             // return generatedText;
             await updateGeneratedTextRecord(prompt, generation, generatedText, endTime - startTime);
-        } catch (error: any) {
+        } catch (error) {
             console.error(`Error generating text: ${JSON.stringify(error)}`)
         }
     }

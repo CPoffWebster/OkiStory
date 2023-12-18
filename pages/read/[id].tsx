@@ -1,6 +1,6 @@
 import { BooksAttributes } from "@/services/database/models/Books";
 import { GetServerSideProps } from "next";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PagesAttributes } from "@/services/database/models/Pages";
 import Book from "@/app/components/Books/Book";
 import axios from "axios";
@@ -17,6 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function GetBookData(props: { guid: string }) {
+  const intervalRef = useRef<NodeJS.Timeout | undefined>();
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([
     <div key="initial-loading" className={styles.coverContainer}>
       <h1 className={styles.title} style={{ marginTop: "-10vw" }}>
@@ -33,30 +34,26 @@ export default function GetBookData(props: { guid: string }) {
 
   // Initial load of location and character for newly created books
   useEffect(() => {
+    const getBookCreationElements = async (
+      locationGUID: string,
+      characterGUID: string
+    ) => {
+      if (locationGUID !== "" && characterGUID !== "") {
+        const response = await axios.post("/api/read/getCreationElements", {
+          locationGUID,
+          characterGUID,
+        });
+        setLocation(response.data.location);
+        setCharacter(response.data.character);
+        sessionStorage.clear();
+      }
+    };
     const locationGUID = sessionStorage.getItem("Location") || "";
     const characterGUID = sessionStorage.getItem("Character") || "";
     getBookCreationElements(locationGUID, characterGUID);
-    getBook();
   }, []);
 
-  // Initial load of location and character
-  const getBookCreationElements = async (
-    locationGUID: string,
-    characterGUID: string
-  ) => {
-    if (locationGUID !== "" && characterGUID !== "") {
-      const response = await axios.post("/api/read/getCreationElements", {
-        locationGUID,
-        characterGUID,
-      });
-      setLocation(response.data.location);
-      setCharacter(response.data.character);
-      sessionStorage.clear();
-    }
-  };
-
-  // Get book and pages data
-  const getBook = async () => {
+  useEffect(() => {
     const fetchBookData = async () => {
       const response = await axios.post("/api/read/getBook", {
         guid: props.guid,
@@ -72,9 +69,10 @@ export default function GetBookData(props: { guid: string }) {
       if (
         bookData !== null &&
         pagesData !== null &&
-        pagesData.length === bookData.PageCount
+        pagesData.length === bookData.PageCount &&
+        (bookData.imageGCSLocation || bookData.imageError === true)
       ) {
-        setBookPageCount(bookData.PageCount);
+        setBookPageCount(bookData.PageCount!);
         const [pagesContentUpdate] = createBookLayout(
           bookData,
           pagesData,
@@ -82,21 +80,31 @@ export default function GetBookData(props: { guid: string }) {
           setPagesConfigured
         );
         setPagesContent(pagesContentUpdate);
-
-        if (
-          coverConfigured &&
-          bookData.PageCount === pagesData.length &&
-          pagesData.length === pagesConfigured
-        ) {
-          clearInterval(interval);
-        }
       }
     };
 
     // Call fetchBookData immediately and then set an interval
     fetchBookData();
-    const interval = setInterval(fetchBookData, 5000);
-  };
+    intervalRef.current = setInterval(fetchBookData, 10000);
+
+    // Cleanup function to clear the interval when component unmounts
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = undefined;
+      }
+    };
+  }, []);
+
+  // UseEffect to check for state updates and clear interval
+  useEffect(() => {
+    if (coverConfigured && bookPageCount === pagesConfigured) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = undefined;
+      }
+    }
+  }, [coverConfigured, bookPageCount, pagesConfigured]);
 
   return (
     <>

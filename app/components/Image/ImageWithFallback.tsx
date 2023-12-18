@@ -19,12 +19,19 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({
 }) => {
   const initialSrc = `/api/images/getImage?filename=${filename}`;
   const [currentSrc, setCurrentSrc] = useState(initialSrc);
+  const [filenameNotEmtpy, setFilenameNotEmpty] = useState(false);
 
   useEffect(() => {
-    if (error) {
-      setCurrentSrc(defaultImage);
+    if (
+      !filenameNotEmtpy &&
+      filename != "" &&
+      filename != null &&
+      filename != undefined
+    ) {
+      setFilenameNotEmpty(true);
+      setCurrentSrc(`/api/images/getImage?filename=${filename}`);
     }
-  }, [error, defaultImage]);
+  }, [filename, error, defaultImage]);
 
   return (
     <img className={className} src={currentSrc} alt={alt} onLoad={onLoad} />

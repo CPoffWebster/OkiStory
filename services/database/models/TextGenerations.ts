@@ -1,4 +1,4 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
+import { DataTypes, Model, Sequelize, Transaction } from 'sequelize';
 import { serializeTableObject } from '../modelSerialize';
 
 export interface TextGenerationsAttributes {
@@ -14,8 +14,8 @@ export interface TextGenerationsAttributes {
 
 export class TextGenerations extends Model<TextGenerationsAttributes> {
 
-    static async createGeneration(textGeneration: TextGenerationsAttributes) {
-        const textGenerationInstance = await TextGenerations.create(textGeneration);
+    static async createGeneration(textGeneration: TextGenerationsAttributes, transaction: Transaction) {
+        const textGenerationInstance = await TextGenerations.create(textGeneration, { transaction });
         return serializeTableObject(textGenerationInstance);
     }
 

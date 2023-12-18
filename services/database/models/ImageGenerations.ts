@@ -16,8 +16,8 @@ export interface ImageGenerationsAttributes {
 
 export class ImageGenerations extends Model<ImageGenerationsAttributes> {
 
-    static async createGeneration(imageGeneration: ImageGenerationsAttributes) {
-        const imageGenerationInstance = await ImageGenerations.create(imageGeneration);
+    static async createGeneration(imageGeneration: ImageGenerationsAttributes, transaction: Transaction) {
+        const imageGenerationInstance = await ImageGenerations.create(imageGeneration, { transaction });
         return serializeTableObject(imageGenerationInstance);
     }
 
