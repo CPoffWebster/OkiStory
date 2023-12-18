@@ -41,7 +41,7 @@ export function bookPrompt(character: string, location: string, theme: string): 
     The output should strictly follow this structure:
     { "title": string, "titleImageDescription": string, "pageCount": number, "pages": [ { "pageNumber": number, "text": string, "imageDescription": string } ] }
     
-    Important!: pageCount value should be between ${numberOfPages}. There should be x pages in the pages list where x is equal to pageCount.
+    Important!: pageCount value should be exactly ${numberOfPages}. There should be x pages in the pages list where x is equal to pageCount.
     
     Given the directions above, create a story with the following parameters:
     Character: ${character}
