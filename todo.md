@@ -1,18 +1,10 @@
 
 
 
-
-
-Creating / Reading
-- [?] Issue with cover page API call error
-- [x] Allow next page based off pagesConfigured and image/text loaded
-- [x] Loading icon for book creation
-- [ ] withBaseURL not working as I want it to, check getImage api - http://localhost:3000/api/images/getImage?filename=books/12-17-2023/92125c1d-8af6-460e-aaf7-c1351b125e7d.png
-
-
-
-
-
+Book Analytics (1/5/2024-in progress)
+- [ ] Book ratings
+- [ ] Every time a user reads a book how long do they read, do they read every page, and what page do they leave, do they rate / change rating
+- [ ] Book popularity
 
 
 Post-POC
@@ -45,8 +37,12 @@ POST MVP IDEAS
 
 
 
-
 ### MVP Finished 12/1
+
+Creating / Reading
+- [x] Issue with cover page API call error
+- [x] Allow next page based off pagesConfigured and image/text loaded
+- [x] Loading icon for book creation
 
 Overall
 - [x] background color
@@ -85,4 +81,4 @@ Creating Books
 Go Live
 - [x] Create UAT vs prod
 - [] reset the database
-- [] create a set of pre-generated books
+- [x] create a set of pre-generated books

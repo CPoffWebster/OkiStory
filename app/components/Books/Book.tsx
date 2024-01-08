@@ -23,19 +23,24 @@ const Book: React.FC<BookReaderProps> = ({
 
   // Pre-render pages
   useEffect(() => {
+    console.log(pagesContent, pageCount);
     const pageRendering = pagesContent.map((content, index) => {
       // Determine if the page should have left/right offset
-      let style = {};
+      let pageStyle = {};
+      let bindingStyle = {};
       if (index % 2 !== 0) {
-        style = { left: "1vw" };
+        pageStyle = { left: "1vw" };
       } else {
-        style = { right: "1vw", zIndex: `${pagesContent.length - index}` };
+        pageStyle = { right: "1vw", zIndex: `${pagesContent.length - index}` };
+      }
+      if (index === 0 || index === pageCount * 2 - 1) {
+        bindingStyle = styles.bindingPage;
       }
       return (
         <div
           key={index}
-          className={`${styles.page} ${index === 0 ? styles.coverPage : ""}`}
-          style={style} // Apply the dynamic style here
+          className={`${styles.page} ${bindingStyle}`}
+          style={pageStyle} // Apply the dynamic style here
         >
           {content}
         </div>
@@ -100,9 +105,12 @@ const Book: React.FC<BookReaderProps> = ({
     <div>
       {currentIndex === 0 ? (
         <div className={styles.coverContainer}>{renderedPages}</div>
+      ) : currentIndex === pageCount * 2 ? (
+        <div className={styles.coverContainer}>{renderedPages}</div>
       ) : (
         <div className={styles.pageContainer}>{renderedPages}</div>
       )}
+
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
         disableRightArrow={disableRightArrow}
