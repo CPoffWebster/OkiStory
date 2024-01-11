@@ -1,0 +1,23 @@
+.emojiRating {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .emojiRating li {
+    margin: 5px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .emojiRating li:nth-child(1) { color: red; }       /* Red */
+  .emojiRating li:nth-child(2) { color: orange; }    /* Orange */
+  .emojiRating li:nth-child(3) { color: yellow; }    /* Yellow */
+  .emojiRating li:nth-child(4) { color: lightgreen; }/* Light Green */
+  .emojiRating li:nth-child(5) { color: green; }     /* Green */
+  
+  /* Hover effect */
+  .emojiRating li:hover {
+    transform: scale(1.2);
+  }

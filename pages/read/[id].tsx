@@ -8,6 +8,7 @@ import styles from "./id.module.css";
 import { LocationsAttributes } from "@/services/database/models/Locations";
 import { Selection } from "@/app/components/Selections/Selection";
 import ImageWithFallback from "@/app/components/Image/ImageWithFallback";
+import EmojiRating from "@/app/components/EmojiRating/EmojiRating";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const guid = context.query.id as unknown as string; // Access 'id' directly
@@ -29,9 +30,9 @@ export default function GetBookData(props: { guid: string }) {
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
   const [character, setCharacter] = useState<LocationsAttributes | null>(null);
   const [bookPageCount, setBookPageCount] = useState<number>(0);
+  const [bookRating, setBookRating] = useState<number>(0);
   const [coverConfigured, setCoverConfigured] = useState<boolean>(false);
   const [pagesConfigured, setPagesConfigured] = useState<number>(0);
-  const [selectedRating, setSelectedRating] = useState<number>(0);
 
   // Initial load of location and character for newly created books
   useEffect(() => {
@@ -74,6 +75,7 @@ export default function GetBookData(props: { guid: string }) {
         (bookData.imageGCSLocation || bookData.imageError === true)
       ) {
         setBookPageCount(bookData.PageCount + 1);
+        setBookRating(bookData.UserBookRating || 0);
         const [pagesContentUpdate] = createBookLayout(
           bookData,
           pagesData,
@@ -128,43 +130,14 @@ export default function GetBookData(props: { guid: string }) {
           </div>
         )}
       </span>
-      <span className={styles.ratingOutline}>
-        <div className={styles.pageText}>
-          <h1 className={styles.storyOutlineTitle}>Rate Story</h1>
-          <ul className={styles.emojiRating}>
-            <li
-              onClick={() => setSelectedRating(1)}
-              style={{ opacity: selectedRating === 1 ? 1 : 0.5 }}
-            >
-              😠
-            </li>
-            <li
-              onClick={() => setSelectedRating(2)}
-              style={{ opacity: selectedRating === 2 ? 1 : 0.5 }}
-            >
-              😦
-            </li>
-            <li
-              onClick={() => setSelectedRating(3)}
-              style={{ opacity: selectedRating === 3 ? 1 : 0.5 }}
-            >
-              😐
-            </li>
-            <li
-              onClick={() => setSelectedRating(4)}
-              style={{ opacity: selectedRating === 4 ? 1 : 0.5 }}
-            >
-              🙂
-            </li>
-            <li
-              onClick={() => setSelectedRating(5)}
-              style={{ opacity: selectedRating === 5 ? 1 : 0.5 }}
-            >
-              😀
-            </li>
-          </ul>
-        </div>
-      </span>
+      {bookRating && (
+        <span className={styles.ratingOutline}>
+          <div className={styles.pageText}>
+            <h1 className={styles.storyOutlineTitle}>Rate Story</h1>
+            <EmojiRating previousRating={bookRating} bookGuid={props.guid} />
+          </div>
+        </span>
+      )}
       <Book
         pagesContent={pagesContent}
         pageCount={bookPageCount}

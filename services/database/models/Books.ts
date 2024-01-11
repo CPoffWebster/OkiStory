@@ -17,7 +17,8 @@ export interface BooksAttributes {
 
     // Not in database
     imageGCSLocation?: string; // location of image from GeneratedImageID
-    imageError?: boolean; // error from generating image
+    imageError?: boolean; // error from generating image\
+    UserBookRating?: number; // rating from UserBookReviews
 }
 
 export class Books extends Model<BooksAttributes> {

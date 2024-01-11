@@ -23,7 +23,6 @@ const Book: React.FC<BookReaderProps> = ({
 
   // Pre-render pages
   useEffect(() => {
-    console.log(pagesContent, pageCount);
     const pageRendering = pagesContent.map((content, index) => {
       // Determine if the page should have left/right offset
       let pageStyle = {};

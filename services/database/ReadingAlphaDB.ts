@@ -9,6 +9,8 @@ import { initLocations } from './models/Locations';
 import { initTextGenerations } from './models/TextGenerations';
 import { initImageGenerations } from './models/ImageGenerations';
 import { seedDefaultCharacters, seedDefaultLocations } from './seedInstaller';
+import { initUserBookReads } from './models/UserBookReads';
+import { initUserBookReviews } from './models/UserBookReviews';
 
 
 type ReadingAlphaTables = ReturnType<typeof initializeTables>;
@@ -96,6 +98,8 @@ export class ReadingAlphaDB {
         await this.tables.Locations.sync(syncOptions)
         await this.tables.TextGenerations.sync(syncOptions)
         await this.tables.ImageGenerations.sync(syncOptions)
+        await this.tables.UserBookReads.sync(syncOptions)
+        await this.tables.UserBookReviews.sync(syncOptions)
 
         await this.seedData();
     }
@@ -132,6 +136,8 @@ function initializeTables(sequelize: Sequelize) {
         Locations: initLocations(sequelize),
         TextGenerations: initTextGenerations(sequelize),
         ImageGenerations: initImageGenerations(sequelize),
+        UserBookReads: initUserBookReads(sequelize),
+        UserBookReviews: initUserBookReviews(sequelize),
     }
     return tables;
 }

@@ -2,14 +2,14 @@ import { DataTypes, Model, Op, Sequelize, Transaction } from 'sequelize';
 
 export interface UserBookReadsAttributes {
     id?: number;
-    bookId: number;
-    userId: number;
-    pagesTurnedForward: number;
-    pagesTurnedBackward: number;
-    readEntireBook: boolean;
-    lastPageRead: number;
-    ratingChanged: boolean;
-    timeSpentReading: number;
+    BookGUID: string;
+    UserId: number;
+    PagesTurnedForward: number;
+    PagesTurnedBackward: number;
+    ReadEntireBook: boolean;
+    LastPageRead: number;
+    RatingChanged: boolean;
+    TimeSpentReading: number;
 }
 
 export class UserBookReads extends Model<UserBookReadsAttributes> { }
@@ -17,16 +17,16 @@ export class UserBookReads extends Model<UserBookReadsAttributes> { }
 export function initUserBookReads(sequelize: Sequelize) {
     UserBookReads.init({
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-        bookId: { type: DataTypes.INTEGER, allowNull: false },
-        userId: { type: DataTypes.INTEGER, allowNull: false },
-        pagesTurnedForward: { type: DataTypes.INTEGER, allowNull: false },
-        pagesTurnedBackward: { type: DataTypes.INTEGER, allowNull: false },
-        readEntireBook: { type: DataTypes.BOOLEAN, allowNull: false },
-        lastPageRead: { type: DataTypes.INTEGER, allowNull: false },
-        ratingChanged: { type: DataTypes.BOOLEAN, allowNull: false },
-        timeSpentReading: { type: DataTypes.INTEGER, allowNull: false }
+        BookGUID: { type: DataTypes.STRING(255), allowNull: false },
+        UserId: { type: DataTypes.INTEGER, allowNull: false },
+        PagesTurnedForward: { type: DataTypes.INTEGER, allowNull: false },
+        PagesTurnedBackward: { type: DataTypes.INTEGER, allowNull: false },
+        ReadEntireBook: { type: DataTypes.BOOLEAN, allowNull: false },
+        LastPageRead: { type: DataTypes.INTEGER, allowNull: false },
+        RatingChanged: { type: DataTypes.BOOLEAN, allowNull: false },
+        TimeSpentReading: { type: DataTypes.INTEGER, allowNull: false }
     }, {
-        sequelize, modelName: 'books', tableName: `books`,
+        sequelize, modelName: 'user_book_reads', tableName: `user_book_reads`,
         timestamps: true
     });
 
