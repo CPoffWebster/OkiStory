@@ -12,6 +12,7 @@ export interface UserBookReadsAttributes {
     StartedBookReading: Date;
     FinishedBookReading: Date;
     InitialFinishedLoading: Date;
+    HowUserLeft: string;
 }
 
 export class UserBookReads extends Model<UserBookReadsAttributes> {
@@ -32,7 +33,8 @@ export function initUserBookReads(sequelize: Sequelize) {
         LastPageRead: { type: DataTypes.INTEGER, allowNull: false },
         StartedBookReading: { type: DataTypes.DATE, allowNull: false },
         FinishedBookReading: { type: DataTypes.DATE, allowNull: false },
-        InitialFinishedLoading: { type: DataTypes.DATE, allowNull: false }
+        InitialFinishedLoading: { type: DataTypes.DATE, allowNull: false },
+        HowUserLeft: { type: DataTypes.STRING(255), allowNull: false },
     }, {
         sequelize, modelName: 'user_book_reads', tableName: `user_book_reads`,
         timestamps: true

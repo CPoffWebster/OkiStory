@@ -46,7 +46,7 @@ const Book: React.FC<BookReaderProps> = ({
   }, [coverConfigured]);
 
   // Send analytics data for book read record
-  const sendPageData = () => {
+  const sendPageData = (howUserLeft: string) => {
     navigator.sendBeacon(
       "/api/read/readingSession",
       JSON.stringify({
@@ -59,16 +59,30 @@ const Book: React.FC<BookReaderProps> = ({
         StartedBookReading: startedBookReading,
         FinishedBookReading: Date.now(),
         InitialFinishedLoading: initialFinishedLoading,
+        HowUserLeft: howUserLeft,
       })
     );
   };
 
   // If page is closed, run sendPageData
   useEffect(() => {
-    window.addEventListener("beforeunload", sendPageData);
-    // Cleanup the event listener when the component unmounts
+    // Consolidated event handler
+    const handlePageEvent = (howUserLeft: string) => sendPageData(howUserLeft);
+
+    // Add event listeners with the consolidated handler
+    window.addEventListener("beforeunload", () =>
+      handlePageEvent("Closed Page")
+    );
+    // window.addEventListener("popstate", () => handlePageEvent("Back Button"));
+
+    // Cleanup function for removing the event listeners
     return () => {
-      window.removeEventListener("beforeunload", sendPageData);
+      window.removeEventListener("beforeunload", () =>
+        handlePageEvent("Closed Page")
+      );
+      // window.removeEventListener("popstate", () =>
+      //   handlePageEvent("Back Button")
+      // );
     };
   }, []);
 
@@ -172,7 +186,7 @@ const Book: React.FC<BookReaderProps> = ({
         onFlipLeft={handleFlipLeft}
         onFlipRight={handleFlipRight}
         onReturnHome={() => {
-          sendPageData();
+          sendPageData("Home Button");
           router.push("/");
         }}
       />
