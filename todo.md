@@ -2,9 +2,8 @@
 
 
 Book Analytics (1/5/2024-in progress)
-- [ ] Book ratings
+- [x] Book ratings
 - [ ] Every time a user reads a book how long do they read, do they read every page, and what page do they leave, do they rate / change rating
-- [ ] Book popularity
 
 - [ ] const user = await Users.getUserBySession(req, res); ------> TRANSACTION
 

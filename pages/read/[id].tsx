@@ -19,6 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default function GetBookData(props: { guid: string }) {
   const intervalRef = useRef<NodeJS.Timeout | undefined>();
+  const startedBookReading = useRef(Date.now()).current;
   const [pagesContent, setPagesContent] = useState<React.JSX.Element[]>([
     <div key="initial-loading" className={styles.coverContainer}>
       <h1 className={styles.title} style={{ marginTop: "-10vw" }}>
@@ -29,6 +30,7 @@ export default function GetBookData(props: { guid: string }) {
   ]);
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
   const [character, setCharacter] = useState<LocationsAttributes | null>(null);
+  const [bookCreated, setBookCreated] = useState<boolean>(false);
   const [bookPageCount, setBookPageCount] = useState<number>(0);
   const [bookRating, setBookRating] = useState<number>(0);
   const [coverConfigured, setCoverConfigured] = useState<boolean>(false);
@@ -52,6 +54,7 @@ export default function GetBookData(props: { guid: string }) {
     };
     const locationGUID = sessionStorage.getItem("Location") || "";
     const characterGUID = sessionStorage.getItem("Character") || "";
+    if (locationGUID !== "" && characterGUID !== "") setBookCreated(true);
     getBookCreationElements(locationGUID, characterGUID);
   }, []);
 
@@ -139,6 +142,9 @@ export default function GetBookData(props: { guid: string }) {
         </span>
       )}
       <Book
+        startedBookReading={startedBookReading}
+        bookGuid={props.guid}
+        bookCreated={bookCreated}
         pagesContent={pagesContent}
         pageCount={bookPageCount}
         coverConfigured={coverConfigured}
