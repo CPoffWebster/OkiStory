@@ -26,7 +26,7 @@
 }
 
 .coverContainer {
-  width: calc(100% - 2vw);
+  width: calc(100% - 1vw);
   height: calc(40vw - 2vw);
   position: relative;
   pointer-events: none;

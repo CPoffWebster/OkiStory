@@ -180,7 +180,7 @@ const Book: React.FC<BookReaderProps> = ({
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
         disableRightArrow={disableRightArrow}
-        rightArrowMessage={isLoading ? "Loading..." : undefined}
+        isLoadingRightArrow={isLoading}
         rightImportant={currentIndex < pageCount * 2}
         homeImportant={currentIndex != 0 && currentIndex >= pageCount * 2}
         onFlipLeft={handleFlipLeft}
