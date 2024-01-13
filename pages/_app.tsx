@@ -12,7 +12,7 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
-  const GOOGLE_TAG_MANAGER_ID = "G-DW4563ZMBT";
+  const GOOGLE_TAG_MANAGER_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS;
   return (
     <SessionProvider session={session}>
       <Head>
