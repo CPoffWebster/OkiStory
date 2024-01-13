@@ -8,6 +8,7 @@ import styles from "./id.module.css";
 import { LocationsAttributes } from "@/services/database/models/Locations";
 import { Selection } from "@/app/components/Selections/Selection";
 import ImageWithFallback from "@/app/components/Image/ImageWithFallback";
+import EmojiRating from "@/app/components/EmojiRating/EmojiRating";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const guid = context.query.id as unknown as string; // Access 'id' directly
@@ -29,6 +30,7 @@ export default function GetBookData(props: { guid: string }) {
   const [location, setLocation] = useState<LocationsAttributes | null>(null);
   const [character, setCharacter] = useState<LocationsAttributes | null>(null);
   const [bookPageCount, setBookPageCount] = useState<number>(0);
+  const [bookRating, setBookRating] = useState<number>(0);
   const [coverConfigured, setCoverConfigured] = useState<boolean>(false);
   const [pagesConfigured, setPagesConfigured] = useState<number>(0);
 
@@ -72,7 +74,8 @@ export default function GetBookData(props: { guid: string }) {
         pagesData.length === bookData.PageCount &&
         (bookData.imageGCSLocation || bookData.imageError === true)
       ) {
-        setBookPageCount(bookData.PageCount!);
+        setBookPageCount(bookData.PageCount + 1);
+        setBookRating(bookData.UserBookReview?.Rating || 0);
         const [pagesContentUpdate] = createBookLayout(
           bookData,
           pagesData,
@@ -127,6 +130,14 @@ export default function GetBookData(props: { guid: string }) {
           </div>
         )}
       </span>
+      {bookRating && (
+        <span className={styles.ratingOutline}>
+          <div className={styles.pageText}>
+            <h1 className={styles.storyOutlineTitle}>Rate Story</h1>
+            <EmojiRating previousRating={bookRating} bookGuid={props.guid} />
+          </div>
+        </span>
+      )}
       <Book
         pagesContent={pagesContent}
         pageCount={bookPageCount}
@@ -152,6 +163,7 @@ function createBookLayout(
   if (bookData === null) return [[]];
   const updatePagesContent: React.JSX.Element[] = [];
 
+  // Set Cover Page
   updatePagesContent.push(
     <div className={styles.coverContainer}>
       <h1 className={styles.title}>{bookData.Title}</h1>
@@ -166,9 +178,11 @@ function createBookLayout(
   );
   if (pagesData === null) [updatePagesContent, 0];
 
+  // Set Pages
+  let pagesConfigured = 0;
   for (let i = 0; i < pagesData.length; i++) {
     if (pagesData[i].imageGCSLocation || pagesData[i].imageError === true) {
-      // pagesConfigured++;
+      pagesConfigured++;
       updatePagesContent.push(
         <ImageWithFallback
           key={`page-image-${i}`}
@@ -184,6 +198,22 @@ function createBookLayout(
         </div>
       );
     }
+  }
+
+  // Set Back Cover Page
+  if (pagesConfigured === bookData.PageCount) {
+    updatePagesContent.push(
+      <div className={styles.coverContainer}>
+        <h1 className={styles.title}>The End</h1>
+        <ImageWithFallback
+          key={`last-page-image`}
+          className={styles.coverImage}
+          filename={bookData.imageGCSLocation || ""}
+          error={bookData.imageError}
+          onLoad={() => setPagesConfigured((curr) => curr + 1)}
+        />
+      </div>
+    );
   }
 
   return [updatePagesContent];

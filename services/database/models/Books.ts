@@ -1,5 +1,6 @@
 import { DataTypes, Model, Op, Sequelize, Transaction } from 'sequelize';
 import { serializeTableObject } from '../modelSerialize';
+import { UserBookReviewsAttributes } from './UserBookReviews';
 
 export interface BooksAttributes {
     id?: number;
@@ -17,7 +18,8 @@ export interface BooksAttributes {
 
     // Not in database
     imageGCSLocation?: string; // location of image from GeneratedImageID
-    imageError?: boolean; // error from generating image
+    imageError?: boolean; // error from generating image\
+    UserBookReview?: UserBookReviewsAttributes; // rating from UserBookReviews
 }
 
 export class Books extends Model<BooksAttributes> {

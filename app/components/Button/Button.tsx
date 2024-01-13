@@ -8,7 +8,7 @@ type ButtonProps = {
   iconSize?: "small" | "medium" | "large" | "none";
   className: string;
   disabled?: boolean;
-  disabledMessage?: string;
+  isLoadingRightArrow?: boolean;
   markedAsImportant?: boolean;
   onClick(): Promise<any> | void;
 };
@@ -20,7 +20,7 @@ const Button: React.FC<ButtonProps> = ({
   iconSize = "mediumIcon",
   className = "",
   disabled = false,
-  disabledMessage,
+  isLoadingRightArrow = false,
   markedAsImportant = false,
   onClick,
 }) => {
@@ -40,7 +40,7 @@ const Button: React.FC<ButtonProps> = ({
       <button
         className={` ${styles.button} ${
           markedAsImportant ? "markedAsImportant" : "notMarkedAsImportant"
-        } 
+        }
       ${disabled || isDisabled ? styles.disabled : ""}
       ${className}`}
         disabled={disabled}
@@ -57,14 +57,23 @@ const Button: React.FC<ButtonProps> = ({
                     : "notMarkedAsImportant"
                 }
               >
-                {icon}
+                {isLoadingRightArrow ? (
+                  <div className={styles.spinnerContainer}>
+                    <div
+                      className={`${styles.spinner} ${
+                        markedAsImportant
+                          ? styles.spinnerImportant
+                          : styles.spinnerNotImportant
+                      }`}
+                    ></div>
+                  </div>
+                ) : (
+                  icon
+                )}
               </div>
             </div>
           )}
         </div>
-        {disabled && disabledMessage && (
-          <div className={styles.tooltip}>{disabledMessage}</div>
-        )}
       </button>
     </div>
   );

@@ -72,24 +72,35 @@
 
 } */
 
-
-.tooltip {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: white;
-    padding: .5rem;
-    border-radius: .5rem;
-    font-size: .8rem;
-    margin-bottom: .2rem;
-    opacity: 0;
-    transition: opacity 0.3s;
-    visibility: hidden;
+.spinnerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4.5vw;
+    width: 3vw;
 }
 
-.button:hover .tooltip {
-    visibility: visible;
-    opacity: 1;
+.spinner {
+    /* border: .2vw solid black;
+    border-top: .2vw solid #3498db; */
+    border-radius: 50%;
+    width: 2.5vw;
+    height: 2.5vw;
+    animation: spin 1s linear infinite;
+}
+
+.spinnerImportant {
+    border: .2vw solid #f3f3f3;
+    border-top: .2vw solid #3498db;
+}
+
+.spinnerNotImportant {
+    border: .2vw solid black;
+    border-top: .2vw solid #3498db;
+}
+  
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

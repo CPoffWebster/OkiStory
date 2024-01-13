@@ -1,0 +1,24 @@
+.emojiRating {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.emojiRating li {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 6vw;
+  height: 6vw;
+  margin: 0.5vw;
+  font-size: 5vw;
+  cursor: pointer;
+  border: 4vw solid;
+  border-radius: 50%;
+}
+
+/* Hover effect */
+.emojiRating li:hover {
+  transform: scale(1.2);
+}

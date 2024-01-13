@@ -26,32 +26,17 @@
 }
 
 .coverContainer {
-  background: linear-gradient(to right, saddlebrown 50%);
-  width: calc(100% - 2vw);
+  width: calc(100% - 1vw);
   height: calc(40vw - 2vw);
   position: relative;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   pointer-events: none;
-  flex-direction: row;
 }
 
-.coverPage {
+.bindingPage {
   width: calc(50%);
   height: 100%;
-  position: absolute;
   top: 0;
-  right: 0;
-  transform-origin: 0 0;
-  transition: transform 1.4s;
-  backface-visibility: hidden;
   background-color: saddlebrown;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 
 .page:nth-child(even) {

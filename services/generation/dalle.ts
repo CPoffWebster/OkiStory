@@ -81,7 +81,7 @@ async function updateGeneratedImageRecord(imageUrl: string, generation: ImageGen
     let price = 0;
     switch (generation.Model.toLowerCase()) {
         case ('dall-e-3'):
-            price = .08;
+            price = .04;
             break;
         case ('test'):
             price = 0;

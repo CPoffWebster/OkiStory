@@ -6,6 +6,8 @@ import { Transaction } from 'sequelize';
 import { connectToDb } from "./database/database";
 import { Locations, LocationsAttributes } from "./database/models/Locations";
 import { Characters, CharactersAttributes } from "./database/models/Characters";
+import { UserBookReviews } from "./database/models/UserBookReviews";
+import { Users, UsersAttributes } from "./database/models/Users";
 
 /**
  * Get the bookshelf list of books for a user
@@ -85,7 +87,7 @@ export async function getDefaultBooks(count: number, offset: number): Promise<[n
  * @param guid 
  * @returns 
  */
-export async function getBookByGUID(guid: string): Promise<[BooksAttributes | null, PagesAttributes[] | null, LocationsAttributes | null, CharactersAttributes | null]> {
+export async function getBookByGUID(guid: string, user: UsersAttributes | null): Promise<[BooksAttributes | null, PagesAttributes[] | null, LocationsAttributes | null, CharactersAttributes | null]> {
     const db = connectToDb();
     const transaction = await db.transaction();
     try {
@@ -94,6 +96,10 @@ export async function getBookByGUID(guid: string): Promise<[BooksAttributes | nu
         book = await addImageGCSLocation(book, transaction) as BooksAttributes;
         let location: LocationsAttributes = await Locations.getLocation(book.LocationGUID, transaction);
         let character: CharactersAttributes = await Characters.getCharacter(book.CharacterGUID, transaction);
+
+        if (user) {
+            book.UserBookReview = await UserBookReviews.getUserBookReview(guid, user.id!, transaction);
+        }
 
         let pages = await Pages.getBookPages(book.id!, transaction);
         if (pages === null) return [book, null, location, character];

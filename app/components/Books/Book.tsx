@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Book.module.css";
 import { useRouter } from "next/router";
 import NavigationButtons, { useFlippedPages } from "../NavButtons/NavButtons";
 
 interface BookReaderProps {
-  pagesContent: React.JSX.Element[];
-  pageCount: number;
-  coverConfigured: boolean;
-  pagesConfigured: number;
+  pagesContent: React.JSX.Element[]; // Array of book pages
+  pageCount: number; // Number of pages in the book
+  coverConfigured: boolean; // Has the cover page loaded?
+  pagesConfigured: number; // Number of pages that have loaded
 }
 
 const Book: React.FC<BookReaderProps> = ({
@@ -25,17 +25,21 @@ const Book: React.FC<BookReaderProps> = ({
   useEffect(() => {
     const pageRendering = pagesContent.map((content, index) => {
       // Determine if the page should have left/right offset
-      let style = {};
+      let pageStyle = {};
+      let bindingStyle = {};
       if (index % 2 !== 0) {
-        style = { left: "1vw" };
+        pageStyle = { left: "1vw" };
       } else {
-        style = { right: "1vw", zIndex: `${pagesContent.length - index}` };
+        pageStyle = { right: "1vw", zIndex: `${pagesContent.length - index}` };
+      }
+      if (index === 0 || index === pageCount * 2 - 1) {
+        bindingStyle = styles.bindingPage;
       }
       return (
         <div
           key={index}
-          className={`${styles.page} ${index === 0 ? styles.coverPage : ""}`}
-          style={style} // Apply the dynamic style here
+          className={`${styles.page} ${bindingStyle}`}
+          style={pageStyle} // Apply the dynamic style here
         >
           {content}
         </div>
@@ -100,13 +104,16 @@ const Book: React.FC<BookReaderProps> = ({
     <div>
       {currentIndex === 0 ? (
         <div className={styles.coverContainer}>{renderedPages}</div>
+      ) : currentIndex === pageCount * 2 ? (
+        <div className={styles.coverContainer}>{renderedPages}</div>
       ) : (
         <div className={styles.pageContainer}>{renderedPages}</div>
       )}
+
       <NavigationButtons
         disableLeftArrow={currentIndex <= 1}
         disableRightArrow={disableRightArrow}
-        rightArrowMessage={isLoading ? "Loading..." : undefined}
+        isLoadingRightArrow={isLoading}
         rightImportant={currentIndex < pageCount * 2}
         homeImportant={currentIndex != 0 && currentIndex >= pageCount * 2}
         onFlipLeft={handleFlipLeft}
