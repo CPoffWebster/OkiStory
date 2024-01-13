@@ -72,6 +72,27 @@
 
 } */
 
+.tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: .5rem;
+    border-radius: .5rem;
+    font-size: .8rem;
+    margin-bottom: .2rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    visibility: hidden;
+}
+
+.button:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
 .spinnerContainer {
     display: flex;
     align-items: center;

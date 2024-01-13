@@ -8,6 +8,7 @@ type ButtonProps = {
   iconSize?: "small" | "medium" | "large" | "none";
   className: string;
   disabled?: boolean;
+  disabledMessage?: string;
   isLoadingRightArrow?: boolean;
   markedAsImportant?: boolean;
   onClick(): Promise<any> | void;
@@ -20,6 +21,7 @@ const Button: React.FC<ButtonProps> = ({
   iconSize = "mediumIcon",
   className = "",
   disabled = false,
+  disabledMessage = "",
   isLoadingRightArrow = false,
   markedAsImportant = false,
   onClick,
@@ -74,6 +76,9 @@ const Button: React.FC<ButtonProps> = ({
             </div>
           )}
         </div>
+        {disabled && disabledMessage != "" && (
+          <div className={styles.tooltip}>{disabledMessage}</div>
+        )}
       </button>
     </div>
   );

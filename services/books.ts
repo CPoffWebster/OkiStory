@@ -98,7 +98,7 @@ export async function getBookByGUID(guid: string, user: UsersAttributes | null):
         let character: CharactersAttributes = await Characters.getCharacter(book.CharacterGUID, transaction);
 
         if (user) {
-            book.UserBookRating = (await UserBookReviews.getUserBookReview(guid, user.id!, transaction)).Rating;
+            book.UserBookReview = await UserBookReviews.getUserBookReview(guid, user.id!, transaction);
         }
 
         let pages = await Pages.getBookPages(book.id!, transaction);

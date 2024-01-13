@@ -4,9 +4,6 @@ import { useRouter } from "next/router";
 import NavigationButtons, { useFlippedPages } from "../NavButtons/NavButtons";
 
 interface BookReaderProps {
-  startedBookReading: number; // When the book was started
-  bookGuid: string; // GUID of the book
-  bookCreated: boolean; // Was the book just created?
   pagesContent: React.JSX.Element[]; // Array of book pages
   pageCount: number; // Number of pages in the book
   coverConfigured: boolean; // Has the cover page loaded?
@@ -14,9 +11,6 @@ interface BookReaderProps {
 }
 
 const Book: React.FC<BookReaderProps> = ({
-  startedBookReading,
-  bookGuid,
-  bookCreated,
   pagesContent,
   pageCount,
   coverConfigured,
@@ -26,65 +20,6 @@ const Book: React.FC<BookReaderProps> = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const { flippedPages, flipPage } = useFlippedPages();
   const [renderedPages, setRenderedPages] = useState<React.JSX.Element[]>([]);
-
-  // Analytics variables
-  const [pagesTurnedForward, setPagesTurnedForward] = useState<number>(0);
-  const [pagesTurnedBackward, setPagesTurnedBackward] = useState<number>(0);
-  const [readEntireBook, setReadEntireBook] = useState<boolean>(false);
-  const [initialFinishedLoading, setInitialFinishedLoading] =
-    useState<number>(0);
-
-  useEffect(() => {
-    // Update readEntireBook
-    if (currentIndex !== 0 && currentIndex === pageCount * 2) {
-      setReadEntireBook(true);
-    }
-  }, [currentIndex]);
-
-  useEffect(() => {
-    setInitialFinishedLoading(Date.now());
-  }, [coverConfigured]);
-
-  // Send analytics data for book read record
-  const sendPageData = (howUserLeft: string) => {
-    navigator.sendBeacon(
-      "/api/read/readingSession",
-      JSON.stringify({
-        BookGUID: bookGuid,
-        BookCreated: bookCreated,
-        PagesTurnedForward: pagesTurnedForward,
-        PagesTurnedBackward: pagesTurnedBackward,
-        ReadEntireBook: readEntireBook,
-        LastPageRead: currentIndex / 2,
-        StartedBookReading: startedBookReading,
-        FinishedBookReading: Date.now(),
-        InitialFinishedLoading: initialFinishedLoading,
-        HowUserLeft: howUserLeft,
-      })
-    );
-  };
-
-  // If page is closed, run sendPageData
-  useEffect(() => {
-    // Consolidated event handler
-    const handlePageEvent = (howUserLeft: string) => sendPageData(howUserLeft);
-
-    // Add event listeners with the consolidated handler
-    window.addEventListener("beforeunload", () =>
-      handlePageEvent("Closed Page")
-    );
-    // window.addEventListener("popstate", () => handlePageEvent("Back Button"));
-
-    // Cleanup function for removing the event listeners
-    return () => {
-      window.removeEventListener("beforeunload", () =>
-        handlePageEvent("Closed Page")
-      );
-      // window.removeEventListener("popstate", () =>
-      //   handlePageEvent("Back Button")
-      // );
-    };
-  }, []);
 
   // Pre-render pages
   useEffect(() => {
@@ -131,7 +66,6 @@ const Book: React.FC<BookReaderProps> = ({
     return new Promise<void>((resolve, reject) => {
       if (currentIndex <= 1) return;
       flipPage(currentIndex, false);
-      setPagesTurnedBackward((prevCount) => prevCount + 1);
       // Wait for the animation to complete before updating currentIndex
       setTimeout(() => {
         setCurrentIndex((prevIndex) => prevIndex - 2);
@@ -148,7 +82,6 @@ const Book: React.FC<BookReaderProps> = ({
       }
 
       flipPage(currentIndex, true);
-      setPagesTurnedForward((prevCount) => prevCount + 1);
       // Wait for the animation to complete before updating currentIndex
       setTimeout(() => {
         setCurrentIndex((prevIndex) => prevIndex + 2);
@@ -185,10 +118,7 @@ const Book: React.FC<BookReaderProps> = ({
         homeImportant={currentIndex != 0 && currentIndex >= pageCount * 2}
         onFlipLeft={handleFlipLeft}
         onFlipRight={handleFlipRight}
-        onReturnHome={() => {
-          sendPageData("Home Button");
-          router.push("/");
-        }}
+        onReturnHome={() => router.push("/")}
       />
     </div>
   );
