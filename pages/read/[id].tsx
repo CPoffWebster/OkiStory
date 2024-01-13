@@ -130,14 +130,12 @@ export default function GetBookData(props: { guid: string }) {
           </div>
         )}
       </span>
-      {bookRating && (
-        <span className={styles.ratingOutline}>
-          <div className={styles.pageText}>
-            <h1 className={styles.storyOutlineTitle}>Rate Story</h1>
-            <EmojiRating previousRating={bookRating} bookGuid={props.guid} />
-          </div>
-        </span>
-      )}
+      <span className={styles.ratingOutline}>
+        <div className={styles.pageText}>
+          <h1 className={styles.storyOutlineTitle}>Rate Story</h1>
+          <EmojiRating previousRating={bookRating} bookGuid={props.guid} />
+        </div>
+      </span>
       <Book
         pagesContent={pagesContent}
         pageCount={bookPageCount}
